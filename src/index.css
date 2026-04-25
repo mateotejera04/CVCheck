@@ -69,15 +69,59 @@
 
 /* src/index.css or in your pageStyle string for react-to-print */
 
+/* A4 page sizing - used for both screen preview and print so they match */
+:root {
+  --a4-width: 794px;  /* 210mm at 96dpi */
+  --a4-height: 1123px; /* 297mm at 96dpi */
+}
+
+.a4-page {
+  width: var(--a4-width);
+  min-height: var(--a4-height);
+  box-sizing: border-box;
+  background: #fff;
+}
+
+/* Wrapper auto-scales the A4 page to fit container width on screens.
+   Always-on responsive scaling keeps preview === download proportions. */
+.a4-scale-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.a4-scale-wrapper .a4-page {
+  transform-origin: top left;
+  transform: scale(var(--a4-scale, 1));
+}
+
+/* JS sets --a4-scale via ResizeObserver. As fallback, use CSS to scale based on viewport. */
+@supports (zoom: 1) {
+  /* Use container queries when available */
+}
+
 @media print {
   @page {
-    min-height: 1050px;
+    size: A4;
+    margin: 0;
   }
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  .a4-scale-wrapper {
+    overflow: visible !important;
+  }
+  .a4-page,
   .print-a4 {
-    min-height: 1050px !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    transform: none !important;
+    margin: 0 !important;
+    box-shadow: none !important;
     page-break-after: always !important;
   }
-
   .print-a4-sidebar {
     width: 210mm !important;
     height: 1050px !important;

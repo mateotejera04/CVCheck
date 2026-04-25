@@ -51,7 +51,33 @@ const ModernTemplate = ({ resume }) => {
   const { isEditable } = useEditResume();
   const { modernSettings, setModernSettings } = useModernSetting();
   const contentRef = useRef(null);
+  const scaleWrapperRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+
+  // A4 page is 794px wide. Scale it to fit the container width and adjust wrapper height.
+  useEffect(() => {
+    const wrapper = scaleWrapperRef.current;
+    const page = contentRef.current;
+    if (!wrapper || !page) return;
+
+    const A4_WIDTH = 794;
+    const A4_HEIGHT = 1123;
+
+    const updateScale = () => {
+      const containerWidth = wrapper.clientWidth;
+      const scale = Math.min(1, containerWidth / A4_WIDTH);
+      page.style.setProperty("--a4-scale", scale);
+      // Match wrapper height to scaled page height (page might grow if multi-page content)
+      const pageHeight = Math.max(page.scrollHeight, A4_HEIGHT);
+      wrapper.style.height = `${pageHeight * scale}px`;
+    };
+
+    updateScale();
+    const ro = new ResizeObserver(updateScale);
+    ro.observe(wrapper);
+    ro.observe(page);
+    return () => ro.disconnect();
+  }, [resume, modernSettings]);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -1700,21 +1726,20 @@ const ModernTemplate = ({ resume }) => {
         </div>
       )}
 
-      {/* Resume Preview */}
-      <div className="m-3 border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
+      {/* Resume Preview - A4 sized, scaled to fit container */}
+      <div ref={scaleWrapperRef} className="m-3 mx-2.5 mb-2.5 a4-scale-wrapper">
         <div
           ref={contentRef}
-          className="w-full md:min-h-[1050px] overflow-hidden mx-auto print-a4 text-sm leading-relaxed"
+          className="a4-page print-a4 text-sm leading-relaxed bg-white shadow-xl"
           style={{
             fontFamily: modernSettings.fontFamily || "Lato, sans-serif",
             backgroundColor: modernSettings.backgroundColor || "#ffffff",
-
             flexDirection: "column",
           }}
         >
           {/* Inner Resume Container */}
           <div
-            className={` flex overflow-hidden min-h-[1120px] flex-col `}
+            className={`flex flex-col h-full`}
             style={{
               padding: modernSettings.padding || "25px",
               border:

@@ -51,7 +51,28 @@ const StandardTemplate = ({ resume }) => {
   const { isEditable } = useEditResume();
   const { standardSettings, setStandardSettings } = useStandardSetting();
   const contentRef = useRef(null);
+  const scaleWrapperRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+
+  useEffect(() => {
+    const wrapper = scaleWrapperRef.current;
+    const page = contentRef.current;
+    if (!wrapper || !page) return;
+    const A4_WIDTH = 794;
+    const A4_HEIGHT = 1123;
+    const updateScale = () => {
+      const containerWidth = wrapper.clientWidth;
+      const scale = Math.min(1, containerWidth / A4_WIDTH);
+      page.style.setProperty("--a4-scale", scale);
+      const pageHeight = Math.max(page.scrollHeight, A4_HEIGHT);
+      wrapper.style.height = `${pageHeight * scale}px`;
+    };
+    updateScale();
+    const ro = new ResizeObserver(updateScale);
+    ro.observe(wrapper);
+    ro.observe(page);
+    return () => ro.disconnect();
+  }, []);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -1667,11 +1688,11 @@ const StandardTemplate = ({ resume }) => {
         </div>
       )}
 
-      {/* Resume Preview */}
-      <div className="m-3 border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
+      {/* Resume Preview - A4 sized, scaled to fit container */}
+      <div ref={scaleWrapperRef} className="m-3 mx-2.5 mb-2.5 a4-scale-wrapper">
         <div
           ref={contentRef}
-          className="w-full md:min-h-[1050px] overflow-hidden mx-auto print-a4 text-sm leading-relaxed"
+          className="a4-page print-a4 text-sm leading-relaxed bg-white shadow-xl"
           style={{
             fontFamily: standardSettings.fontFamily || "Inter",
             backgroundColor: standardSettings.backgroundColor || "#ffffff",

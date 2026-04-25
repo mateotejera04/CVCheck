@@ -55,7 +55,28 @@ const SidebarTemplate = ({ resume }) => {
   const { isEditable } = useEditResume();
   const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
   const contentRef = useRef(null);
+  const scaleWrapperRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
+
+  useEffect(() => {
+    const wrapper = scaleWrapperRef.current;
+    const page = contentRef.current;
+    if (!wrapper || !page) return;
+    const A4_WIDTH = 794;
+    const A4_HEIGHT = 1123;
+    const updateScale = () => {
+      const containerWidth = wrapper.clientWidth;
+      const scale = Math.min(1, containerWidth / A4_WIDTH);
+      page.style.setProperty("--a4-scale", scale);
+      const pageHeight = Math.max(page.scrollHeight, A4_HEIGHT);
+      wrapper.style.height = `${pageHeight * scale}px`;
+    };
+    updateScale();
+    const ro = new ResizeObserver(updateScale);
+    ro.observe(wrapper);
+    ro.observe(page);
+    return () => ro.disconnect();
+  }, []);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor, {
@@ -1881,11 +1902,11 @@ const SidebarTemplate = ({ resume }) => {
           </div>
         </div>
       )}
-      {/* Resume Preview */}
-      <div className="overflow-hidden m-2.5 md:flex   border border-gray-200 mx-2.5 mb-2.5 bg-white/60 backdrop-blur-md  shadow-xl">
+      {/* Resume Preview - A4 sized, scaled to fit container */}
+      <div ref={scaleWrapperRef} className="m-2.5 mx-2.5 mb-2.5 a4-scale-wrapper">
         <div
           ref={contentRef}
-          className=" print-a4-sidebar md:min-h-[1050px] flex"
+          className="a4-page print-a4-sidebar flex bg-white shadow-xl"
           style={{
             backgroundColor: sidebarSettings.bgColor || "#ffffff",
             fontFamily: sidebarSettings.fontFamily || "Inter",
