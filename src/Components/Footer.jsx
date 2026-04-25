@@ -1,148 +1,122 @@
-import { motion } from "framer-motion";
-import {
-  FaGithub,
-  FaHeart,
-  FaBug,
-  FaEnvelope,
-  FaTwitter,
-  FaLinkedin,
-} from "react-icons/fa";
+import { FaGithub, FaEnvelope, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { SiGoogleforms, SiPeerlist } from "react-icons/si";
-import { Link } from "react-router-dom";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    {
-      icon: FaGithub,
-      href: "https://github.com/VrandaaGarg/CVCheck",
-      label: "GitHub",
-    },
-    { icon: FaXTwitter, href: "https://x.com/vrandaagarg", label: "Twitter" },
-
-    { icon: FaEnvelope, href: "mailto:resumate@vrandagarg.in", label: "Email" },
-
-    {
-      icon: SiPeerlist,
-      href: "https://peerlist.io/vrandagarg",
-      label: "Peerlist",
-    },
+    { icon: FaGithub, href: "https://github.com/", label: "GitHub" },
+    { icon: FaXTwitter, href: "https://x.com/", label: "Twitter" },
+    { icon: FaLinkedin, href: "https://linkedin.com/", label: "LinkedIn" },
+    { icon: FaEnvelope, href: "mailto:hello@cvcheck.app", label: "Email" },
   ];
 
   return (
-    <footer className="bg-white border-t border-gray-100 text-gray-700 relative">
-      {/* Subtle Background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-sky-50/30 to-blue-50/30" />
+    <footer className="surface-base border-t border-zinc-200">
+      <div className="container-page py-14 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+          {/* Brand */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-sky-600" />
+              <span className="text-lg font-bold tracking-tight text-zinc-900">
+                CVCheck
+              </span>
+            </div>
+            <p className="text-sm text-zinc-600 max-w-xs leading-relaxed">
+              AI-powered resume builder for your career success.
+            </p>
+          </div>
 
-      <div className="relative z-10">
-        {/* Main Footer Content */}
-        <div className="max-w-7xl mx-auto px-6 py-6 md:py-12">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            {/* Brand Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="flex flex-col items-center md:items-start"
-            >
-              <div className="flex items-center gap-3 mb-1 md:mb-3">
-                <img
-                  src="https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157818/logo_zskfw0.png"
-                  alt="CVCheck Logo"
-                  className="w-10 h-10 md:w-10 md:h-10"
-                />
-                <span className="text-lg md:text-2xl font-bold bg-gradient-to-r from-sky-600 to-sky-600 bg-clip-text text-transparent">
-                  CVCheck
-                </span>
-              </div>
-
-              <p className="text-[14px] md:text-sm text-gray-600 text-center md:text-left max-w-md">
-                AI-powered resume builder for your career success
-              </p>
-
-              {/* Created with Love */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                viewport={{ once: true }}
-                className="flex items-center gap-2 text-gray-500 text-[14px] md:text-sm mt-2"
-              >
-                <span>Made with</span>
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 2,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <FaHeart className="text-red-400" />
-                </motion.div>
-                <span>by CVCheck</span>
-              </motion.div>
-            </motion.div>
-
-            {/* Right Section - Social Links & Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="flex flex-col items-center md:items-end gap-4"
-            >
-              {/* Social Links */}
-              <div className="flex gap-3">
-                {socialLinks.map((social, index) => (
-                  <motion.a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="p-2 bg-gray-100 hover:bg-sky-100 border border-gray-200 hover:border-sky-200 rounded-lg text-gray-600 hover:text-sky-600 transition-all duration-300"
-                    title={social.label}
+          {/* Links */}
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+                Product
+              </h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a
+                    href="/templates"
+                    className="text-zinc-700 hover:text-sky-700 transition-colors"
                   >
-                    <social.icon className="text-[14px] md:text-xl" />
-                  </motion.a>
-                ))}
-              </div>
+                    Templates
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/dashboard"
+                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                  >
+                    Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/ats-checker"
+                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                  >
+                    ATS Checker
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+                Account
+              </h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a
+                    href="/login"
+                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                  >
+                    Log in
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/signup"
+                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                  >
+                    Sign up
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-              {/* Report Bug Button */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() =>
-                  window.open(
-                    "mailto:resumate@vrandagarg.in?subject=Bug%20Report&body=Please%20describe%20the%20issue%20you%20encountered.",
-                    "_blank"
-                  )
-                }
-                className="flex items-center cursor-pointer gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 rounded-lg text-[14px] md:text-sm font-medium transition-all duration-300"
-              >
-                <FaBug size={12} />
-                <span>Report Bug</span>
-              </motion.button>
-            </motion.div>
+          {/* Social */}
+          <div className="md:text-right">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+              Connect
+            </h3>
+            <div className="flex md:justify-end gap-2">
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 text-zinc-500 hover:text-sky-600 hover:border-sky-300 transition-colors"
+                  aria-label={s.label}
+                >
+                  <s.icon className="text-base" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-200">
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="flex justify-center items-center gap-3 text-[14px] md:text-sm text-gray-500"
-            >
-              <p>© {currentYear} CVCheck. All rights reserved.</p>
-            </motion.div>
+        <div className="mt-12 pt-6 border-t border-zinc-200 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-zinc-500">
+          <p>© {currentYear} CVCheck. All rights reserved.</p>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-sky-700 transition-colors">
+              Privacy
+            </a>
+            <a href="#" className="hover:text-sky-700 transition-colors">
+              Terms
+            </a>
           </div>
         </div>
       </div>

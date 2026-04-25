@@ -1,6 +1,5 @@
-// src/Components/Loaders/ATSCheckingLoader.jsx
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   FaRobot,
   FaSearch,
@@ -9,73 +8,35 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 
-const ATSCheckingLoader = ({ isVisible }) => {
-  const [completedSteps, setCompletedSteps] = useState([]);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+const steps = [
+  { id: 1, icon: FaSearch, title: "Scanning document", duration: 2500 },
+  { id: 2, icon: FaSpellCheck, title: "Analyzing keywords", duration: 3000 },
+  { id: 3, icon: FaRobot, title: "Simulating ATS filters", duration: 3500 },
+  { id: 4, icon: FaChartLine, title: "Scoring", duration: 2000 },
+  { id: 5, icon: FaCheckCircle, title: "Generating report", duration: 1500 },
+];
 
-  const steps = [
-    {
-      id: 1,
-      icon: FaSearch,
-      title: "Scanning Document",
-      description: "Analyzing resume structure and format",
-      duration: 2500,
-    },
-    {
-      id: 2,
-      icon: FaSpellCheck,
-      title: "Keyword Analysis",
-      description: "Checking for ATS-friendly keywords and phrases",
-      duration: 3000,
-    },
-    {
-      id: 3,
-      icon: FaRobot,
-      title: "ATS Simulation",
-      description: "Running through applicant tracking system filters",
-      duration: 3500,
-    },
-    {
-      id: 4,
-      icon: FaChartLine,
-      title: "Scoring Analysis",
-      description: "Calculating compatibility score and recommendations",
-      duration: 2000,
-    },
-    {
-      id: 5,
-      icon: FaCheckCircle,
-      title: "Generating Report",
-      description: "Preparing detailed ATS compatibility report",
-      duration: 1500,
-    },
-  ];
+const ATSCheckingLoader = ({ isVisible }) => {
+  const [completed, setCompleted] = useState([]);
+  const [currentIdx, setCurrentIdx] = useState(0);
 
   useEffect(() => {
     if (!isVisible) {
-      setCompletedSteps([]);
-      setCurrentStepIndex(0);
+      setCompleted([]);
+      setCurrentIdx(0);
       return;
     }
-
-    let stepTimer;
-    const processSteps = () => {
-      if (currentStepIndex < steps.length) {
-        stepTimer = setTimeout(() => {
-          setCompletedSteps((prev) => [...prev, steps[currentStepIndex].id]);
-          setCurrentStepIndex((prev) => prev + 1);
-        }, steps[currentStepIndex]?.duration || 2000);
-      }
-    };
-
-    processSteps();
-
-    return () => {
-      if (stepTimer) clearTimeout(stepTimer);
-    };
-  }, [currentStepIndex, isVisible]);
+    if (currentIdx >= steps.length) return;
+    const t = setTimeout(() => {
+      setCompleted((prev) => [...prev, steps[currentIdx].id]);
+      setCurrentIdx((prev) => prev + 1);
+    }, steps[currentIdx]?.duration || 2000);
+    return () => clearTimeout(t);
+  }, [currentIdx, isVisible]);
 
   if (!isVisible) return null;
+
+  const progress = Math.round((completed.length / steps.length) * 100);
 
   return (
     <AnimatePresence>
@@ -83,157 +44,78 @@ const ATSCheckingLoader = ({ isVisible }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+        className="fixed inset-0 bg-zinc-900/40 z-50 flex items-center justify-center p-4"
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white/95 backdrop-blur-md max-h-[90vh] overflow-y-auto rounded-2xl p-4 md:p-6 max-w-md w-full mx-auto border border-white/30 shadow-2xl relative overflow-hidden"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.15 }}
+          className="bg-white max-w-md w-full mx-auto rounded-2xl border border-zinc-200 shadow-xl overflow-hidden"
         >
-          {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-sky-50/80 via-white/50 to-sky-50/80 rounded-2xl" />
-          {/* Header */}
-          <div className="text-center mb-2 md:mb-4 relative z-10">
-            <motion.div
-              animate={{
-                rotate: [0, 360],
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                rotate: { duration: 3, repeat: Infinity, ease: "linear" },
-                scale: { duration: 2, repeat: Infinity },
-              }}
-              className="md:w-14 md:h-14 w-10 h-10 border-4 border-sky-200/50 border-t-sky-400 border-r-sky-400 rounded-full mx-auto mb-4 shadow-lg"
-            />
-            <h2 className="text-sm md:text-xl font-bold bg-gradient-to-r from-sky-500 to-sky-400 bg-clip-text text-transparent mb-2">
-              ATS Compatibility Check
+          <div className="px-6 pt-6 pb-4 border-b border-zinc-200">
+            <p className="eyebrow mb-2">ATS check</p>
+            <h2 className="text-lg font-semibold text-zinc-900">
+              Analyzing your resume…
             </h2>
-            <p className="text-slate-600 text-xs md:text-sm">
-              Analyzing your resume for ATS systems...
-            </p>
           </div>
 
-          {/* Steps */}
-          <div className=" space-y-2 md:space-y-3 relative z-10">
-            {steps.map((step, index) => {
-              const isCompleted = completedSteps.includes(step.id);
-              const isCurrent = currentStepIndex === index && !isCompleted;
-
+          <div className="px-6 py-5 space-y-3">
+            {steps.map((step, i) => {
+              const isCompleted = completed.includes(step.id);
+              const isCurrent = currentIdx === i && !isCompleted;
+              const Icon = step.icon;
               return (
-                <motion.div
+                <div
                   key={step.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`flex items-center md:gap-3 md:p-2 gap-1.5 p-1 rounded-md md:rounded-xl transition-all duration-300 backdrop-blur-sm ${
-                    isCompleted
-                      ? "bg-green-50/80 border border-green-200/60 shadow-md"
-                      : isCurrent
-                      ? "bg-sky-50/80 border border-sky-200/60 shadow-md"
-                      : "bg-white/40 border border-slate-200/40"
-                  }`}
+                  className="flex items-center gap-3 text-sm"
                 >
-                  {/* Icon */}
-                  <div
-                    className={`w-4 h-4 md:w-8 md:h-8 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm ${
+                  <span
+                    className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
                       isCompleted
-                        ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white"
+                        ? "bg-sky-600 text-white"
                         : isCurrent
-                        ? "bg-gradient-to-r from-sky-500 to-sky-500 text-white"
-                        : "bg-slate-100 text-slate-400"
+                        ? "bg-sky-100 text-sky-700"
+                        : "bg-zinc-100 text-zinc-400"
                     }`}
                   >
                     {isCompleted ? (
-                      <FaCheckCircle size={16} />
+                      <FaCheckCircle size={12} />
+                    ) : isCurrent ? (
+                      <span className="w-3 h-3 border-2 border-sky-600 border-t-transparent rounded-full animate-spin" />
                     ) : (
-                      <step.icon size={16} />
+                      <Icon size={12} />
                     )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1">
-                    <h3
-                      className={`font-semibold text-[13px] md:text-sm transition-colors ${
-                        isCompleted
-                          ? "text-green-600"
-                          : isCurrent
-                          ? "text-sky-600"
-                          : "text-slate-500"
-                      }`}
-                    >
-                      {step.title}
-                    </h3>
-                    <p className=" text-[11px] md:text-xs text-slate-500 md:mt-1">
-                      {step.description}
-                    </p>
-                  </div>
-
-                  {/* Status */}
-                  <div className="flex items-center">
-                    {isCompleted && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="md:w-6 md:h-6 w-3 h-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center shadow-sm"
-                      >
-                        <FaCheckCircle size={12} className="text-white" />
-                      </motion.div>
-                    )}
-                    {isCurrent && (
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{
-                          duration: 1,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }}
-                        className="md:w-6 md:h-6 w-3 h-3 border-2 border-sky-500 border-t-transparent rounded-full"
-                      />
-                    )}
-                  </div>
-                </motion.div>
+                  </span>
+                  <span
+                    className={`flex-1 ${
+                      isCompleted
+                        ? "text-zinc-900"
+                        : isCurrent
+                        ? "text-zinc-900 font-medium"
+                        : "text-zinc-500"
+                    }`}
+                  >
+                    {step.title}
+                  </span>
+                </div>
               );
             })}
           </div>
 
-          {/* Progress Bar */}
-          <div className="mt-3 md:mt-6 relative z-10">
-            <div className="flex justify-between text-[12px] md:text-xs text-slate-600 mb-2">
-              <span>ATS Analysis Progress</span>
-              <span>
-                {Math.round((completedSteps.length / steps.length) * 100)}%
-              </span>
+          <div className="px-6 pb-6">
+            <div className="flex justify-between text-xs text-zinc-500 mb-2">
+              <span>Progress</span>
+              <span>{progress}%</span>
             </div>
-            <div className="w-full bg-slate-200/60 rounded-full h-2 shadow-inner">
+            <div className="w-full bg-zinc-100 rounded-full h-1.5 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{
-                  width: `${(completedSteps.length / steps.length) * 100}%`,
-                }}
-                transition={{ duration: 0.5 }}
-                className="bg-gradient-to-r from-sky-500 to-sky-500 h-1 md:h-2 rounded-full shadow-sm"
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.4 }}
+                className="bg-sky-600 h-full"
               />
             </div>
-          </div>
-
-          {/* Loading Dots */}
-          <div className="flex justify-center mt-3 md:mt-6 space-x-1 relative z-10">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={`ats-loader-dot-${i}`}
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  delay: i * 0.2,
-                }}
-                className="md:w-2 md:h-2 w-1 h-1 bg-sky-500 rounded-full shadow-sm"
-              />
-            ))}
           </div>
         </motion.div>
       </motion.div>

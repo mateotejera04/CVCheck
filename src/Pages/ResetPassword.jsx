@@ -1,9 +1,7 @@
-// src/Pages/ResetPassword.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { confirmPasswordReset, getAuth } from "firebase/auth";
-import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
@@ -12,9 +10,9 @@ export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [oobCode, setOobCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const code = searchParams.get("oobCode");
@@ -25,11 +23,9 @@ export default function ResetPassword() {
   const handleReset = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const auth = getAuth();
-
     try {
-      await confirmPasswordReset(auth, oobCode, newPassword);
-      showSuccessToast("Password reset successful!");
+      await confirmPasswordReset(getAuth(), oobCode, newPassword);
+      showSuccessToast("Password reset successful");
       navigate("/login");
     } catch (err) {
       showErrorToast(err.message || "Failed to reset password.");
@@ -38,33 +34,24 @@ export default function ResetPassword() {
     }
   };
 
-  const inputStyle =
-    "w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800";
-
   return (
-    <motion.div
-      className="py-12 md:py-20 flex items-center justify-center bg-background px-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
-        <h2 className="text-3xl font-bold text-center text-primary mb-1">
-          Reset Password
-        </h2>
-        <p className="text-sm text-center text-gray-500 mb-6">
-          Enter your new password below to reset your account.
+    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center surface-base px-4 py-12">
+      <div className="w-full max-w-md card-flat p-8 md:p-10">
+        <h1 className="h-section mb-2">Reset password</h1>
+        <p className="text-sm text-zinc-600 mb-8">
+          Choose a new password for your account.
         </p>
 
         <form onSubmit={handleReset} className="space-y-5">
           <div>
             <label
               htmlFor="newPassword"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="text-sm font-medium text-zinc-700 mb-2 block"
             >
-              New Password
+              New password
             </label>
             <div className="relative">
-              <FiLock className="absolute top-3 left-3 text-gray-500" />
+              <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
               <input
                 id="newPassword"
                 type={showPassword ? "text" : "password"}
@@ -72,12 +59,13 @@ export default function ResetPassword() {
                 placeholder="••••••••"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className={inputStyle}
+                className="w-full pl-10 pr-10 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
               />
               <button
                 type="button"
-                className="absolute top-3 right-3 text-gray-500"
-                onClick={() => setShowPassword((prev) => !prev)}
+                onClick={() => setShowPassword((p) => !p)}
+                tabIndex={-1}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
               >
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
@@ -86,13 +74,19 @@ export default function ResetPassword() {
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full py-2 bg-sky-700 text-white font-medium rounded hover:bg-sky-800 transition"
+            disabled={loading || !oobCode}
+            className="btn-primary w-full"
           >
-            {loading ? "Resetting..." : "Reset Password"}
+            {loading ? "Resetting…" : "Reset password"}
           </button>
         </form>
+
+        <p className="mt-6 text-sm text-center text-zinc-600">
+          <Link to="/login" className="text-sky-700 font-medium hover:underline">
+            Back to login
+          </Link>
+        </p>
       </div>
-    </motion.div>
+    </div>
   );
 }

@@ -9,33 +9,28 @@ const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background text-primary flex flex-col">
-      {/* Navbar */}
+    <div className="min-h-screen surface-base text-zinc-900 flex flex-col">
       <Navbar
         toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
         isSidebarOpen={isSidebarOpen}
       />
 
-      <div className="flex flex-1 ">
-        {/* Sidebar */}
+      <div className="flex flex-1 pt-16">
         <Sidebar
           isOpen={isSidebarOpen}
           closeSidebar={() => setIsSidebarOpen(false)}
         />
 
-        {/* Page Content */}
         <div
-          className={`flex-1 transition-all duration-300 ${
-            isSidebarOpen ? "sm:ml-72" : "ml-0"
+          className={`flex-1 min-w-0 transition-[margin] duration-200 ${
+            isSidebarOpen ? "lg:ml-64" : "ml-0"
           }`}
         >
-          {" "}
-          {/* only shift on desktop */}
           <motion.main
-            className="px-3 md:px-6 py-2.5 overflow-x-hidden"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            className="px-4 md:px-8 py-6 overflow-x-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
           >
             <Outlet />
           </motion.main>

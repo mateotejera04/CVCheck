@@ -281,161 +281,123 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 bg-zinc-900/40 z-50 flex items-center justify-center p-4"
         onClick={handleClose}
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="bg-white/90 backdrop-blur-md max-h-[95vh] no-scrollbar overflow-y-auto rounded-2xl p-5 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.15 }}
+          className="bg-white max-h-[95vh] no-scrollbar overflow-y-auto rounded-2xl max-w-md w-full mx-auto border border-zinc-200 shadow-xl"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-sky-50/50 via-white/50 to-blue-50/50 rounded-2xl" />
-
-          {/* Header */}
-          <div className="relative z-10 flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 md:w-7 md:h-7 shrink-0 bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg">
-                <FaUpload className="text-white text-sm" />
-              </div>
-              <h2 className="text-lg md:text-xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
-                Upload Resume
-              </h2>
-            </div>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200">
+            <h2 className="text-base font-semibold text-zinc-900">
+              Upload resume
+            </h2>
             <button
               onClick={handleClose}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100/50 transition-all duration-200"
+              className="text-zinc-400 hover:text-zinc-600"
             >
               <FaTimes size={16} />
             </button>
           </div>
 
-          {/* Upload Area */}
-          <div
-            className={`relative border-2 border-dashed rounded-xl p-4 md:p-5 text-center transition-all duration-300 mb-6 bg-white/40 backdrop-blur-sm ${
-              dragActive
-                ? "border-sky-400 bg-sky-50/50 shadow-lg scale-[1.02]"
-                : "border-gray-300 hover:border-sky-300 hover:bg-sky-50/30"
-            } ${
-              isUploading ? "pointer-events-none opacity-60" : "hover:shadow-lg"
-            }`}
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-          >
-            <input
-              type="file"
-              id="file-upload-modal"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              onChange={handleInputChange}
-              accept=".pdf,.doc,.docx,.txt"
-              disabled={isUploading}
-            />
+          <div className="px-6 py-5 space-y-5">
+            <div
+              className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
+                dragActive
+                  ? "border-sky-500 bg-sky-50"
+                  : "border-zinc-300 hover:border-sky-400 hover:bg-zinc-50"
+              } ${isUploading ? "pointer-events-none opacity-60" : ""}`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+            >
+              <input
+                type="file"
+                id="file-upload-modal"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                onChange={handleInputChange}
+                accept=".pdf,.doc,.docx,.txt"
+                disabled={isUploading}
+              />
 
-            {isUploading ? (
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                  <FaSpinner className="animate-spin text-white text-xl" />
+              {isUploading ? (
+                <div className="flex flex-col items-center py-2">
+                  <FaSpinner className="animate-spin text-sky-600 text-2xl mb-3" />
+                  <p className="text-sm font-medium text-zinc-700">
+                    Uploading…
+                  </p>
                 </div>
-                <p className="text-gray-700 font-medium">
-                  Uploading your resume...
-                </p>
-                <p className="text-gray-500 text-sm mt-1">Please wait</p>
-              </div>
-            ) : uploadedFile ? (
-              <div className="flex flex-col items-center">
-                <div className="w-6 h-6 md:w-14 md:h-14 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mb-2 shadow-lg">
-                  <FaCheckCircle className="text-white text-sm md:text-xl" />
+              ) : uploadedFile ? (
+                <div className="flex flex-col items-center py-2">
+                  <FaCheckCircle className="text-green-600 text-2xl mb-2" />
+                  <p className="text-sm font-semibold text-zinc-900 truncate max-w-full">
+                    {uploadedFile.fileName}
+                  </p>
+                  <p className="text-xs text-green-700 mt-1">
+                    Upload successful
+                  </p>
                 </div>
-                <p className="text-gray-800 font-semibold text-sm md:text-lg mb-1">
-                  {uploadedFile.fileName}
-                </p>
-                <p className="text-green-600 text-xs md:text-sm font-medium">
-                  ✓ Upload successful
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                  <FaUpload className="text-white text-xl" />
+              ) : (
+                <div className="flex flex-col items-center py-2">
+                  <FaUpload className="text-sky-600 text-2xl mb-3" />
+                  <p className="text-sm font-semibold text-zinc-900">
+                    Drop your resume here
+                  </p>
+                  <p className="text-xs text-zinc-500 mt-1">
+                    or click to browse — PDF, DOC, DOCX, TXT (max 10 MB)
+                  </p>
                 </div>
-                <p className="text-gray-800 font-semibold text-sm md:text-lg mb-2">
-                  Drop your resume here
+              )}
+            </div>
+
+            {uploadedFile && (
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-zinc-700">
+                  What would you like to do?
                 </p>
-                <p className="text-gray-600 text-sm mb-3">
-                  or click to browse files
-                </p>
-                <div className="inline-flex items-center gap-2 bg-gray-100/80 rounded-lg md:rounded-full px-3 py-1">
-                  <span className="text-xs text-gray-500">
-                    PDF, DOC, DOCX, TXT
-                  </span>
-                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                  <span className="text-xs text-gray-500">Max 10MB</span>
-                </div>
+                <OptionCheckbox
+                  icon={<FaUpload />}
+                  label="Create resume"
+                  description="Build a new resume from this file"
+                  checked={selectedOptions.createResume}
+                  onChange={() => handleOptionToggle("createResume")}
+                />
+                <OptionCheckbox
+                  icon={<FaRobot />}
+                  label="Check ATS score"
+                  description="Analyze ATS compatibility"
+                  checked={selectedOptions.checkATS}
+                  onChange={() => handleOptionToggle("checkATS")}
+                />
               </div>
             )}
           </div>
 
-          {/* Options */}
           {uploadedFile && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              className="space-y-2 md:space-y-3 mb-4"
-            >
-              <div className="text-xs md:text-sm font-medium text-gray-700 mb-3">
-                What would you like to do with your resume?
-              </div>
-              <OptionCheckbox
-                icon={<FaUpload />}
-                label="Create Resume"
-                description="Build a new resume from this file"
-                checked={selectedOptions.createResume}
-                onChange={() => handleOptionToggle("createResume")}
-              />
-              <OptionCheckbox
-                icon={<FaRobot />}
-                label="Check ATS Score"
-                description="Analyze ATS compatibility"
-                checked={selectedOptions.checkATS}
-                onChange={() => handleOptionToggle("checkATS")}
-              />
-            </motion.div>
-          )}
-
-          {/* Done Button */}
-          {uploadedFile && (
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-              onClick={handleDone}
-              disabled={
-                isProcessing || Object.values(selectedOptions).every((v) => !v)
-              }
-              className="relative w-full py-2 md:py-4 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-semibold hover:from-sky-700 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:hover:shadow-lg overflow-hidden group"
-            >
-              {/* Button background effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-sky-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-              <div className="relative z-10 flex items-center gap-1 md:gap-2">
+            <div className="px-6 py-4 border-t border-zinc-200">
+              <button
+                onClick={handleDone}
+                disabled={
+                  isProcessing ||
+                  Object.values(selectedOptions).every((v) => !v)
+                }
+                className="btn-primary w-full"
+              >
                 {isProcessing ? (
                   <>
                     <FaSpinner className="animate-spin" />
-                    <span>{processingStep || "Processing..."}</span>
+                    {processingStep || "Processing…"}
                   </>
                 ) : (
-                  <>
-                    <span className="text-xs md:text-sm">Get Started</span>
-                  </>
+                  "Get started"
                 )}
-              </div>
-            </motion.button>
+              </button>
+            </div>
           )}
         </motion.div>
       </motion.div>
@@ -449,71 +411,41 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
   );
 };
 
-// Option Checkbox Component
 const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
-  <motion.div
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
+  <button
+    type="button"
     onClick={onChange}
-    className={`relative flex items-center gap-2 md:gap-4 p-2 md:p-4 rounded-xl cursor-pointer transition-all duration-300 border-2 ${
+    className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-colors text-left ${
       checked
-        ? "border-sky-300 bg-sky-50/50 shadow-md"
-        : "border-gray-200 bg-white/50 hover:border-sky-200 hover:bg-sky-50/30"
+        ? "border-sky-300 bg-sky-50"
+        : "border-zinc-200 bg-white hover:border-zinc-300"
     }`}
   >
-    {/* Checkbox */}
-    <div
-      className={`w-4 h-4 md:w-5 md:h-5 border-2 rounded-md flex items-center justify-center transition-all duration-200 ${
-        checked
-          ? "bg-gradient-to-r from-sky-500 to-blue-500 border-transparent"
-          : "border-gray-300 bg-white"
-      }`}
-    >
-      {checked && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="w-2.5 h-2.5 bg-white rounded-sm"
-        />
-      )}
-    </div>
-
-    {/* Icon */}
-    <div
-      className={`w-8 h-8 hidden md:w-10 md:h-10 rounded-lg md:flex items-center justify-center transition-all duration-200 ${
-        checked
-          ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg"
-          : "bg-gray-100 text-gray-600"
+    <span
+      className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm shrink-0 ${
+        checked ? "bg-sky-600 text-white" : "bg-zinc-100 text-zinc-600"
       }`}
     >
       {icon}
-    </div>
-
-    {/* Content */}
-    <div className="flex-1">
-      <div
-        className={`font-semibold text-xs md:text-sm transition-colors ${
-          checked ? "text-sky-700" : "text-gray-800"
+    </span>
+    <span className="flex-1 min-w-0">
+      <span
+        className={`block text-sm font-semibold ${
+          checked ? "text-sky-700" : "text-zinc-900"
         }`}
       >
         {label}
-      </div>
-      <div className="text-xs md:text-sm text-gray-600 mt-0.5">
-        {description}
-      </div>
-    </div>
-
-    {/* Selection indicator */}
-    {checked && (
-      <motion.div
-        initial={{ scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
-        className="w-4 h-4 md:w-6 md:h-6 bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center"
-      >
-        <FaCheckCircle className="text-white text-xs md:text-sm" />
-      </motion.div>
-    )}
-  </motion.div>
+      </span>
+      <span className="block text-xs text-zinc-500 mt-0.5">{description}</span>
+    </span>
+    <span
+      className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+        checked ? "border-sky-600 bg-sky-600" : "border-zinc-300"
+      }`}
+    >
+      {checked && <FaCheckCircle className="text-white text-xs" />}
+    </span>
+  </button>
 );
 
 export default ResumeUploadModal;

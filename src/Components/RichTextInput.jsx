@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import {
   FaBold,
   FaItalic,
@@ -6,7 +6,6 @@ import {
   FaListOl,
   FaListUl,
 } from "react-icons/fa";
-import { motion } from "framer-motion";
 
 const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
   const ref = useRef();
@@ -32,17 +31,23 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
     document.execCommand(cmd, false, null);
   };
 
+  const tools = [
+    { cmd: "bold", icon: FaBold, label: "Bold" },
+    { cmd: "italic", icon: FaItalic, label: "Italic" },
+    { cmd: "underline", icon: FaUnderline, label: "Underline" },
+    { cmd: "insertOrderedList", icon: FaListOl, label: "Ordered list" },
+    { cmd: "insertUnorderedList", icon: FaListUl, label: "Bullet list" },
+  ];
+
   return (
-    <div className="space-y-2 w-full relative">
-      {/* Editable Field */}
+    <div className="w-full border border-zinc-200 rounded-xl bg-white overflow-hidden focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-100 transition">
       <div className="relative">
         {isEmpty && (
-          <div className="absolute left-3 top-3 text-gray-400 text-sm pointer-events-none select-none">
+          <div className="absolute left-3 top-3 text-zinc-400 text-sm pointer-events-none select-none">
             {placeholder}
           </div>
         )}
-        <motion.div
-          layout
+        <div
           ref={ref}
           contentEditable
           suppressContentEditableWarning
@@ -51,59 +56,31 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
           onPaste={(e) => {
             e.preventDefault();
             const text = e.clipboardData.getData("text/plain");
-            // Allow only plain text (no styles), then wrap it safely
             document.execCommand(
               "insertHTML",
               false,
               text.replace(/\n/g, "<br>")
             );
           }}
-          className="min-h-[180px] border border-gray-300 rounded p-3 md:pr-6 focus:outline-none text-sm text-gray-800 bg-white transition"
+          className="min-h-[180px] p-3 focus:outline-none text-sm text-zinc-900"
           style={{ whiteSpace: "pre-wrap" }}
         />
       </div>
 
-      {/* Toolbar */}
-      <motion.div
-        layout
-        className="flex gap-2 bg-gray-100 p-1.5 justify-center rounded border border-gray-200 shadow-sm text-sm"
-      >
-        <button
-          onClick={() => format("bold")}
-          title="Bold"
-          className="p-2 rounded hover:bg-gray-200 transition"
-        >
-          <FaBold className="text-gray-700" />
-        </button>
-        <button
-          onClick={() => format("italic")}
-          title="Italic"
-          className="p-2 rounded hover:bg-gray-200 transition"
-        >
-          <FaItalic className="text-gray-700" />
-        </button>
-        <button
-          onClick={() => format("underline")}
-          title="Underline"
-          className="p-2 rounded hover:bg-gray-200 transition"
-        >
-          <FaUnderline className="text-gray-700" />
-        </button>
-        <button
-          onClick={() => format("insertOrderedList")}
-          title="Ordered List"
-          className="p-2 rounded hover:bg-gray-200 transition"
-        >
-          <FaListOl className="text-gray-700" />
-        </button>
-        <button
-          onClick={() => format("insertUnorderedList")}
-          title="Bullet List"
-          className="p-2 rounded hover:bg-gray-200 transition"
-        >
-          <FaListUl className="text-gray-700" />
-        </button>
-      </motion.div>
+      <div className="flex gap-1 px-2 py-1.5 border-t border-zinc-200 bg-zinc-50">
+        {tools.map(({ cmd, icon: Icon, label }) => (
+          <button
+            key={cmd}
+            type="button"
+            onClick={() => format(cmd)}
+            title={label}
+            aria-label={label}
+            className="p-2 rounded-md text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/70 transition-colors"
+          >
+            <Icon className="text-sm" />
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

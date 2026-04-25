@@ -6,18 +6,16 @@ import { motion } from "framer-motion";
 
 const HomeLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-background text-primary">
+    <div className="min-h-screen flex flex-col surface-base text-zinc-900">
       <Navbar />
-
       <motion.main
-        className="flex-grow"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        className="flex-grow pt-16"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
       >
         <Outlet />
       </motion.main>
-
       <Footer />
     </div>
   );

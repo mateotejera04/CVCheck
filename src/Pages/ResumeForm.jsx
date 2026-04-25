@@ -291,7 +291,7 @@ const ResumeForm = () => {
                   placeholder="Enter your full name"
                   value={formData.name}
                   onChange={(e) => handleChange(e, "name")}
-                  className="w-full px-4 py-4 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white/80 backdrop-blur-sm text-gray-800 font-medium transition-all duration-300 group-hover:border-gray-300"
+                  className="w-full pl-10 pr-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
                 />
                 <FiUser className="absolute left-4 top-4 text-gray-400 group-focus-within:text-sky-500 transition-colors" />
               </div>
@@ -307,7 +307,7 @@ const ResumeForm = () => {
                 placeholder="e.g. SOFTWARE ENGINEERING STUDENT"
                 value={formData.headline || ""}
                 onChange={(e) => handleChange(e, "headline")}
-                className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white/80 backdrop-blur-sm text-gray-800 font-medium transition-all duration-300 group-hover:border-gray-300"
+                className="w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Short tagline shown under your name (used by the Modern template).
@@ -337,7 +337,7 @@ const ResumeForm = () => {
                   onClick={() => handleEnhanceField("description")}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="absolute -top-5 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
+                  className="absolute -top-3 right-2 p-2 rounded-full bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {aiLoadingField === "description" ? (
                     <BsArrowClockwise className="text-lg animate-spin" />
@@ -352,7 +352,7 @@ const ResumeForm = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-gradient-to-r from-sky-50 to-blue-50 border border-sky-200 rounded-xl relative"
+                  className="mt-4 p-4 bg-sky-50 border border-sky-100 rounded-xl relative"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <FaWandMagicSparkles className="text-sky-600" />
@@ -469,7 +469,7 @@ const ResumeForm = () => {
                 placeholder="e.g., MIT"
                 value={formData.education.college}
                 onChange={(e) => handleChange(e, "education.college")}
-                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
               />
             </div>
 
@@ -487,7 +487,7 @@ const ResumeForm = () => {
                 placeholder="e.g., B.Tech in Computer Science"
                 value={formData.education.degree}
                 onChange={(e) => handleChange(e, "education.degree")}
-                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
               />
             </div>
 
@@ -505,7 +505,7 @@ const ResumeForm = () => {
                 placeholder="e.g., Artificial Intelligence"
                 value={formData.education.specialization}
                 onChange={(e) => handleChange(e, "education.specialization")}
-                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
               />
             </div>
 
@@ -523,7 +523,7 @@ const ResumeForm = () => {
                 placeholder="City and state/country of the college"
                 value={formData.education.location}
                 onChange={(e) => handleChange(e, "education.location")}
-                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
               />
             </div>
 
@@ -543,7 +543,7 @@ const ResumeForm = () => {
                   placeholder="e.g., 2021"
                   value={formData.education.startYear}
                   onChange={(e) => handleChange(e, "education.startYear")}
-                  className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                  className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
                 />
               </div>
               <div className="flex-1 relative">
@@ -560,7 +560,7 @@ const ResumeForm = () => {
                   placeholder="e.g., 2025"
                   value={formData.education.endYear}
                   onChange={(e) => handleChange(e, "education.endYear")}
-                  className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                  className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
                 />
               </div>
             </div>
@@ -580,7 +580,7 @@ const ResumeForm = () => {
                 placeholder="e.g., 9.0"
                 value={formData.education.cgpa}
                 onChange={(e) => handleChange(e, "education.cgpa")}
-                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
               />
             </div>
 
@@ -599,7 +599,7 @@ const ResumeForm = () => {
                 placeholder="e.g., DPS Delhi"
                 value={formData.education.school}
                 onChange={(e) => handleChange(e, "education.school")}
-                className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
               />
             </div>
 
@@ -619,7 +619,7 @@ const ResumeForm = () => {
                   placeholder="e.g., 92%"
                   value={formData.education.tenth}
                   onChange={(e) => handleChange(e, "education.tenth")}
-                  className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                  className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
                 />
               </div>
 
@@ -638,7 +638,7 @@ const ResumeForm = () => {
                   placeholder="e.g., 89%"
                   value={formData.education.twelfth}
                   onChange={(e) => handleChange(e, "education.twelfth")}
-                  className="w-full px-4 py-2 pl-10 border rounded focus:outline-none focus:ring-2 focus:ring-sky-600 bg-white text-sm text-gray-800"
+                  className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
                 />
               </div>
             </div>
@@ -800,7 +800,7 @@ const ResumeForm = () => {
                       onClick={() =>
                         handleEnhanceField(`projects[${index}].description`)
                       }
-                      className="absolute -top-5 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
+                      className="absolute -top-3 right-2 p-2 rounded-full bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {aiLoadingField === `projects[${index}].description` ? (
                         <BsArrowClockwise className="text-xl animate-spin" />
@@ -1034,7 +1034,7 @@ const ResumeForm = () => {
                         onClick={() =>
                           handleEnhanceField(`experience[${index}].description`)
                         }
-                        className="absolute -top-5 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
+                        className="absolute -top-3 right-2 p-2 rounded-full bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {aiLoadingField ===
                         `experience[${index}].description` ? (
@@ -1164,7 +1164,7 @@ const ResumeForm = () => {
                             `achievements[${index}].description`
                           )
                         }
-                        className="absolute -top-5 right-2 p-2 rounded-full bg-gradient-to-tr from-sky-500 via-sky-600 to-sky-700 hover:from-sky-600 hover:to-sky-800 text-white shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed ring-2 ring-offset-2 ring-sky-300"
+                        className="absolute -top-3 right-2 p-2 rounded-full bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {aiLoadingField ===
                         `achievements[${index}].description` ? (
@@ -1408,154 +1408,88 @@ const ResumeForm = () => {
     }
   };
 
+  const progressPct = ((step + 1) / steps.length) * 100;
+
   return (
-    <div className="relative bg-gradient-to-br from-white via-sky-50 to-sky-50 px-2 md:px-20 py-7 md:py-16 overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute -top-20 -left-20 w-80 h-80 bg-gradient-to-r from-sky-300 to-cyan-200 opacity-15 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-r from-blue-300 to-pink-200 opacity-10 blur-3xl rounded-full z-0" />
-
-      <div className="relative z-10 py-12 max-w-3xl mx-auto">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-8"
-        >
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1.5 mb-3 shadow-lg">
-            <FaWandMagicSparkles className="text-blue-500" />
-            <span className="text-xs font-medium text-gray-700">
-              Resume Builder
-            </span>
-          </div>
-
-          <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-sky-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2 ">
-            {steps[step]}
-          </h1>
-
-          <p className="text-sm text-gray-600 max-w-2xl mx-auto">
-            Step {step + 1} of {steps.length} - Let's build your professional
-            story
+    <div className="surface-base min-h-screen">
+      <div className="container-page py-10 md:py-14 max-w-3xl">
+        <header className="mb-8">
+          <p className="eyebrow mb-2">
+            Step {step + 1} of {steps.length}
           </p>
-        </motion.div>
+          <h1 className="h-section mb-2">{steps[step]}</h1>
+          <p className="text-zinc-600 text-sm">
+            Let's build your professional story.
+          </p>
+        </header>
 
-        {/* Progress Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <div className="flex justify-between items-center mb-2">
+        {/* Progress */}
+        <div className="mb-8">
+          <div className="hidden md:flex justify-between items-center mb-3">
             {steps.map((stepName, index) => (
               <div
-                key={index}
-                className={`flex items-center gap-1 md:gap-2 text-xs font-medium ${
-                  index <= step ? "text-sky-600" : "text-gray-400"
+                key={stepName}
+                className={`flex items-center gap-2 text-xs font-medium ${
+                  index <= step ? "text-zinc-900" : "text-zinc-400"
                 }`}
               >
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                <span
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-semibold border ${
                     index < step
-                      ? "bg-green-500 text-white"
+                      ? "bg-sky-600 text-white border-sky-600"
                       : index === step
-                      ? "bg-sky-500 text-white"
-                      : "bg-gray-200 text-gray-500"
+                      ? "bg-white text-sky-600 border-sky-600"
+                      : "bg-white text-zinc-400 border-zinc-200"
                   }`}
                 >
                   {index < step ? "✓" : index + 1}
-                </motion.div>
-                <span className="hidden md:block">{stepName}</span>
+                </span>
+                <span>{stepName}</span>
               </div>
             ))}
           </div>
-
-          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-            <motion.div
-              className="bg-gradient-to-r from-sky-500 to-blue-500 h-full rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${((step + 1) / steps.length) * 100}%` }}
-              transition={{ duration: 0.5 }}
+          <div className="w-full bg-zinc-100 rounded-full h-1 overflow-hidden">
+            <div
+              className="bg-sky-600 h-full rounded-full transition-all"
+              style={{ width: `${progressPct}%` }}
             />
           </div>
-        </motion.div>
+        </div>
 
-        {/* Form Content */}
-        <motion.div
-          key={step}
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -30 }}
-          transition={{ duration: 0.4 }}
-          className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-3 md:p-8 shadow-xl"
-        >
+        {/* Form */}
+        <div key={step} className="card-flat p-5 md:p-8">
           {renderStep()}
-        </motion.div>
+        </div>
 
-        {/* Navigation Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex justify-between items-center mt-6"
-        >
-          {/* Back Button */}
-          <motion.button
-            onClick={() => setStep((prev) => Math.max(prev - 1, 0))}
+        {/* Navigation */}
+        <div className="flex justify-between items-center mt-6">
+          <button
+            type="button"
+            onClick={() => setStep((p) => Math.max(p - 1, 0))}
             disabled={step === 0}
-            whileHover={{ scale: step === 0 ? 1 : 1.05 }}
-            whileTap={{ scale: step === 0 ? 1 : 0.95 }}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold shadow-md transition-all duration-300 text-xs ${
-              step === 0
-                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                : "bg-gray-800 hover:bg-gray-700 text-white hover:shadow-xl"
-            }`}
+            className="btn-secondary inline-flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <FaArrowLeft />
-            Back
-          </motion.button>
+            <FaArrowLeft /> Back
+          </button>
 
-          {/* Next / Finish Button */}
           {step === steps.length - 1 ? (
-            <motion.button
-              onClick={async () => {
-                try {
-                  await createResume(formData);
-                  setResume(formData);
-                  showSuccessToast("Resume saved successfully!");
-                  navigate("/resume");
-                } catch (err) {
-                  toast.error("Failed to save resume!");
-                  console.error("Firestore error:", err.message);
-                }
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 text-xs"
+            <button
+              type="button"
+              onClick={saveResumeToFirebase}
+              className="btn-primary inline-flex items-center gap-2"
             >
-              <FaCheckCircle />
-              Build Resume
-            </motion.button>
+              <FaCheckCircle /> Build resume
+            </button>
           ) : (
-            <motion.button
-              onClick={() => {
-                if (step === 0 && !formData.name.trim()) {
-                  return toast.error("Name is required!");
-                }
-                setStep((prev) => Math.min(prev + 1, steps.length - 1));
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-sky-500 to-blue-500 hover:from-sky-600 hover:to-blue-600 text-white font-semibold rounded-lg shadow-md hover:shadow-xl transition-all duration-300 text-xs"
+            <button
+              type="button"
+              onClick={nextStep}
+              className="btn-primary inline-flex items-center gap-2"
             >
-              Next
-              <FaArrowRight />
-            </motion.button>
+              Next <FaArrowRight />
+            </button>
           )}
-        </motion.div>
+        </div>
       </div>
     </div>
   );

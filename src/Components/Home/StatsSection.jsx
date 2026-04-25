@@ -1,69 +1,55 @@
-import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
 
 const StatsSection = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  const controls = useAnimation();
-  const [counts, setCounts] = useState({ resumes: 0, hired: 0 });
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [counts, setCounts] = useState({ resumes: 0, hired: 0, score: 0 });
 
   useEffect(() => {
-    if (isInView) {
-      const duration = 2000;
-      const start = performance.now();
+    if (!isInView) return;
+    const duration = 1800;
+    const start = performance.now();
+    let raf;
+    const tick = (t) => {
+      const p = Math.min((t - start) / duration, 1);
+      setCounts({
+        resumes: Math.floor(12000 * p),
+        hired: Math.floor(3000 * p),
+        score: Math.floor(92 * p),
+      });
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [isInView]);
 
-      const animateCount = (timestamp) => {
-        const progress = Math.min((timestamp - start) / duration, 1);
-        setCounts({
-          resumes: Math.floor(12000 * progress),
-          hired: Math.floor(3000 * progress),
-        });
-        if (progress < 1) requestAnimationFrame(animateCount);
-      };
-
-      requestAnimationFrame(animateCount);
-      controls.start({ opacity: 1, y: 0 });
-    }
-  }, [isInView, controls]);
+  const items = [
+    { value: `${counts.resumes.toLocaleString()}+`, label: "Resumes created" },
+    { value: `${counts.hired.toLocaleString()}+`, label: "Users hired" },
+    { value: `${counts.score}%`, label: "Average ATS score" },
+  ];
 
   return (
-    <section className="py-12 md:py-16 px-6 md:px-12 lg:px-20 bg-sky-100 text-center">
-      <motion.div
-        ref={ref}
-        initial={{ opacity: 0, y: 20 }}
-        animate={controls}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex flex-col md:flex-row justify-center gap-11"
-      >
-        <div className="flex justify-center items-center ">
-          <h2 className="text-xl md:text-2xl font-semibold text-gray-900 ">
-            Helping Careers Take Off 🚀
-          </h2>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12">
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-sky-600 mb-2 tabular-nums">
-              {counts.resumes.toLocaleString()}+
+    <section ref={ref} className="surface-base">
+      <div className="container-page section-py">
+        <p className="eyebrow text-center mb-3">By the numbers</p>
+        <h2 className="h-section text-center mb-16">
+          Helping careers take off
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-200 border-y border-zinc-200">
+          {items.map((s) => (
+            <div key={s.label} className="px-6 py-12 text-center">
+              <div className="text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 tabular-nums">
+                {s.value}
+              </div>
+              <p className="mt-3 text-xs uppercase tracking-wider text-zinc-500 font-medium">
+                {s.label}
+              </p>
             </div>
-            <p className="text-sm md:text-base text-gray-600 font-medium">
-              Resumes Created
-            </p>
-          </div>
-
-          <div className="hidden sm:block w-px h-12 bg-gray-300"></div>
-
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-sky-600 mb-2 tabular-nums">
-              {counts.hired.toLocaleString()}+
-            </div>
-            <p className="text-sm md:text-base text-gray-600 font-medium">
-              Users Hired
-            </p>
-          </div>
+          ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

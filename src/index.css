@@ -1,5 +1,171 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   Design system tokens — Mistral-style palette with sky-blue accent
+   ========================================================================== */
+:root {
+  --surface-base: #fafaf9;
+  --surface-card: #ffffff;
+  --surface-muted: #f4f4f5;
+
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
+
+  --accent: #0284c7;
+  --accent-hover: #0369a1;
+  --accent-soft: #e0f2fe;
+  --accent-ring: rgba(2, 132, 199, 0.15);
+
+  --border-hairline: #e4e4e7;
+}
+
+/* Component primitives — applied via className */
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--accent);
+    color: #fff;
+    font-weight: 500;
+    border-radius: 9999px;
+    transition: background-color 200ms ease;
+    cursor: pointer;
+    line-height: 1.2;
+  }
+  .btn-primary:hover {
+    background-color: var(--accent-hover);
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: #fff;
+    color: var(--text-primary);
+    font-weight: 500;
+    border-radius: 9999px;
+    border: 1px solid #e4e4e7;
+    transition: border-color 200ms ease, background-color 200ms ease;
+    cursor: pointer;
+    line-height: 1.2;
+  }
+  .btn-secondary:hover {
+    border-color: #d4d4d8;
+    background-color: #fafafa;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    border-radius: 0.5rem;
+    transition: color 200ms ease, background-color 200ms ease;
+    cursor: pointer;
+  }
+  .btn-ghost:hover {
+    color: var(--accent-hover);
+    background-color: var(--surface-muted);
+  }
+
+  .container-page {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .section-py {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  @media (min-width: 768px) {
+    .section-py {
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .section-py {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    color: var(--accent-hover);
+  }
+
+  .h-display {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    line-height: 1.05;
+  }
+  @media (min-width: 768px) {
+    .h-display { font-size: 3rem; }
+  }
+  @media (min-width: 1024px) {
+    .h-display { font-size: 3.75rem; }
+  }
+
+  .h-section {
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    line-height: 1.15;
+  }
+  @media (min-width: 768px) {
+    .h-section { font-size: 2.25rem; }
+  }
+
+  .body-lg {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .card-flat {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-hairline);
+    border-radius: 1rem;
+  }
+
+  .divider-hairline {
+    border-top: 1px solid var(--border-hairline);
+  }
+
+  .surface-base {
+    background-color: var(--surface-base);
+  }
+}
+
 @keyframes scrollLeft {
   0% {
     transform: translateX(0%);

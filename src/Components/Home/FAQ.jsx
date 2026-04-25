@@ -1,135 +1,97 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiChevronDown, FiMail } from "react-icons/fi";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FiPlus } from "react-icons/fi";
+
+const faqs = [
+  {
+    question: "How is CVCheck different from other resume builders?",
+    answer:
+      "CVCheck offers AI-powered resume optimization, ATS-friendly templates, and real-time feedback. Our platform uses advanced algorithms to analyze your resume and ensure maximum compatibility with Applicant Tracking Systems.",
+  },
+  {
+    question: "Are the resume templates ATS-friendly?",
+    answer:
+      "Yes — every template is designed to be ATS-compatible. Proper formatting, readable fonts, and structured layouts pass through tracking systems while looking professional.",
+  },
+  {
+    question: "Can I customize the resume templates?",
+    answer:
+      "Absolutely. Customize colors, fonts, layouts, and sections — every aspect of your resume — while maintaining ATS compatibility and professional standards.",
+  },
+  {
+    question: "How many resumes can I create?",
+    answer:
+      "Unlimited. Save multiple versions to tailor different resumes for various job applications and industries without restrictions.",
+  },
+  {
+    question: "Is there a mobile app available?",
+    answer:
+      "CVCheck is a responsive web app that works seamlessly on phones and tablets. A dedicated mobile app is in development.",
+  },
+  {
+    question: "What if I need help?",
+    answer:
+      "Reach out anytime for assistance with technical issues, questions about features, or general guidance on resume building.",
+  },
+];
 
 const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const faqs = [
-    {
-      question: "How is CVCheck different from other resume builders?",
-      answer:
-        "CVCheck offers AI-powered resume optimization, ATS-friendly templates, and real-time feedback. Our platform uses advanced algorithms to analyze job descriptions and tailor your resume accordingly, ensuring maximum compatibility with Applicant Tracking Systems.",
-    },
-    {
-      question: "Are the resume templates ATS-friendly?",
-      answer:
-        "Yes! All our templates are specifically designed to be ATS-compatible. We ensure proper formatting, readable fonts, and structured layouts that pass through Applicant Tracking Systems while maintaining professional aesthetics.",
-    },
-    {
-      question: "Can I customize the resume templates?",
-      answer:
-        "Absolutely! CVCheck offers extensive customization options including colors, fonts, layouts, and sections. You can personalize every aspect of your resume while maintaining ATS compatibility and professional standards.",
-    },
-
-    {
-      question: "How many resumes can I create with CVCheck?",
-      answer:
-        "With CVCheck, you can create unlimited resumes and save multiple versions. This allows you to tailor different resumes for various job applications and industries without any restrictions.",
-    },
-    {
-      question: "Is there a mobile app available?",
-      answer:
-        "CVCheck is currently available as a responsive web application that works seamlessly on all devices including smartphones and tablets. A dedicated mobile app is in development and will be available soon.",
-    },
-    {
-      question: "What if I need help or have technical issues?",
-      answer:
-        "Our support team is here to help! You can reach out to us anytime for assistance with technical issues, questions about features, or general guidance on resume building.",
-    },
-  ];
-
-  const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const [openIndex, setOpenIndex] = useState(0);
+  const toggleFAQ = (i) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section className="py-20 md:py-24 px-6 md:px-12 lg:px-20 bg-white">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-16">
-          {/* Left Side - Header */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
-            viewport={{ once: true }}
-            className="lg:sticky lg:top-24 lg:self-start"
-          >
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
-              Frequently Asked <span className="text-sky-600">Questions</span>
-            </h2>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              Everything you need to know about CVCheck's AI-powered resume
-              building platform.
+    <section className="surface-base">
+      <div className="container-page section-py">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="lg:col-span-4">
+            <p className="eyebrow mb-3">FAQ</p>
+            <h2 className="h-section mb-4">Frequently asked questions</h2>
+            <p className="body-lg max-w-md">
+              Everything you need to know about CVCheck's AI-powered resume building platform.
             </p>
+          </div>
 
-            {/* Support Button */}
-            <motion.a
-              href="mailto:resumate@vrandagarg.in"
-              className="inline-flex items-center gap-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FiMail className="text-lg" />
-              Contact Support
-            </motion.a>
-
-            <p className="text-sm text-gray-500 mt-4">
-              Still have questions? Contact our support team
-            </p>
-          </motion.div>
-
-          {/* Right Side - FAQ Items */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
-            viewport={{ once: true }}
-            className="space-y-1 md:space-y-4"
-          >
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className=" overflow-hidden transition-all duration-300"
-              >
-                <button
-                  onClick={() => toggleFAQ(index)}
-                  className="w-full px-6 py-5 text-left flex items-center justify-between  transition-colors duration-200"
-                >
-                  <span className="font-semibold text-gray-900 pr-4">
-                    {faq.question}
-                  </span>
-                  <motion.div
-                    animate={{ rotate: openIndex === index ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex-shrink-0"
-                  >
-                    <FiChevronDown className="text-sky-600 text-xl" />
-                  </motion.div>
-                </button>
-
-                <AnimatePresence>
-                  {openIndex === index && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
+          <div className="lg:col-span-8">
+            <div className="border-t border-zinc-200">
+              {faqs.map((faq, index) => {
+                const open = openIndex === index;
+                return (
+                  <div key={index} className="border-b border-zinc-200">
+                    <button
+                      onClick={() => toggleFAQ(index)}
+                      className="w-full py-5 text-left flex items-center justify-between gap-6 group"
                     >
-                      <div className="px-6 pb-5 text-gray-600 leading-relaxed">
-                        {faq.answer}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </motion.div>
+                      <span className="text-base md:text-lg font-medium text-zinc-900 group-hover:text-sky-700 transition-colors">
+                        {faq.question}
+                      </span>
+                      <motion.span
+                        animate={{ rotate: open ? 45 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-shrink-0 w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-700"
+                      >
+                        <FiPlus />
+                      </motion.span>
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {open && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="pb-6 pr-12 text-zinc-600 leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>

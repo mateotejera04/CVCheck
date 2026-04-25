@@ -233,100 +233,42 @@ const companies = [
   { name: "LinkedIn", color: "#0077B5", Logo: CompanyLogos.LinkedIn },
 ];
 
-const CompanyItem = memo(({ company, index }) => (
-  <motion.div
-    key={index}
-    className="flex flex-col items-center justify-center min-w-[140px] group"
-  >
-    <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center p-4 group-hover:shadow-md group-hover:border-sky-200 transition-all duration-300">
-      <company.Logo
-        className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
-        aria-label={`${company.name} logo`}
-      />
+const CompanyItem = memo(({ company }) => (
+  <div className="flex items-center justify-center min-w-[120px] h-12 mx-8 opacity-60 hover:opacity-100 transition-opacity">
+    <div className="w-20 h-10 flex items-center justify-center grayscale hover:grayscale-0 transition-[filter]">
+      <company.Logo aria-label={`${company.name} logo`} />
     </div>
-    <p className="text-xs md:text-sm font-medium text-gray-600 mt-3 group-hover:text-gray-900 transition-colors duration-300">
-      {company.name}
-    </p>
-  </motion.div>
+  </div>
 ));
 
 const Companies = () => {
   return (
-    <section className="py-16 md:py-20 px-6 md:px-12 lg:px-20 bg-sky-50 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute -top-10 -left-10 w-40 h-40 bg-sky-200/10 rounded-full blur-2xl z-0" />
-      <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-sky-200/10 rounded-full blur-2xl z-0" />
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="text-center mb-12 md:mb-16 relative z-10"
-      >
-        <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-full px-6 py-2 mb-6 shadow-sm">
-          <div className="w-2 h-2 bg-sky-600 rounded-full animate-pulse"></div>
-          <span className="text-sm font-medium text-gray-800">
-            Success Stories
-          </span>
-        </div>
-
-        <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
-          Trusted by Professionals at Top Companies
-        </h2>
-        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-          Our resumes have helped thousands land jobs at leading companies
-          worldwide
+    <section className="surface-base border-y border-zinc-200">
+      <div className="container-page py-12">
+        <p className="eyebrow text-center mb-8">
+          Trusted by professionals at top companies
         </p>
-      </motion.div>
-
-      <div className="relative w-full max-w-7xl mx-auto overflow-hidden z-10">
-        {/* Gradient overlays for smooth fade effect */}
-        <div className="absolute left-0 top-0 w-40 h-full bg-gradient-to-r from-sky-50 to-transparent z-10 pointer-events-none"></div>
-        <div className="absolute right-0 top-0 w-40 h-full bg-gradient-to-l from-sky-50 to-transparent z-10 pointer-events-none"></div>
-
-        <motion.div
-          className="flex md:gap-12 w-max"
-          animate={{ x: [0, -50 * companies.length * 2] }}
-          transition={{
-            x: {
-              repeat: Infinity,
-              repeatType: "loop",
-              duration: 30,
-              ease: "linear",
-            },
-          }}
-        >
-          {[...companies, ...companies, ...companies].map((company, i) => (
-            <CompanyItem key={i} company={company} index={i} />
-          ))}
-        </motion.div>
-      </div>
-
-      {/* Stats or additional info */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        viewport={{ once: true }}
-        className="text-center mt-12 md:mt-16 relative z-10"
-      >
-        <div className="flex flex-row items-center justify-center gap-6 md:gap-8">
-          <div className="flex items-center gap-2 text-gray-600">
-            <div className="w-3 h-3 bg-sky-500 rounded-full"></div>
-            <span className="text-sm md:text-base font-medium">
-              10,000+ Resumes Created
-            </span>
-          </div>
-          <div className="hidden sm:block w-px h-4 bg-gray-300"></div>
-          <div className="flex items-center gap-2 text-gray-600">
-            <div className="w-3 h-3 bg-sky-500 rounded-full"></div>
-            <span className="text-sm md:text-base font-medium">
-              95% Success Rate
-            </span>
-          </div>
+        <div className="relative w-full overflow-hidden">
+          <div className="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-[var(--surface-base)] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 w-24 h-full bg-gradient-to-l from-[var(--surface-base)] to-transparent z-10 pointer-events-none" />
+          <motion.div
+            className="flex w-max"
+            animate={{ x: [0, -50 * companies.length * 2] }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 40,
+                ease: "linear",
+              },
+            }}
+          >
+            {[...companies, ...companies, ...companies].map((company, i) => (
+              <CompanyItem key={i} company={company} />
+            ))}
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

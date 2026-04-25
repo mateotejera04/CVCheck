@@ -183,111 +183,82 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 bg-zinc-900/40 z-50 flex items-center justify-center p-4"
         onClick={handleClose}
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0, y: 20 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="bg-white/90 backdrop-blur-md max-h-[95vh] overflow-y-auto rounded-2xl p-4 sm:p-8 max-w-md w-full mx-auto border border-white/20 shadow-2xl relative overflow-hidden"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.15 }}
+          className="bg-white max-h-[95vh] overflow-y-auto rounded-2xl max-w-md w-full mx-auto border border-zinc-200 shadow-xl"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-sky-50/50 via-white/50 to-blue-50/50 rounded-2xl" />
-
-          {/* Header */}
-          <div className="relative z-10 flex items-center justify-between mb-3 md:mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-7 h-7 md:w-10 md:h-10 bg-gradient-to-r from-sky-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
-                <FaUpload className="text-white text-sm md:text-lg" />
-              </div>
-              <h2 className="text-md md:text-xl font-bold bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
-                Process Resume
-              </h2>
-            </div>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200">
+            <h2 className="text-base font-semibold text-zinc-900">
+              Process resume
+            </h2>
             <button
               onClick={handleClose}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100/50 transition-all duration-200"
+              className="text-zinc-400 hover:text-zinc-600"
             >
               <FaTimes size={16} />
             </button>
           </div>
 
-          {/* Selected Resume Info */}
-          {selectedResume && (
-            <div className="relative z-10 mb-3 md:mb-6 p-2 md:p-4 bg-sky-50/50 rounded-lg md:rounded-xl border border-sky-200/50">
-              <h3 className="font-semibold text-sm md:text-base text-sky-800 mb-1">
-                Selected Resume:
-              </h3>
-              <p className="text-sky-700 text-xs md:text-sm">
-                {selectedResume.fileName}
-              </p>
-            </div>
-          )}
-
-          {/* Options */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="relative z-10 space-y-3 mb-3 md:mb-6"
-          >
-            <div className="text-xs md:text-sm font-medium text-gray-700 mb-3">
-              What would you like to do with this resume?
-            </div>
-
-            <OptionRadio
-              icon={<FaUpload />}
-              label="Create Resume"
-              description="Build a new resume from this file"
-              value="createResume"
-              checked={selectedOption === "createResume"}
-              onChange={() => handleOptionSelect("createResume")}
-            />
-
-            <OptionRadio
-              icon={<FaRobot />}
-              label="Check ATS Score"
-              description="Analyze ATS compatibility"
-              value="checkATS"
-              checked={selectedOption === "checkATS"}
-              onChange={() => handleOptionSelect("checkATS")}
-            />
-          </motion.div>
-
-          {/* Process Button */}
-          {selectedOption && (
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-              onClick={handleProcess}
-              disabled={isProcessing}
-              className="relative w-full py-3 md:py-4 bg-gradient-to-r from-sky-600 to-blue-600 text-white rounded-xl font-semibold hover:from-sky-700 hover:to-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:hover:shadow-lg overflow-hidden group"
-            >
-              {/* Button background effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-sky-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-              <div className="relative z-10 flex items-center gap-2">
-                {isProcessing ? (
-                  <>
-                    <FaSpinner className="animate-spin" />
-                    <span>{processingStep || "Processing..."}</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Process Resume</span>
-                  </>
-                )}
+          <div className="px-6 py-5 space-y-4">
+            {selectedResume && (
+              <div className="px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg">
+                <p className="text-xs font-medium text-zinc-500 mb-0.5">
+                  Selected file
+                </p>
+                <p className="text-sm text-zinc-800 truncate">
+                  {selectedResume.fileName}
+                </p>
               </div>
-            </motion.button>
-          )}
+            )}
+
+            <p className="text-sm text-zinc-700">
+              What would you like to do with this resume?
+            </p>
+
+            <div className="space-y-2">
+              <OptionRadio
+                icon={<FaUpload />}
+                label="Create resume"
+                description="Build a new resume from this file"
+                checked={selectedOption === "createResume"}
+                onChange={() => handleOptionSelect("createResume")}
+              />
+              <OptionRadio
+                icon={<FaRobot />}
+                label="Check ATS score"
+                description="Analyze ATS compatibility"
+                checked={selectedOption === "checkATS"}
+                onChange={() => handleOptionSelect("checkATS")}
+              />
+            </div>
+          </div>
+
+          <div className="px-6 py-4 border-t border-zinc-200">
+            <button
+              onClick={handleProcess}
+              disabled={isProcessing || !selectedOption}
+              className="btn-primary w-full"
+            >
+              {isProcessing ? (
+                <>
+                  <FaSpinner className="animate-spin" />
+                  {processingStep || "Processing…"}
+                </>
+              ) : (
+                "Continue"
+              )}
+            </button>
+          </div>
         </motion.div>
       </motion.div>
 
-      {/* Loaders - Only render the active one */}
       {showResumeLoader && (
         <ResumeCreationLoader isVisible={showResumeLoader} />
       )}
@@ -296,60 +267,41 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
   );
 };
 
-// Option Radio Component
 const OptionRadio = ({ icon, label, description, checked, onChange }) => (
-  <motion.div
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
+  <button
+    type="button"
     onClick={onChange}
-    className={`relative flex items-center gap-2.5 md:gap-4 p-3 md:p-4 rounded-xl cursor-pointer transition-all duration-300 border-2 ${
+    className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-colors text-left ${
       checked
-        ? "border-sky-300 bg-sky-50/50 shadow-md"
-        : "border-gray-200 bg-white/50 hover:border-sky-200 hover:bg-sky-50/30"
+        ? "border-sky-300 bg-sky-50"
+        : "border-zinc-200 bg-white hover:border-zinc-300"
     }`}
   >
-    {/* Radio */}
-    <div
-      className={`md:w-5 w-4 h-4 md:h-5 border-2 rounded-full flex items-center justify-center transition-all duration-200 ${
-        checked
-          ? "bg-gradient-to-r from-sky-500 to-blue-500 border-transparent"
-          : "border-gray-300 bg-white"
-      }`}
-    >
-      {checked && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="w-2.5 h-2.5 bg-white rounded-full"
-        />
-      )}
-    </div>
-
-    {/* Icon */}
-    <div
-      className={`md:w-10 w-8 h-8 md:h-10 rounded-lg flex items-center justify-center transition-all duration-200 ${
-        checked
-          ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg"
-          : "bg-gray-100 text-gray-600"
+    <span
+      className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm ${
+        checked ? "bg-sky-600 text-white" : "bg-zinc-100 text-zinc-600"
       }`}
     >
       {icon}
-    </div>
-
-    {/* Content */}
-    <div className="flex-1">
-      <div
-        className={`font-semibold text-sm transition-colors ${
-          checked ? "text-sky-700" : "text-gray-800"
+    </span>
+    <span className="flex-1">
+      <span
+        className={`block text-sm font-semibold ${
+          checked ? "text-sky-700" : "text-zinc-900"
         }`}
       >
         {label}
-      </div>
-      <div className="text-xs md:text-sm text-gray-600 mt-0.5">
-        {description}
-      </div>
-    </div>
-  </motion.div>
+      </span>
+      <span className="block text-xs text-zinc-500 mt-0.5">{description}</span>
+    </span>
+    <span
+      className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+        checked ? "border-sky-600 bg-sky-600" : "border-zinc-300"
+      }`}
+    >
+      {checked && <span className="w-1.5 h-1.5 bg-white rounded-full" />}
+    </span>
+  </button>
 );
 
 export default PdfActionsModal;

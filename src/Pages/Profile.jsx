@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,18 +8,12 @@ import {
   FiMail,
   FiCheck,
   FiX,
-  FiSettings,
-  FiStar,
+  FiFileText,
+  FiEye,
+  FiDownload,
+  FiTrash2,
+  FiClock,
 } from "react-icons/fi";
-import {
-  FaFileAlt,
-  FaEye,
-  FaDownload,
-  FaTrash,
-  FaUpload,
-  FaClock,
-} from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
 import showSuccessToast from "../Components/showSuccessToast";
 import {
   getUserUploadedResumes,
@@ -41,10 +35,7 @@ const Profile = () => {
   const [uploadedResumes, setUploadedResumes] = useState([]);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [loadingResumes, setLoadingResumes] = useState(true);
-  const [deleteModal, setDeleteModal] = useState({
-    isOpen: false,
-    resume: null,
-  });
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, resume: null });
   const [isDeleting, setIsDeleting] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
 
@@ -53,404 +44,215 @@ const Profile = () => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Load uploaded resumes and user profile
+  const loadResumes = async () => {
+    try {
+      setLoadingResumes(true);
+      const resumes = await getUserUploadedResumes();
+      const sorted = resumes.sort(
+        (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
+      );
+      setUploadedResumes(sorted);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load resumes");
+    } finally {
+      setLoadingResumes(false);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
+    const loadAll = async () => {
       try {
-        setLoadingResumes(true);
-
-        // Load uploaded resumes
-        const resumes = await getUserUploadedResumes();
-        const sortedResumes = resumes.sort(
-          (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
-        );
-        setUploadedResumes(sortedResumes);
-
-        // Load user profile data
+        await loadResumes();
         const profile = await getUserProfile();
         setUserProfile(profile);
-      } catch (error) {
-        console.error("Error loading data:", error);
-        toast.error("Failed to load profile data");
-      } finally {
-        setLoadingResumes(false);
+      } catch (err) {
+        console.error(err);
       }
     };
-
-    if (user) {
-      loadData();
-    }
+    if (user) loadAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  // Handle upload success
-  const handleUploadSuccess = (uploadedFile) => {
-    // Refresh uploaded resumes list
-    const loadUploadedResumes = async () => {
-      try {
-        const resumes = await getUserUploadedResumes();
-        const sortedResumes = resumes.sort(
-          (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
-        );
-        setUploadedResumes(sortedResumes);
-      } catch (error) {
-        console.error("Error refreshing uploaded resumes:", error);
-      }
-    };
-    loadUploadedResumes();
-  };
+  const handleUploadSuccess = () => loadResumes();
 
-  // Handle delete resume - open confirmation modal
-  const handleDeleteResume = (resume) => {
-    setDeleteModal({ isOpen: true, resume });
-  };
+  const handleDeleteResume = (r) => setDeleteModal({ isOpen: true, resume: r });
 
-  // Confirm delete resume
   const confirmDeleteResume = async () => {
     if (!deleteModal.resume) return;
-
     setIsDeleting(true);
     try {
       await deleteUploadedResume(deleteModal.resume.id);
-      setUploadedResumes((prev) =>
-        prev.filter((r) => r.id !== deleteModal.resume.id)
-      );
-      toast.success("Resume deleted successfully!");
+      setUploadedResumes((prev) => prev.filter((r) => r.id !== deleteModal.resume.id));
+      toast.success("Resume deleted");
       setDeleteModal({ isOpen: false, resume: null });
-    } catch (error) {
-      console.error("Error deleting resume:", error);
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to delete resume");
     } finally {
       setIsDeleting(false);
     }
   };
 
-  // Close delete modal
   const closeDeleteModal = () => {
-    if (!isDeleting) {
-      setDeleteModal({ isOpen: false, resume: null });
-    }
+    if (!isDeleting) setDeleteModal({ isOpen: false, resume: null });
   };
 
   const handleSave = async () => {
     try {
       await updateUser({ displayName: form.name });
       setEditing(false);
-      showSuccessToast("Profile updated successfully!");
-    } catch (error) {
-      console.error("Error updating profile:", error);
+      showSuccessToast("Profile updated");
+    } catch (err) {
+      console.error(err);
     }
   };
 
   const handleLogout = () => {
     logout();
-    showSuccessToast("Logged out successfully!");
+    showSuccessToast("Logged out");
     navigate("/");
   };
 
+  const initials = (user?.displayName || user?.email || "U").charAt(0).toUpperCase();
+
+  const inputCls =
+    "w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-sky-50 to-sky-50 px-4 sm:px-6 md:px-20 py-8 sm:py-12 md:py-16 overflow-hidden relative">
-      {/* Subtle Background Elements */}
-      <div className="absolute -top-20 sm:-top-40 -left-20 sm:-left-40 w-48 sm:w-96 h-48 sm:h-96 bg-sky-200/20 blur-3xl rounded-full z-0" />
-      <div className="absolute -bottom-20 sm:-bottom-40 -right-20 sm:-right-40 w-64 sm:w-[500px] h-64 sm:h-[500px] bg-sky-200/15 blur-3xl rounded-full z-0" />
-
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:2rem_2rem] sm:bg-[size:4rem_4rem] opacity-30" />
-
-      <div className="relative pt-10 z-10 max-w-2xl mx-auto">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-8 sm:mb-12"
-        >
-          <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-full px-4 sm:px-6 py-2 mb-4 shadow-sm">
-            <FiUser className="text-sky-600" />
-            <span className="text-xs sm:text-sm font-medium text-gray-800">
-              User Profile
-            </span>
-          </div>
-
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Profile Settings
-          </h1>
-
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 px-4 sm:px-0">
-            Manage your account information and preferences
+    <div className="surface-base min-h-screen">
+      <div className="container-page py-10 md:py-14 max-w-3xl">
+        <header className="mb-10">
+          <p className="eyebrow mb-2">Profile</p>
+          <h1 className="h-section mb-2">Account settings</h1>
+          <p className="text-zinc-600">
+            Manage your profile information and uploaded resumes.
           </p>
-        </motion.div>
+        </header>
 
-        {/* Profile Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="bg-white border border-gray-100 rounded-3xl shadow-lg overflow-hidden"
-        >
-          {/* Card Header */}
-          <div className="bg-gradient-to-r from-sky-600 to-sky-700 p-4 sm:p-6 md:p-8 text-center text-white relative overflow-hidden">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-10 -right-10 w-20 sm:w-40 h-20 sm:h-40 border border-white/10 rounded-full"
-            />
-
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="relative z-10"
-            >
-              {/* Avatar */}
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden shadow-2xl border-4 border-white/20"
-              >
-                {userProfile?.imgUrl ? (
-                  <img
-                    src={userProfile.imgUrl}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-r from-sky-500 to-blue-500 text-white flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-bold uppercase">
-                    {user?.displayName?.charAt(0) ||
-                      user?.email?.charAt(0) ||
-                      "U"}
-                  </div>
-                )}
-              </motion.div>
-
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1">
+        {/* Profile card */}
+        <section className="card-flat overflow-hidden mb-8">
+          <div className="p-6 md:p-8 flex items-center gap-5 border-b border-zinc-100">
+            <div className="w-16 h-16 rounded-full overflow-hidden bg-sky-100 text-sky-700 flex items-center justify-center text-2xl font-semibold shrink-0">
+              {userProfile?.imgUrl ? (
+                <img
+                  src={userProfile.imgUrl}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                initials
+              )}
+            </div>
+            <div className="min-w-0">
+              <h2 className="text-lg font-semibold text-zinc-900 truncate">
                 {user?.displayName || "User"}
               </h2>
-              <p className="text-white/80 text-sm sm:text-base break-all sm:break-normal">
-                {user?.email}
-              </p>
-            </motion.div>
+              <p className="text-sm text-zinc-500 truncate">{user?.email}</p>
+            </div>
           </div>
 
-          {/* Card Content */}
-          <div className="p-4 sm:p-6 md:p-8 lg:p-12">
-            <AnimatePresence mode="wait">
-              {editing ? (
-                <motion.div
-                  key="editing"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4 }}
-                  className="space-y-4 sm:space-y-6"
-                >
-                  {/* Full Name Input */}
-                  <div className="relative group">
-                    <label className="text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                      <FiUser className="text-sky-600" />
-                      Full Name
-                    </label>
-                    <div className="relative">
-                      <input
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        className="w-full px-3 sm:px-4 py-3 sm:py-4 pl-8 sm:pl-12 border-2 border-slate-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-300 bg-white/80 backdrop-blur-sm text-slate-800 font-medium transition-all duration-300 group-hover:border-slate-300 text-sm sm:text-base"
-                        placeholder="Enter your full name"
-                      />
-                      <FiUser className="absolute left-2 sm:left-4 top-3 sm:top-4 text-slate-400 group-focus-within:text-sky-500 transition-colors" />
-                    </div>
-                  </div>
-
-                  {/* Email Input */}
-                  <div className="relative group">
-                    <label className="text-xs sm:text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
-                      <FiMail className="text-sky-600" />
-                      Email Address
-                    </label>
-                    <div className="relative">
-                      <input
-                        name="email"
-                        disabled
-                        value={form.email}
-                        onChange={handleChange}
-                        className="w-full px-3 sm:px-4 py-3 sm:py-4 pl-8 sm:pl-12 border-2 border-slate-200/60 rounded-xl bg-slate-100/60 text-slate-600 font-medium cursor-not-allowed text-sm sm:text-base"
-                        placeholder="Email cannot be changed"
-                      />
-                      <FiMail className="absolute left-2 sm:left-4 top-3 sm:top-4 text-slate-400" />
-                    </div>
-                    <p className="text-xs text-slate-500 mt-2">
-                      Email address cannot be modified for security reasons
-                    </p>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
-                    <motion.button
-                      onClick={handleSave}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex-1 flex items-center justify-center gap-2 py-3 sm:py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
-                    >
-                      <FiCheck size={16} className="sm:w-[18px] sm:h-[18px]" />
-                      Save Changes
-                    </motion.button>
-                    <motion.button
-                      onClick={() => setEditing(false)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex-1 flex items-center justify-center gap-2 py-3 sm:py-4 bg-slate-600 hover:bg-slate-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
-                    >
-                      <FiX size={16} className="sm:w-[18px] sm:h-[18px]" />
-                      Cancel
-                    </motion.button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="viewing"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.4 }}
-                  className="space-y-4 sm:space-y-6"
-                >
-                  {/* Profile Information */}
-                  <div className="space-y-3 sm:space-y-4">
-                    <div className="p-3 sm:p-4 bg-slate-50/80 border border-slate-200/60 rounded-xl">
-                      <label className="block text-xs sm:text-sm font-semibold text-slate-600 mb-1">
-                        Full Name
-                      </label>
-                      <p className="text-base sm:text-lg font-semibold text-slate-900 break-words">
-                        {user?.displayName || user?.name || "Not provided"}
-                      </p>
-                    </div>
-
-                    <div className="p-3 sm:p-4 bg-slate-50/80 border border-slate-200/60 rounded-xl">
-                      <label className="block text-xs sm:text-sm font-semibold text-slate-600 mb-1">
-                        Email Address
-                      </label>
-                      <p className="text-base sm:text-lg text-slate-700 break-all sm:break-normal">
-                        {user?.email}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Account Stats */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <div className="p-3 sm:p-4 bg-gradient-to-r from-sky-50/80 to-cyan-50/80 border border-sky-200/60 rounded-xl text-center">
-                      <FiStar className="text-xl sm:text-2xl text-sky-600 mx-auto mb-2" />
-                      <p className="text-xs sm:text-sm font-medium text-sky-800">
-                        Account Status
-                      </p>
-                      <p className="text-base sm:text-lg font-bold text-sky-700">
-                        Active
-                      </p>
-                    </div>
-                    <div className="p-3 sm:p-4 bg-gradient-to-r from-green-50/80 to-emerald-50/80 border border-green-200/60 rounded-xl text-center">
-                      <FiSettings className="text-xl sm:text-2xl text-green-600 mx-auto mb-2" />
-                      <p className="text-xs sm:text-sm font-medium text-green-800">
-                        Profile
-                      </p>
-                      <p className="text-base sm:text-lg font-bold text-green-700">
-                        Complete
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
-                    <motion.button
-                      onClick={() => setEditing(true)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex-1 flex items-center justify-center gap-2 py-3 sm:py-4 bg-gradient-to-r from-slate-900 to-slate-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
-                    >
-                      <FiEdit2 size={16} className="sm:w-[18px] sm:h-[18px]" />
-                      Edit Profile
-                    </motion.button>
-                    <motion.button
-                      onClick={handleLogout}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex-1 flex items-center justify-center gap-2 py-3 sm:py-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
-                    >
-                      <FiLogOut size={16} className="sm:w-[18px] sm:h-[18px]" />
-                      Sign Out
-                    </motion.button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          <div className="p-6 md:p-8">
+            {editing ? (
+              <div className="space-y-5">
+                <div>
+                  <label className="text-sm font-medium text-zinc-700 mb-2 block">
+                    Full name
+                  </label>
+                  <input
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Your name"
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-zinc-700 mb-2 block">
+                    Email
+                  </label>
+                  <input
+                    name="email"
+                    disabled
+                    value={form.email}
+                    className={`${inputCls} bg-zinc-50 text-zinc-500 cursor-not-allowed`}
+                  />
+                  <p className="text-xs text-zinc-500 mt-2">
+                    Email cannot be changed.
+                  </p>
+                </div>
+                <div className="flex gap-3 pt-1">
+                  <button onClick={handleSave} className="btn-primary inline-flex items-center gap-2">
+                    <FiCheck /> Save
+                  </button>
+                  <button
+                    onClick={() => setEditing(false)}
+                    className="btn-secondary inline-flex items-center gap-2"
+                  >
+                    <FiX /> Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <Field icon={FiUser} label="Full name" value={user?.displayName || "Not provided"} />
+                <Field icon={FiMail} label="Email" value={user?.email} />
+                <div className="flex gap-3 pt-2">
+                  <button
+                    onClick={() => setEditing(true)}
+                    className="btn-primary inline-flex items-center gap-2"
+                  >
+                    <FiEdit2 /> Edit profile
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="btn-secondary inline-flex items-center gap-2 hover:!border-red-200 hover:!text-red-600"
+                  >
+                    <FiLogOut /> Sign out
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        </motion.div>
+        </section>
 
-        {/* Uploaded Resumes Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-6 sm:mt-8 bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 sm:p-6 shadow-lg"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base sm:text-lg font-semibold text-slate-900 flex items-center gap-2">
-              <FaFileAlt className="text-sky-600" />
-              Uploaded Resumes
-            </h3>
+        {/* Uploaded resumes */}
+        <section className="card-flat p-6 md:p-8">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-base font-semibold text-zinc-900">Uploaded resumes</h2>
+            <button
+              type="button"
+              onClick={() => setIsUploadModalOpen(true)}
+              className="btn-primary inline-flex items-center gap-2 text-sm"
+            >
+              Upload
+            </button>
           </div>
 
           {loadingResumes ? (
-            <div className="flex items-center justify-center py-8">
-              <FaClock className="animate-spin text-gray-400 mr-2" />
-              <span className="text-gray-500">Loading resumes...</span>
+            <div className="flex items-center justify-center py-10 text-sm text-zinc-500">
+              <FiClock className="animate-spin mr-2" /> Loading…
             </div>
           ) : uploadedResumes.length === 0 ? (
-            <div className="text-center py-8 ">
-              <FaFileAlt className="text-4xl text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 mb-4">No resumes uploaded yet</p>
+            <div className="text-center py-10 border border-dashed border-zinc-200 rounded-xl">
+              <FiFileText className="text-3xl text-zinc-300 mx-auto mb-3" />
+              <p className="text-sm text-zinc-600">No resumes uploaded yet</p>
             </div>
           ) : (
-            <div className="space-y-3 max-h-[500px] overflow-y-auto">
-              {uploadedResumes.map((resume, index) => (
-                <ProfileResumeItem
-                  key={resume.id}
-                  resume={resume}
-                  onDelete={handleDeleteResume}
-                  index={index}
-                />
+            <ul className="divide-y divide-zinc-100 max-h-[500px] overflow-y-auto">
+              {uploadedResumes.map((r) => (
+                <ProfileResumeRow key={r.id} resume={r} onDelete={handleDeleteResume} />
               ))}
-            </div>
+            </ul>
           )}
-        </motion.div>
-
-        {/* Additional Info Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-6 sm:mt-8 bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 sm:p-6 shadow-lg"
-        >
-          <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-            <FiSettings className="text-sky-600" />
-            Account Information
-          </h3>
-          <div className="text-xs sm:text-sm text-slate-600 space-y-2">
-            <p>• Your account data is securely stored and encrypted</p>
-            <p>
-              • Email address is used for authentication and cannot be changed
-            </p>
-            <p>• You can update your display name anytime</p>
-            <p>• All changes are automatically saved to the cloud</p>
-          </div>
-        </motion.div>
+        </section>
       </div>
 
-      {/* Upload Modal */}
       <ResumeUploadModal
         isOpen={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}
         onUploadSuccess={handleUploadSuccess}
       />
-
-      {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
         isOpen={deleteModal.isOpen}
         onClose={closeDeleteModal}
@@ -462,82 +264,78 @@ const Profile = () => {
   );
 };
 
-// ProfileResumeItem Component
-const ProfileResumeItem = ({ resume, onDelete, index }) => {
-  const formatFileSize = (bytes) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
+function Field({ icon: Icon, label, value }) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-zinc-500 mb-1">
+        <Icon /> {label}
+      </div>
+      <p className="text-base text-zinc-900 break-words">{value}</p>
+    </div>
+  );
+}
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+function ProfileResumeRow({ resume, onDelete }) {
+  const formatFileSize = (bytes) => {
+    if (!bytes) return "0 B";
+    const k = 1024;
+    const sizes = ["B", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+  };
+  const formatDate = (d) =>
+    new Date(d).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     });
+
+  const open = () => resume.fileUrl && window.open(resume.fileUrl, "_blank");
+  const download = async () => {
+    try {
+      const res = await fetch(resume.fileUrl);
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = resume.fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch {
+      toast.error("Failed to download");
+    }
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
-      className=" p-4 bg-gray-50/50 rounded-lg hover:bg-gray-100/50 transition-colors border border-gray-200/50"
-    >
-      <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-2 md:gap-4 flex-1">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-sky-100 rounded-lg flex items-center justify-center">
-            <FaFileAlt className="text-sky-600 text-lg" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h4 className="font-semibold text-gray-900 break-all text-sm sm:text-base">
-              {resume.fileName}
-            </h4>
-          </div>
-        </div>
-
-        <div className="flex items-center md:gap-2">
-          {/* View Button */}
-          <button
-            title="View Resume"
-            className="p-2 text-gray-400 hover:text-sky-600 rounded-lg hover:bg-sky-50 transition-colors"
-          >
-            <FaEye size={16} />
-          </button>
-
-          {/* Download Button */}
-          <button
-            title="Download Resume"
-            className="p-2 text-gray-400 hover:text-green-600 rounded-lg hover:bg-green-50 transition-colors"
-          >
-            <FaDownload size={16} />
-          </button>
-
-          {/* Delete Button */}
-          <button
-            title="Delete Resume"
-            onClick={() => onDelete(resume)}
-            className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
-          >
-            <FaTrash size={16} />
-          </button>
-        </div>
+    <li className="flex items-center gap-3 py-3">
+      <div className="w-9 h-9 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+        <FiFileText />
       </div>
-      <div className="flex items-center mt-2 justify-between gap-2">
-        <p className="text-xs flex justify-start sm:text-sm text-gray-500">
-          {formatFileSize(resume.fileSize)}
-        </p>
-        <p className="text-xs sm:text-sm text-gray-500">
-          {formatDate(resume.uploadedAt)}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-zinc-900 truncate">{resume.fileName}</p>
+        <p className="text-xs text-zinc-500">
+          {formatFileSize(resume.fileSize)} · {formatDate(resume.uploadedAt)}
         </p>
       </div>
-    </motion.div>
+      <div className="flex items-center gap-1 text-zinc-400">
+        <button onClick={open} title="View" className="p-2 rounded-md hover:bg-zinc-100 hover:text-zinc-900 transition-colors">
+          <FiEye />
+        </button>
+        <button onClick={download} title="Download" className="p-2 rounded-md hover:bg-zinc-100 hover:text-zinc-900 transition-colors">
+          <FiDownload />
+        </button>
+        <button
+          onClick={() => onDelete(resume)}
+          title="Delete"
+          className="p-2 rounded-md hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <FiTrash2 />
+        </button>
+      </div>
+    </li>
   );
-};
+}
 
 export default Profile;
