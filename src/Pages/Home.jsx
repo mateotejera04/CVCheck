@@ -13,10 +13,7 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 
-import Marquee from "../Components/Home/Marquee";
-import StatsSection from "../Components/Home/StatsSection";
 import Steps from "../Components/Home/Steps";
-import Testimonials from "../Components/Home/Testimonials";
 import TemplateCarousel from "../Components/Home/TemplateCarousel";
 import FAQ from "../Components/Home/FAQ";
 
@@ -74,53 +71,36 @@ const Home = () => {
   return (
     <div className="surface-base text-zinc-900">
       {/* Hero */}
-      <section className="container-page pt-20 md:pt-28 pb-16 md:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="eyebrow mb-4">AI-powered resume builder</p>
-            <h1 className="h-display mb-6">
-              Build a resume that lands the interview.
-            </h1>
-            <p className="body-lg max-w-xl mb-8">
-              CVCheck combines a clean editor, ATS-friendly templates, and an
-              AI bullet enhancer so you spend less time formatting and more
-              time applying.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <button onClick={handleCTA} className="btn-primary">
-                Get started
-                <FiArrowRight />
-              </button>
-              <button
-                onClick={() => navigate("/templates")}
-                className="btn-secondary"
-              >
-                View templates
-              </button>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="card-flat overflow-hidden"
-          >
-            <img
-              src="https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157796/homepage_npyssp.png"
-              alt="CVCheck dashboard preview"
-              className="w-full h-auto"
-              loading="eager"
-            />
-          </motion.div>
-        </div>
+      <section className="container-page pt-24 md:pt-32 pb-20 md:pb-28">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl"
+        >
+          <p className="eyebrow mb-4">AI-powered resume builder</p>
+          <h1 className="h-display mb-6">
+            Build a resume that lands the interview.
+          </h1>
+          <p className="body-lg max-w-xl mb-8">
+            CVCheck combines a clean editor, ATS-friendly templates, and an AI
+            bullet enhancer so you spend less time formatting and more time
+            applying.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <button onClick={handleCTA} className="btn-primary">
+              Get started
+              <FiArrowRight />
+            </button>
+            <button
+              onClick={() => navigate("/templates")}
+              className="btn-secondary"
+            >
+              View templates
+            </button>
+          </div>
+        </motion.div>
       </section>
-
-      <Marquee />
 
       {/* Features */}
       <section className="surface-base">
@@ -158,9 +138,7 @@ const Home = () => {
       </section>
 
       <Steps />
-      <StatsSection />
       <TemplateCarousel />
-      <Testimonials />
       <FAQ />
 
       {/* Final CTA */}

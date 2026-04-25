@@ -1,14 +1,13 @@
-import { FaGithub, FaEnvelope, FaLinkedin } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaGithub, FaEnvelope } from "react-icons/fa";
+
+const CONTACT_EMAIL = "mateotejera0207@gmail.com";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: FaGithub, href: "https://github.com/", label: "GitHub" },
-    { icon: FaXTwitter, href: "https://x.com/", label: "Twitter" },
-    { icon: FaLinkedin, href: "https://linkedin.com/", label: "LinkedIn" },
-    { icon: FaEnvelope, href: "mailto:hello@cvcheck.app", label: "Email" },
+    { icon: FaGithub, href: "https://github.com/mateotejera04", label: "GitHub" },
+    { icon: FaEnvelope, href: `mailto:${CONTACT_EMAIL}`, label: "Email" },
   ];
 
   return (
@@ -111,6 +110,12 @@ export default function Footer() {
         <div className="mt-12 pt-6 border-t border-zinc-200 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-zinc-500">
           <p>© {currentYear} CVCheck. All rights reserved.</p>
           <div className="flex gap-4">
+            <a
+              href={`mailto:${CONTACT_EMAIL}?subject=CVCheck%20bug%20report`}
+              className="hover:text-sky-700 transition-colors"
+            >
+              Report a bug
+            </a>
             <a href="#" className="hover:text-sky-700 transition-colors">
               Privacy
             </a>
