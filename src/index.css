@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+[contenteditable] ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+}
+
+[contenteditable] ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+}
+
+.resume-content ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+}
+
+.resume-content ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+}
+/* Reduce left margin on small screens */
+@media (max-width: 640px) {
+  [contenteditable] ul,
+  [contenteditable] ol,
+  .resume-content ul,
+  .resume-content ol {
+    padding-left: 0.75rem; /* or 0.5rem if you want it even tighter */
+  }
+}
+
+.marquee-track {
+  display: flex;
+  animation: scrollLeft 30s linear infinite;
+  width: max-content;
+}
+
+/* Scrollbar Styling (works in Webkit browsers like Chrome, Edge) */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fbff; /* slate-200 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #c9e3f6; /* slate-400 */
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background-color 0.3s;
+}
+
+/*no scrollbar*/
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* src/index.css or in your pageStyle string for react-to-print */
+
+@media print {
+  @page {
+    min-height: 1050px;
+  }
+  .print-a4 {
+    min-height: 1050px !important;
+    page-break-after: always !important;
+  }
+
+  .print-a4-sidebar {
+    width: 210mm !important;
+    height: 1050px !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+@media print {
+  .resume-h1 {
+    font-size: clamp(20px, var(--resume-h1-user, 30px), 96px) !important;
+  }
+  .resume-h2 {
+    font-size: clamp(14px, var(--resume-h2-user, 16px), 80px) !important;
+  }
+  .resume-h3 {
+    font-size: clamp(12px, var(--resume-h3-user, 14px), 35px) !important;
+  }
+  .resume-h4 {
+    font-size: clamp(10px, var(--resume-h4-user, 12px), 25px) !important;
+  }
+}
