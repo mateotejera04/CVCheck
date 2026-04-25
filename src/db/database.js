@@ -130,6 +130,23 @@ export const getSidebarSettings = async () => {
   return snapshot.exists() ? snapshot.data() : null;
 };
 
+export const editModernSettings = async (settings) => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const ref = doc(db, "users", user.uid, "modernSettings", "data");
+  await setDoc(ref, { ...settings, updatedOn: serverTimestamp() });
+};
+
+export const getModernSettings = async () => {
+  const user = auth.currentUser;
+  if (!user) return null;
+
+  const ref = doc(db, "users", user.uid, "modernSettings", "data");
+  const snapshot = await getDoc(ref);
+  return snapshot.exists() ? snapshot.data() : null;
+};
+
 export const editStandardSettings = async (settings) => {
   const user = auth.currentUser;
   if (!user) return;

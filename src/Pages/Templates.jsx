@@ -32,6 +32,14 @@ export default function Templates() {
       badge: "Standard",
       badgeColor: "bg-gradient-to-r from-blue-500 to-pink-400",
     },
+    {
+      id: 4,
+      name: "Modern Template",
+      image: "/standard.jpg",
+      description: "Profile-style layout with circular photo and personal summary on top.",
+      badge: "New",
+      badgeColor: "bg-gradient-to-r from-orange-500 to-red-400",
+    },
   ];
 
   return (

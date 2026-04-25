@@ -21,10 +21,12 @@ import {
   FaShare,
 } from "react-icons/fa";
 import StandardTemplate from "../Components/Templates/StandardTemplate";
+import ModernTemplate from "../Components/Templates/ModernTemplate";
 import {
   editClassicSettings,
   editSidebarSettings,
   editStandardSettings,
+  editModernSettings,
   updateResume,
 } from "../db/database";
 import showSuccessToast from "../Components/showSuccessToast";
@@ -37,6 +39,7 @@ export default function Resume() {
   const { classicSettings, setClassicSettings } = useClassicSetting();
   const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
   const { standardSettings, setStandardSettings } = useStandardSetting();
+  const { modernSettings, setModernSettings } = useModernSetting();
 
   const [selectedTemplate, setSelectedTemplate] = useState(
     () => localStorage.getItem("selectedTemplate") || "classic"
@@ -73,6 +76,7 @@ export default function Resume() {
         editClassicSettings(classicSettings),
         editSidebarSettings(sidebarSettings),
         editStandardSettings(standardSettings),
+        editModernSettings(modernSettings),
         updateResume(resume),
       ]);
       showSuccessToast("Changes saved successfully!");
@@ -100,6 +104,12 @@ export default function Resume() {
       label: "Standard",
       icon: "📝",
       description: "Clean and minimal",
+    },
+    {
+      value: "modern",
+      label: "Modern",
+      icon: "🪪",
+      description: "Photo header, profile-style",
     },
   ];
 
@@ -322,6 +332,17 @@ export default function Resume() {
                   visibleSections={visibleSections}
                   settings={standardSettings}
                   onSettingsChange={setStandardSettings}
+                />
+              )}
+
+              {selectedTemplate === "modern" && (
+                <ModernTemplate
+                  resume={resume}
+                  onChange={setResume}
+                  sectionOrder={sectionOrder}
+                  visibleSections={visibleSections}
+                  settings={modernSettings}
+                  onSettingsChange={setModernSettings}
                 />
               )}
             </motion.div>

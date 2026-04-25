@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getClassicSettings } from "../db/database";
+import { getClassicSettings, getModernSettings } from "../db/database";
 
 const CombinedTemplateContext = createContext();
 
@@ -10,7 +10,7 @@ export const CombinedTemplateProvider = ({ children }) => {
   });
 
   const [modernSettings, setModernSettings] = useState(() => {
-    const local = localStorage.getItem("modernSettings");
+    const local = localStorage.getItem("ModernTemplateSetting");
     return local ? JSON.parse(local) : {};
   });
 
@@ -28,9 +28,15 @@ export const CombinedTemplateProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      const cloudData = await getClassicSettings();
-      if (!localStorage.getItem("ClassicTemplateSetting") && cloudData) {
-        setClassicSettings(cloudData);
+      const [classicCloud, modernCloud] = await Promise.all([
+        getClassicSettings(),
+        getModernSettings(),
+      ]);
+      if (!localStorage.getItem("ClassicTemplateSetting") && classicCloud) {
+        setClassicSettings(classicCloud);
+      }
+      if (!localStorage.getItem("ModernTemplateSetting") && modernCloud) {
+        setModernSettings(modernCloud);
       }
       setLoading(false);
     };
@@ -42,7 +48,7 @@ export const CombinedTemplateProvider = ({ children }) => {
   }, [classicSettings]);
 
   useEffect(() => {
-    localStorage.setItem("modernSettings", JSON.stringify(modernSettings));
+    localStorage.setItem("ModernTemplateSetting", JSON.stringify(modernSettings));
   }, [modernSettings]);
 
   useEffect(() => {

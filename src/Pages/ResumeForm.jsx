@@ -116,6 +116,7 @@ const ResumeForm = () => {
 
   const defaultResumeData = {
     name: "",
+    headline: "",
     description: "",
     imgUrl: "",
     education: {
@@ -294,6 +295,23 @@ const ResumeForm = () => {
                 />
                 <FiUser className="absolute left-4 top-4 text-gray-400 group-focus-within:text-sky-500 transition-colors" />
               </div>
+            </div>
+
+            {/* Headline / Subtitle */}
+            <div className="relative group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Headline
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. SOFTWARE ENGINEERING STUDENT"
+                value={formData.headline || ""}
+                onChange={(e) => handleChange(e, "headline")}
+                className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-white/80 backdrop-blur-sm text-gray-800 font-medium transition-all duration-300 group-hover:border-gray-300"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Short tagline shown under your name (used by the Modern template).
+              </p>
             </div>
 
             {/* Description Field */}
