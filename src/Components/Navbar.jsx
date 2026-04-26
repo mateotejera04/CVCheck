@@ -61,7 +61,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
             to={user ? "/dashboard" : "/"}
             className="flex items-center gap-2"
           >
-            <span className="w-2 h-2 rounded-full bg-[color:var(--text-primary)]" />
+            <img src="/logo.png" alt="CVCheck" className="w-7 h-7 md:w-8 md:h-8 object-contain" />
             <span
               className="text-lg md:text-xl tracking-tight text-[color:var(--text-primary)]"
               style={{ fontFamily: "var(--font-serif)" }}

@@ -18,7 +18,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-[color:var(--text-primary)]" />
+              <img src="/logo.png" alt="CVCheck" className="w-7 h-7 object-contain" />
               <span
                 className="text-lg tracking-tight text-[color:var(--text-primary)]"
                 style={{ fontFamily: "var(--font-serif)" }}
