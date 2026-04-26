@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
+import { useLocale } from "../../Contexts/LocaleContext";
 
 const StatsSection = () => {
+  const { t, locale } = useLocale();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [counts, setCounts] = useState({ resumes: 0, hired: 0, score: 0 });
@@ -25,9 +27,9 @@ const StatsSection = () => {
   }, [isInView]);
 
   const items = [
-    { value: `${counts.resumes.toLocaleString()}+`, label: "Resumes created" },
-    { value: `${counts.hired.toLocaleString()}+`, label: "Users hired" },
-    { value: `${counts.score}%`, label: "Average ATS score" },
+    { value: `${counts.resumes.toLocaleString(locale === "es" ? "es-ES" : "en-US")}+`, label: t("stats.labels.0") },
+    { value: `${counts.hired.toLocaleString(locale === "es" ? "es-ES" : "en-US")}+`, label: t("stats.labels.1") },
+    { value: `${counts.score}%`, label: t("stats.labels.2") },
   ];
 
   return (
@@ -40,11 +42,11 @@ const StatsSection = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 mb-6">
             <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-            <span className="eyebrow">By the numbers</span>
+            <span className="eyebrow">{t("stats.eyebrow")}</span>
             <span className="h-px w-10 bg-[color:var(--text-muted)]" />
           </div>
           <h2 className="h-section">
-            Helping careers <em className="italic font-normal">take off.</em>
+            {t("stats.title")} <em className="italic font-normal">{t("stats.titleEmphasis")}</em>
           </h2>
         </div>
         <div

@@ -5,11 +5,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../Contexts/AuthContext";
 import showSuccessToast from "./showSuccessToast";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { user, logout } = useAuth();
+  const { locale, toggleLocale, t } = useLocale();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const isLoginPage = location.pathname === "/login";
@@ -31,9 +33,9 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
 
   const handleLogout = useCallback(() => {
     logout();
-    showSuccessToast("Logged out successfully!");
+    showSuccessToast(t("nav.loggedOut"));
     navigate("/");
-  }, [logout, navigate]);
+  }, [logout, navigate, t]);
 
   return (
     <nav
@@ -49,7 +51,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
             <button
               onClick={toggleSidebar}
               className="p-2 -ml-2 text-[color:var(--text-primary)] hover:opacity-70 rounded-lg transition-opacity"
-              aria-label="Toggle sidebar"
+              aria-label={t("nav.toggleSidebar")}
             >
               {isSidebarOpen ? <RxCross2 size={22} /> : <FaBars size={20} />}
             </button>
@@ -76,10 +78,10 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                 to="/login"
                 className="hidden sm:inline-flex text-[13px] tracking-[0.04em] text-[color:var(--text-primary)] hover:opacity-60 px-3 py-2 transition-opacity"
               >
-                Log in
+                {t("nav.login")}
               </Link>
               <Link to="/signup" className="btn-primary text-sm">
-                Get started
+                {t("common.getStarted")}
               </Link>
             </>
           ) : (
@@ -94,7 +96,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                     "U"}
                 </span>
                 <span className="hidden md:inline text-sm text-[color:var(--text-primary)] truncate max-w-32">
-                  {user?.displayName || "Account"}
+                  {user?.displayName || t("nav.accountFallback")}
                 </span>
               </button>
 
@@ -117,7 +119,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                           className="text-base text-[color:var(--text-primary)] truncate"
                           style={{ fontFamily: "var(--font-serif)" }}
                         >
-                          {user?.displayName || "User"}
+                          {user?.displayName || t("nav.userFallback")}
                         </p>
                         <p className="text-xs text-[color:var(--text-muted)] truncate mt-0.5">
                           {user?.email}
@@ -130,7 +132,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                           className="flex items-center gap-3 px-5 py-2.5 text-sm text-[color:var(--text-primary)] hover:bg-[color:var(--accent-soft)] transition-colors"
                         >
                           <FaTachometerAlt className="opacity-60" />
-                          Dashboard
+                          {t("common.dashboard")}
                         </Link>
                         <Link
                           to="/profile"
@@ -138,7 +140,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                           className="flex items-center gap-3 px-5 py-2.5 text-sm text-[color:var(--text-primary)] hover:bg-[color:var(--accent-soft)] transition-colors"
                         >
                           <FaUser className="opacity-60" />
-                          Profile
+                          {t("common.profile")}
                         </Link>
                       </div>
                       <div className="border-t border-[color:var(--border-hairline)] py-1.5">
@@ -147,7 +149,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
                           className="w-full flex items-center gap-3 px-5 py-2.5 text-sm text-[color:var(--text-primary)] hover:bg-[color:var(--accent-soft)] transition-colors"
                         >
                           <FaSignOutAlt className="opacity-60" />
-                          Sign out
+                          {t("common.signOut")}
                         </button>
                       </div>
                     </motion.div>
@@ -156,6 +158,15 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
               </AnimatePresence>
             </div>
           )}
+          <button
+            type="button"
+            onClick={toggleLocale}
+            className="inline-flex h-9 min-w-10 items-center justify-center rounded-full border border-[color:var(--border-hairline)] px-3 text-[11px] font-semibold tracking-[0.12em] text-[color:var(--text-primary)] hover:bg-[color:var(--accent-soft)] transition-colors"
+            aria-label={t("language.switchTo")}
+            title={t("language.switchTo")}
+          >
+            {locale === "en" ? "ES" : "EN"}
+          </button>
         </div>
       </div>
     </nav>

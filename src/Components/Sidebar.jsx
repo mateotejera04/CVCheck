@@ -8,17 +8,19 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const Sidebar = ({ isOpen, closeSidebar }) => {
   const location = useLocation();
+  const { t } = useLocale();
 
   const menuItems = [
-    { path: "/dashboard", icon: FaHome, label: "Dashboard" },
-    { path: "/resume-form", icon: FaFileAlt, label: "Edit Resume" },
-    { path: "/resume", icon: FaFileAlt, label: "My Resume" },
-    { path: "/ats-checker", icon: FaRobot, label: "ATS Compatibility" },
-    { path: "/templates", icon: FaCogs, label: "Templates" },
-    { path: "/profile", icon: FaUser, label: "Profile" },
+    { path: "/dashboard", icon: FaHome, label: t("common.dashboard") },
+    { path: "/resume-form", icon: FaFileAlt, label: t("sidebar.editResume") },
+    { path: "/resume", icon: FaFileAlt, label: t("sidebar.myResume") },
+    { path: "/ats-checker", icon: FaRobot, label: t("sidebar.atsCompatibility") },
+    { path: "/templates", icon: FaCogs, label: t("common.templates") },
+    { path: "/profile", icon: FaUser, label: t("common.profile") },
   ];
 
   return (
@@ -43,7 +45,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             className="fixed top-16 left-0 z-40 w-64 h-[calc(100vh-4rem)] py-6 px-3 bg-[color:var(--surface-base)] border-r border-[color:var(--border-hairline)] overflow-y-auto"
           >
             <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] px-3 mb-4">
-              Navigation
+              {t("sidebar.navigation")}
             </p>
             <ul className="space-y-1 text-sm">
               {menuItems.map((item) => {

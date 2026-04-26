@@ -88,7 +88,7 @@ export const getFileMetadata = async (fileId) => {
  * @param {File} file - The file to validate
  * @returns {Object} Validation result
  */
-export const validateResumeFile = (file) => {
+export const validateResumeFile = (file, t) => {
   const allowedTypes = [
     "application/pdf",
     "application/msword",
@@ -102,12 +102,16 @@ export const validateResumeFile = (file) => {
 
   if (!allowedTypes.includes(file.type)) {
     errors.push(
-      "File type not supported. Please upload PDF, DOC, DOCX, or TXT files."
+      t?.("uploadModal.invalidFileType") ||
+        "File type not supported. Please upload PDF, DOC, DOCX, or TXT files."
     );
   }
 
   if (file.size > maxSize) {
-    errors.push("File size too large. Please upload files smaller than 10MB.");
+    errors.push(
+      t?.("uploadModal.fileTooLarge") ||
+        "File size too large. Please upload files smaller than 10MB."
+    );
   }
 
   return {
@@ -121,7 +125,7 @@ export const validateResumeFile = (file) => {
  * @param {File} file - The image file to upload
  * @returns {Promise<Object>} Upload result with file ID and URL
  */
-export const uploadProfileImage = async (file) => {
+export const uploadProfileImage = async (file, t) => {
   try {
     const user = auth.currentUser;
     if (!user) {
@@ -129,7 +133,7 @@ export const uploadProfileImage = async (file) => {
     }
 
     // Validate image file
-    const validation = validateImageFile(file);
+    const validation = validateImageFile(file, t);
     if (!validation.isValid) {
       throw new Error(validation.errors.join(", "));
     }
@@ -160,7 +164,7 @@ export const uploadProfileImage = async (file) => {
  * @param {File} file - The file to validate
  * @returns {Object} Validation result
  */
-export const validateImageFile = (file) => {
+export const validateImageFile = (file, t) => {
   const allowedTypes = [
     "image/jpeg",
     "image/jpg",
@@ -175,12 +179,16 @@ export const validateImageFile = (file) => {
 
   if (!allowedTypes.includes(file.type)) {
     errors.push(
-      "File type not supported. Please upload JPEG, PNG, WebP, or GIF images."
+      t?.("resumeForm.invalidImageType") ||
+        "File type not supported. Please upload JPEG, PNG, WebP, or GIF images."
     );
   }
 
   if (file.size > maxSize) {
-    errors.push("File size too large. Please upload images smaller than 5MB.");
+    errors.push(
+      t?.("resumeForm.imageTooLarge") ||
+        "File size too large. Please upload images smaller than 5MB."
+    );
   }
 
   return {

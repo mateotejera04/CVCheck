@@ -3,7 +3,10 @@ import { OpenAI } from "openai";
 import dotenv from "dotenv";
 dotenv.config();
 
-export async function enhanceBullet(text) {
+const responseLanguage = (locale = "en") =>
+  locale === "es" ? "Spanish" : "English";
+
+export async function enhanceBullet(text, locale = "en") {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -20,6 +23,7 @@ Requirements:
 ✅ Maintain professional, concise language (under 2 lines)
 ✅ Focus on impact and results, not just responsibilities
 ✅ Preserve any HTML formatting exactly as provided
+✅ Write the enhanced result in ${responseLanguage(locale)}
 
 Return ONLY the enhanced version - no explanations, quotes, or additional text.
 `;
@@ -47,7 +51,7 @@ function sanitize(text) {
 }
 
 //func to check ATS score
-export async function checkATSCompatibility(resume) {
+export async function checkATSCompatibility(resume, locale = "en") {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   const prompt = `
@@ -99,6 +103,7 @@ Your job is to evaluate how well the given resume aligns with ATS best practices
 - If a field is well-optimized, **don't include it in \`sectionWiseFeedback\`**.
 - Skills section contains both domain and languages, so provide suggestions accordingly.
 - If a section is missing, include it in \`sectionWiseFeedback\` with suggestions to add it.
+- Write all user-facing JSON string values in ${responseLanguage(locale)}.
 
 Resume:
 User Description: ${sanitize(resume.description)}
@@ -155,7 +160,7 @@ Achievements: ${(resume.achievements || [])
 }
 
 // Function to parse uploaded resume and format according to ResuMate template
-export async function parseResumeFromFile(fileUrl) {
+export async function parseResumeFromFile(fileUrl, locale = "en") {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   try {
@@ -280,6 +285,8 @@ EDUCATION PARSING GUIDELINES:
 - Look for specializations, majors, or concentrations
 - Check for education dates in various formats (2020-2024, 2020 to 2024, etc.)
 - Include ALL educational institutions mentioned, not just the highest degree
+- Keep proper nouns, company names, school names, URLs, emails, and technologies exactly as written.
+- Write descriptive user-facing fields in ${responseLanguage(locale)} when translation is appropriate.
 
 Return ONLY the JSON object with actual data from the resume, no additional text or formatting. If information is not available in the resume, use empty strings "" or empty arrays [].`;
 
@@ -410,7 +417,7 @@ Return ONLY the JSON object with actual data from the resume, no additional text
 }
 
 // Function to check ATS compatibility directly from uploaded file
-export async function checkATSFromFile(fileUrl) {
+export async function checkATSFromFile(fileUrl, locale = "en") {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   try {
@@ -512,6 +519,7 @@ IMPORTANT:
 - Focus on ATS optimization, not visual design
 - If a section is well-formatted, don't include it in sectionWiseFeedback
 - Provide actionable, specific suggestions with examples
+- Write all user-facing JSON string values in ${responseLanguage(locale)}
 - Return ONLY the JSON object, no additional text`;
 
     // Step 7: Create an Assistant with file_search tool for ATS analysis
@@ -634,4 +642,3 @@ IMPORTANT:
     throw new Error(`Failed to analyze ATS compatibility: ${error.message}`);
   }
 }
-

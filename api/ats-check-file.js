@@ -5,14 +5,14 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { fileUrl } = req.body;
+  const { fileUrl, locale = "en" } = req.body;
 
   if (!fileUrl) {
     return res.status(400).json({ error: "File URL is required" });
   }
 
   try {
-    const atsResult = await checkATSFromFile(fileUrl);
+    const atsResult = await checkATSFromFile(fileUrl, locale);
     return res.json({ success: true, data: atsResult });
   } catch (err) {
     console.error("ATS File Analysis Error:", err.message);

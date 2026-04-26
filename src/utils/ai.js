@@ -1,12 +1,12 @@
 const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 // Enhance a single bullet point
-export async function enhance(text) {
+export async function enhance(text, locale = "en") {
   try {
     const res = await fetch(`${API_BASE}/enhance-bullet`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text, locale }),
     });
 
     const data = await res.json();
@@ -17,12 +17,12 @@ export async function enhance(text) {
   }
 }
 
-export async function atsScore(resume) {
+export async function atsScore(resume, locale = "en") {
   try {
     const res = await fetch(`${API_BASE}/ats-score`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(resume),
+      body: JSON.stringify({ ...resume, locale }),
     });
 
     if (!res.ok) {
@@ -39,14 +39,14 @@ export async function atsScore(resume) {
 }
 
 // Parse resume from uploaded file URL
-export async function parseResumeFromUpload(fileUrl) {
+export async function parseResumeFromUpload(fileUrl, locale = "en") {
   try {
     console.log("Parsing resume from URL:", fileUrl); // Debug log
 
     const res = await fetch(`${API_BASE}/parse-resume`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fileUrl }),
+      body: JSON.stringify({ fileUrl, locale }),
     });
 
     console.log("API Response status:", res.status); // Debug log
@@ -70,14 +70,14 @@ export async function parseResumeFromUpload(fileUrl) {
 }
 
 // Check ATS compatibility from uploaded file URL
-export async function checkATSFromUpload(fileUrl) {
+export async function checkATSFromUpload(fileUrl, locale = "en") {
   try {
     console.log("Checking ATS compatibility from URL:", fileUrl); // Debug log
 
     const res = await fetch(`${API_BASE}/ats-check-file`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fileUrl }),
+      body: JSON.stringify({ fileUrl, locale }),
     });
 
     console.log("ATS Check API Response status:", res.status); // Debug log
@@ -99,4 +99,3 @@ export async function checkATSFromUpload(fileUrl) {
     throw err;
   }
 }
-

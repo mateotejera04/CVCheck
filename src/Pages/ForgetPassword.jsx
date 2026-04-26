@@ -5,6 +5,7 @@ import { sendPasswordResetEmail, getAuth } from "firebase/auth";
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
 import Field from "../Components/ui/Field";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const serif = { fontFamily: "var(--font-serif)" };
 
@@ -12,16 +13,17 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLocale();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       await sendPasswordResetEmail(getAuth(), email);
-      showSuccessToast("Reset email sent. Check your inbox.");
+      showSuccessToast(t("auth.resetEmailSent"));
       navigate("/login");
     } catch (err) {
-      showErrorToast(err.message || "Failed to send reset email");
+      showErrorToast(err.message || t("auth.resetEmailFailed"));
     } finally {
       setLoading(false);
     }
@@ -53,9 +55,9 @@ export default function ForgotPassword() {
             className="text-[44px] leading-[1.05] tracking-tight"
             style={{ ...serif, color: "var(--text-primary)" }}
           >
-            A new key,
+            {t("auth.forgotArtTitleLine1")}
             <br />
-            <em className="italic font-normal">on its way.</em>
+            <em className="italic font-normal">{t("auth.forgotArtTitleEmphasis")}</em>
           </p>
         </div>
         <div
@@ -66,7 +68,7 @@ export default function ForgotPassword() {
             className="h-px w-8"
             style={{ backgroundColor: "var(--text-secondary)" }}
           />
-          One short email
+          {t("auth.forgotArtFooter")}
         </div>
       </div>
 
@@ -76,16 +78,16 @@ export default function ForgotPassword() {
             className="text-[40px] leading-[1.05] tracking-tight"
             style={{ ...serif, color: "var(--text-primary)" }}
           >
-            Forgot <em className="italic font-normal">password?</em>
+            {t("auth.forgotTitle")} <em className="italic font-normal">{t("auth.forgotTitleEmphasis")}</em>
           </h1>
           <p className="mt-3 text-[14px] text-[color:var(--text-muted)]">
-            Enter your email and we'll send you a reset link.
+            {t("auth.forgotIntro")}
           </p>
 
           <form onSubmit={handleSubmit} className="mt-10 space-y-7">
             <Field
               id="email"
-              label="Email"
+              label={t("common.email")}
               type="email"
               name="email"
               required
@@ -103,7 +105,7 @@ export default function ForgotPassword() {
                 color: "var(--surface-base)",
               }}
             >
-              {loading ? "Sending…" : "Send reset email"}
+              {loading ? t("common.sending") : t("auth.sendResetEmail")}
               {!loading && (
                 <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
               )}
@@ -111,12 +113,12 @@ export default function ForgotPassword() {
           </form>
 
           <p className="mt-10 text-[13px] text-center text-[color:var(--text-muted)]">
-            Remember your password?{" "}
+            {t("auth.rememberPassword")}{" "}
             <Link
               to="/login"
               className="underline underline-offset-4 hover:opacity-70 text-[color:var(--text-primary)]"
             >
-              Back to login
+              {t("common.backToLogin")}
             </Link>
           </p>
         </div>

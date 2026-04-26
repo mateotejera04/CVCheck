@@ -23,6 +23,7 @@ import {
 import ResumeUploadModal from "../Components/ResumeUploadModal";
 import DeleteConfirmModal from "../Components/DeleteConfirmModal";
 import toast from "react-hot-toast";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const Profile = () => {
   const { user, logout, updateUser } = useAuth();
@@ -38,6 +39,7 @@ const Profile = () => {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, resume: null });
   const [isDeleting, setIsDeleting] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const { locale, t } = useLocale();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +56,7 @@ const Profile = () => {
       setUploadedResumes(sorted);
     } catch (err) {
       console.error(err);
-      toast.error("Failed to load resumes");
+      toast.error(t("profile.loadFailed"));
     } finally {
       setLoadingResumes(false);
     }
@@ -84,11 +86,11 @@ const Profile = () => {
     try {
       await deleteUploadedResume(deleteModal.resume.id);
       setUploadedResumes((prev) => prev.filter((r) => r.id !== deleteModal.resume.id));
-      toast.success("Resume deleted");
+      toast.success(t("dashboard.resumeDeleted"));
       setDeleteModal({ isOpen: false, resume: null });
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete resume");
+      toast.error(t("dashboard.deleteResumeFailed"));
     } finally {
       setIsDeleting(false);
     }
@@ -102,7 +104,7 @@ const Profile = () => {
     try {
       await updateUser({ displayName: form.name });
       setEditing(false);
-      showSuccessToast("Profile updated");
+      showSuccessToast(t("profile.updated"));
     } catch (err) {
       console.error(err);
     }
@@ -110,7 +112,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     logout();
-    showSuccessToast("Logged out");
+    showSuccessToast(t("profile.loggedOut"));
     navigate("/");
   };
 
@@ -125,16 +127,16 @@ const Profile = () => {
         <header className="mb-12">
           <div className="flex items-center gap-3 mb-5">
             <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-            <span className="eyebrow">Profile</span>
+            <span className="eyebrow">{t("profile.eyebrow")}</span>
           </div>
           <h1
             className="text-[36px] md:text-[48px] tracking-tight leading-[1.05] text-[color:var(--text-primary)]"
             style={{ fontFamily: "var(--font-serif)" }}
           >
-            Account <em className="italic font-normal">settings.</em>
+            {t("profile.title")} <em className="italic font-normal">{t("profile.titleEmphasis")}</em>
           </h1>
           <p className="mt-4 text-[15px] text-[color:var(--text-secondary)]">
-            Manage your profile information and uploaded resumes.
+            {t("profile.intro")}
           </p>
         </header>
 
@@ -156,7 +158,7 @@ const Profile = () => {
               {userProfile?.imgUrl ? (
                 <img
                   src={userProfile.imgUrl}
-                  alt="Profile"
+                  alt={t("profile.avatarAlt")}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -168,7 +170,7 @@ const Profile = () => {
                 className="text-[22px] tracking-tight text-[color:var(--text-primary)] truncate"
                 style={{ fontFamily: "var(--font-serif)" }}
               >
-                {user?.displayName || "User"}
+                {user?.displayName || t("profile.userFallback")}
               </h2>
               <p className="text-sm text-[color:var(--text-muted)] truncate mt-0.5">
                 {user?.email}
@@ -181,19 +183,19 @@ const Profile = () => {
               <div className="space-y-7">
                 <div>
                   <label className="block text-[11px] tracking-[0.18em] uppercase mb-2 text-[color:var(--text-muted)]">
-                    Full name
+                    {t("common.fullName")}
                   </label>
                   <input
                     name="name"
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="Your name"
+                    placeholder={t("profile.namePlaceholder")}
                     className={inputCls}
                   />
                 </div>
                 <div>
                   <label className="block text-[11px] tracking-[0.18em] uppercase mb-2 text-[color:var(--text-muted)]">
-                    Email
+                    {t("common.email")}
                   </label>
                   <input
                     name="email"
@@ -202,37 +204,37 @@ const Profile = () => {
                     className={`${inputCls} text-[color:var(--text-muted)] cursor-not-allowed`}
                   />
                   <p className="text-xs text-[color:var(--text-muted)] mt-2">
-                    Email cannot be changed.
+                    {t("profile.emailLocked")}
                   </p>
                 </div>
                 <div className="flex gap-3 pt-1">
                   <button onClick={handleSave} className="btn-primary inline-flex items-center gap-2">
-                    <FiCheck /> Save
+                    <FiCheck /> {t("common.save")}
                   </button>
                   <button
                     onClick={() => setEditing(false)}
                     className="btn-secondary inline-flex items-center gap-2"
                   >
-                    <FiX /> Cancel
+                    <FiX /> {t("common.cancel")}
                   </button>
                 </div>
               </div>
             ) : (
               <div className="space-y-6">
-                <ProfileField icon={FiUser} label="Full name" value={user?.displayName || "Not provided"} />
-                <ProfileField icon={FiMail} label="Email" value={user?.email} />
+                <ProfileField icon={FiUser} label={t("common.fullName")} value={user?.displayName || t("profile.notProvided")} />
+                <ProfileField icon={FiMail} label={t("common.email")} value={user?.email} />
                 <div className="flex gap-3 pt-3 flex-wrap">
                   <button
                     onClick={() => setEditing(true)}
                     className="btn-primary inline-flex items-center gap-2"
                   >
-                    <FiEdit2 /> Edit profile
+                    <FiEdit2 /> {t("profile.editProfile")}
                   </button>
                   <button
                     onClick={handleLogout}
                     className="btn-secondary inline-flex items-center gap-2"
                   >
-                    <FiLogOut /> Sign out
+                    <FiLogOut /> {t("common.signOut")}
                   </button>
                 </div>
               </div>
@@ -248,19 +250,19 @@ const Profile = () => {
           }}
         >
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-            <h2 className="eyebrow">Uploaded resumes</h2>
+            <h2 className="eyebrow">{t("profile.uploadedResumes")}</h2>
             <button
               type="button"
               onClick={() => setIsUploadModalOpen(true)}
               className="btn-primary inline-flex items-center gap-2 text-sm"
             >
-              Upload
+              {t("common.upload")}
             </button>
           </div>
 
           {loadingResumes ? (
             <div className="flex items-center justify-center py-10 text-sm text-[color:var(--text-muted)]">
-              <FiClock className="animate-spin mr-2" /> Loading…
+              <FiClock className="animate-spin mr-2" /> {t("common.loading")}
             </div>
           ) : uploadedResumes.length === 0 ? (
             <div
@@ -269,7 +271,7 @@ const Profile = () => {
             >
               <FiFileText className="text-3xl text-[color:var(--text-muted)] mx-auto mb-3 opacity-50" />
               <p className="text-sm text-[color:var(--text-secondary)]">
-                No resumes uploaded yet
+                {t("dashboard.noUploads")}
               </p>
             </div>
           ) : (
@@ -278,7 +280,7 @@ const Profile = () => {
               style={{ borderTop: "1px solid var(--border-hairline)" }}
             >
               {uploadedResumes.map((r) => (
-                <ProfileResumeRow key={r.id} resume={r} onDelete={handleDeleteResume} />
+                <ProfileResumeRow key={r.id} resume={r} onDelete={handleDeleteResume} locale={locale} t={t} />
               ))}
             </ul>
           )}
@@ -314,7 +316,7 @@ function ProfileField({ icon: Icon, label, value }) {
   );
 }
 
-function ProfileResumeRow({ resume, onDelete }) {
+function ProfileResumeRow({ resume, onDelete, locale, t }) {
   const formatFileSize = (bytes) => {
     if (!bytes) return "0 B";
     const k = 1024;
@@ -323,7 +325,7 @@ function ProfileResumeRow({ resume, onDelete }) {
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
   };
   const formatDate = (d) =>
-    new Date(d).toLocaleDateString("en-US", {
+    new Date(d).toLocaleDateString(locale === "es" ? "es-ES" : "en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -343,7 +345,7 @@ function ProfileResumeRow({ resume, onDelete }) {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     } catch {
-      toast.error("Failed to download");
+      toast.error(t("profile.downloadFailed"));
     }
   };
 
@@ -366,21 +368,24 @@ function ProfileResumeRow({ resume, onDelete }) {
       <div className="flex items-center gap-1 text-[color:var(--text-muted)]">
         <button
           onClick={open}
-          title="View"
+          title={t("common.view")}
+          aria-label={t("common.view")}
           className="p-2 rounded-md hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--text-primary)] transition-colors"
         >
           <FiEye />
         </button>
         <button
           onClick={download}
-          title="Download"
+          title={t("common.download")}
+          aria-label={t("common.download")}
           className="p-2 rounded-md hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--text-primary)] transition-colors"
         >
           <FiDownload />
         </button>
         <button
           onClick={() => onDelete(resume)}
-          title="Delete"
+          title={t("common.delete")}
+          aria-label={t("common.delete")}
           className="p-2 rounded-md hover:bg-[color:var(--status-danger-soft)] hover:text-[color:var(--status-danger)] transition-colors"
         >
           <FiTrash2 />

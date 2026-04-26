@@ -3,36 +3,31 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
 import TemplatePreview from "../ui/TemplatePreview";
+import { useLocale } from "../../Contexts/LocaleContext";
 
 const templates = [
   {
     id: 1,
-    name: "Sidebar",
     variant: "sidebar",
-    description: "Clean and modern with a color sidebar accent.",
   },
   {
     id: 2,
-    name: "Classic",
     variant: "classic",
-    description: "Traditional, formal, timeless.",
   },
   {
     id: 3,
-    name: "Standard",
     variant: "standard",
-    description: "Clean, simple, gets the job done.",
   },
   {
     id: 4,
-    name: "Modern",
     variant: "modern",
-    description: "Profile-style with circular photo.",
   },
 ];
 
 const TemplateCarousel = () => {
   const navigate = useNavigate();
+  const { t } = useLocale();
+  const templateCopy = t("templates.carouselItems", []);
   return (
     <section
       className="surface-base"
@@ -43,19 +38,19 @@ const TemplateCarousel = () => {
           <div className="max-w-xl">
             <div className="flex items-center gap-3 mb-6">
               <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-              <span className="eyebrow">Templates</span>
+              <span className="eyebrow">{t("templates.eyebrow")}</span>
             </div>
             <h2 className="h-section">
-              Pick a layout that fits
+              {t("templates.carouselTitleLine1")}
               <br />
-              <em className="italic font-normal">your story.</em>
+              <em className="italic font-normal">{t("templates.carouselTitleEmphasis")}</em>
             </h2>
           </div>
           <button
             onClick={() => navigate("/templates")}
             className="btn-secondary text-sm self-start md:self-end"
           >
-            View all
+            {t("templates.viewAll")}
             <FiArrowRight />
           </button>
         </div>
@@ -84,10 +79,10 @@ const TemplateCarousel = () => {
                     className="text-[16px] tracking-tight text-[color:var(--text-primary)]"
                     style={{ fontFamily: "var(--font-serif)" }}
                   >
-                    {t.name}
+                    {templateCopy[i]?.name}
                   </p>
                   <p className="text-[12px] text-[color:var(--text-muted)] mt-1">
-                    {t.description}
+                    {templateCopy[i]?.description}
                   </p>
                 </div>
                 <FiArrowRight className="text-[color:var(--text-muted)] group-hover:text-[color:var(--text-primary)] group-hover:translate-x-0.5 transition-all mt-1" />

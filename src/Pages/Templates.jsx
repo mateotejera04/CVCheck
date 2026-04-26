@@ -1,40 +1,31 @@
 import { useNavigate } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
 import TemplatePreview from "../Components/ui/TemplatePreview";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const templates = [
   {
     id: 1,
-    name: "Sidebar",
     variant: "sidebar",
-    description: "Two-column layout with a clean sidebar for skills and contact.",
-    badge: "Popular",
   },
   {
     id: 2,
-    name: "Classic",
     variant: "classic",
-    description: "A timeless single-column design that reads well in any context.",
-    badge: "Timeless",
   },
   {
     id: 3,
-    name: "Standard",
     variant: "standard",
-    description: "A balanced standard layout that works for most industries.",
-    badge: "Standard",
   },
   {
     id: 4,
-    name: "Modern",
     variant: "modern",
-    description: "Profile-style header with photo and personal summary up top.",
-    badge: "New",
   },
 ];
 
 export default function Templates() {
   const navigate = useNavigate();
+  const { t } = useLocale();
+  const templateCopy = t("templates.items", []);
 
   return (
     <div className="surface-base min-h-[calc(100vh-4rem)]">
@@ -42,21 +33,20 @@ export default function Templates() {
         <div className="max-w-2xl mb-16">
           <div className="flex items-center gap-3 mb-6">
             <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-            <span className="eyebrow">Templates</span>
+            <span className="eyebrow">{t("templates.eyebrow")}</span>
           </div>
           <h1 className="h-section mb-5">
-            Pick a <em className="italic font-normal">starting point.</em>
+            {t("templates.pageTitle")} <em className="italic font-normal">{t("templates.pageTitleEmphasis")}</em>
           </h1>
           <p className="text-[16px] md:text-[17px] leading-relaxed text-[color:var(--text-secondary)]">
-            Every template is ATS-friendly and fully editable. Pick one to step
-            straight into the editor.
+            {t("templates.pageIntro")}
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {templates.map((t) => (
+          {templates.map((template, index) => (
             <button
-              key={t.id}
+              key={template.id}
               type="button"
               onClick={() => navigate("/resume")}
               className="group text-left overflow-hidden rounded-2xl transition-colors"
@@ -66,7 +56,7 @@ export default function Templates() {
               }}
             >
               <div className="relative aspect-[3/4] overflow-hidden">
-                <TemplatePreview variant={t.variant} />
+                <TemplatePreview variant={template.variant} />
                 <span
                   className="absolute top-3 left-3 text-[11px] tracking-[0.14em] uppercase px-2.5 py-1 rounded-full text-[color:var(--text-primary)]"
                   style={{
@@ -74,7 +64,7 @@ export default function Templates() {
                     border: "1px solid var(--border-hairline)",
                   }}
                 >
-                  {t.badge}
+                  {templateCopy[index]?.badge}
                 </span>
               </div>
               <div className="p-5">
@@ -83,12 +73,12 @@ export default function Templates() {
                     className="text-[18px] tracking-tight text-[color:var(--text-primary)]"
                     style={{ fontFamily: "var(--font-serif)" }}
                   >
-                    {t.name}
+                    {templateCopy[index]?.name}
                   </h3>
                   <FiArrowRight className="text-[color:var(--text-muted)] group-hover:text-[color:var(--text-primary)] group-hover:translate-x-0.5 transition-all" />
                 </div>
                 <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed">
-                  {t.description}
+                  {templateCopy[index]?.description}
                 </p>
               </div>
             </button>

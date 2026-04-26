@@ -15,6 +15,7 @@ import {
 
 import TemplateCarousel from "../Components/Home/TemplateCarousel";
 import FAQ from "../Components/Home/FAQ";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const serif = { fontFamily: "Merriweather, ui-serif, Georgia, serif" };
 const cream = "#F5EFE3";
@@ -22,52 +23,25 @@ const ink = "#1a120b";
 const muted = "#6b5a4a";
 const hairline = "#e2d4bd";
 
-const features = [
-  {
-    icon: FiEdit,
-    title: "Step-by-step builder",
-    desc: "Guided form for personal info, education, work experience, skills, and certifications.",
-  },
-  {
-    icon: FiUpload,
-    title: "Upload & enhance",
-    desc: "Upload your existing resume to edit, optimize, and refresh its design.",
-  },
-  {
-    icon: FiBarChart2,
-    title: "ATS compatibility",
-    desc: "Check ATS compatibility for any uploaded resume in seconds.",
-  },
-  {
-    icon: FiLayers,
-    title: "Live preview & editor",
-    desc: "Edit in real-time with formatting, fonts, colors, and hyperlink support.",
-  },
-  {
-    icon: FiFileText,
-    title: "Beautiful templates",
-    desc: "Choose from modern, classic, sidebar, and standard layouts.",
-  },
-  {
-    icon: FiZap,
-    title: "AI bullet enhancer",
-    desc: "Turn weak bullet points into action-oriented statements with AI.",
-  },
-  {
-    icon: FiCheckCircle,
-    title: "ATS scoring",
-    desc: "Get a 0–100 score with concrete suggestions to fix your resume.",
-  },
-  {
-    icon: FiShield,
-    title: "Secure profiles & PDF export",
-    desc: "Your data is securely stored and exported as a polished PDF anytime.",
-  },
+const featureIcons = [
+  FiEdit,
+  FiUpload,
+  FiBarChart2,
+  FiLayers,
+  FiFileText,
+  FiZap,
+  FiCheckCircle,
+  FiShield,
 ];
 
 const Home = () => {
   const navigate = useNavigate();
   const auth = getAuth();
+  const { t } = useLocale();
+  const features = t("home.features", []).map((feature, index) => ({
+    ...feature,
+    icon: featureIcons[index],
+  }));
 
   const handleCTA = () => {
     navigate(auth.currentUser ? "/dashboard" : "/signup");
@@ -104,24 +78,22 @@ const Home = () => {
                 className="text-[12px] tracking-[0.18em] uppercase"
                 style={{ color: muted }}
               >
-                AI-powered resume builder
+                {t("home.eyebrow")}
               </span>
             </div>
             <h1
               className="text-[44px] sm:text-[60px] md:text-[76px] leading-[1.02] tracking-tight"
               style={{ ...serif, color: ink }}
             >
-              Build a resume that
+              {t("home.titleLine1")}
               <br />
-              <em className="italic font-normal">lands the interview.</em>
+              <em className="italic font-normal">{t("home.titleEmphasis")}</em>
             </h1>
             <p
               className="mt-8 text-[17px] md:text-[18px] leading-relaxed max-w-xl"
               style={{ color: muted }}
             >
-              CVCheck combines a clean editor, ATS-friendly templates, and an
-              AI bullet enhancer — so you spend less time formatting and more
-              time applying.
+              {t("home.intro")}
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
               <button
@@ -129,7 +101,7 @@ const Home = () => {
                 className="group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[14px] tracking-wide transition-colors"
                 style={{ backgroundColor: ink, color: cream }}
               >
-                Get started
+                {t("common.getStarted")}
                 <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
               </button>
               <button
@@ -137,7 +109,7 @@ const Home = () => {
                 className="inline-flex items-center justify-center rounded-full px-7 py-3.5 text-[14px] tracking-wide transition-colors hover:bg-black/5"
                 style={{ color: ink, border: `1px solid ${ink}` }}
               >
-                View templates
+                {t("common.viewTemplates")}
               </button>
             </div>
           </motion.div>
@@ -154,23 +126,22 @@ const Home = () => {
                 className="text-[12px] tracking-[0.18em] uppercase"
                 style={{ color: muted }}
               >
-                Features
+                {t("home.featuresEyebrow")}
               </span>
             </div>
             <h2
               className="text-[34px] sm:text-[44px] md:text-[52px] leading-[1.05] tracking-tight"
               style={{ ...serif, color: ink }}
             >
-              Everything you need to ship
+              {t("home.featuresTitleLine1")}
               <br />
-              <em className="italic font-normal">a great resume.</em>
+              <em className="italic font-normal">{t("home.featuresTitleEmphasis")}</em>
             </h2>
             <p
               className="mt-6 text-[16px] md:text-[17px] leading-relaxed"
               style={{ color: muted }}
             >
-              Built for job seekers who'd rather focus on the content than the
-              format.
+              {t("home.featuresIntro")}
             </p>
           </div>
 
@@ -231,22 +202,22 @@ const Home = () => {
             className="relative text-[36px] sm:text-[52px] md:text-[64px] leading-[1.05] tracking-tight max-w-3xl mx-auto"
             style={{ ...serif, color: cream }}
           >
-            Ready to land
+            {t("home.finalTitleLine1")}
             <br />
-            <em className="italic font-normal">your next role?</em>
+            <em className="italic font-normal">{t("home.finalTitleEmphasis")}</em>
           </h2>
           <p
             className="relative mt-6 text-[16px] md:text-[17px] max-w-xl mx-auto"
             style={{ color: "#cdbda6" }}
           >
-            Join thousands of job seekers building better resumes with CVCheck.
+            {t("home.finalIntro")}
           </p>
           <button
             onClick={handleCTA}
             className="group relative mt-10 inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[14px] tracking-wide transition-colors"
             style={{ backgroundColor: cream, color: ink }}
           >
-            Get started
+            {t("common.getStarted")}
             <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>

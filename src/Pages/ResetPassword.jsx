@@ -6,6 +6,7 @@ import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
 import Field from "../Components/ui/Field";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const serif = { fontFamily: "var(--font-serif)" };
 
@@ -16,22 +17,23 @@ export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { t } = useLocale();
 
   useEffect(() => {
     const code = searchParams.get("oobCode");
     if (code) setOobCode(code);
-    else showErrorToast("Invalid or expired reset link.");
-  }, [searchParams]);
+    else showErrorToast(t("auth.invalidResetLink"));
+  }, [searchParams, t]);
 
   const handleReset = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       await confirmPasswordReset(getAuth(), oobCode, newPassword);
-      showSuccessToast("Password reset successful");
+      showSuccessToast(t("auth.resetSuccess"));
       navigate("/login");
     } catch (err) {
-      showErrorToast(err.message || "Failed to reset password.");
+      showErrorToast(err.message || t("auth.resetFailed"));
     } finally {
       setLoading(false);
     }
@@ -63,9 +65,9 @@ export default function ResetPassword() {
             className="text-[44px] leading-[1.05] tracking-tight"
             style={{ ...serif, color: "var(--text-primary)" }}
           >
-            A fresh start,
+            {t("auth.resetArtTitleLine1")}
             <br />
-            <em className="italic font-normal">one keystroke away.</em>
+            <em className="italic font-normal">{t("auth.resetArtTitleEmphasis")}</em>
           </p>
         </div>
         <div
@@ -76,7 +78,7 @@ export default function ResetPassword() {
             className="h-px w-8"
             style={{ backgroundColor: "var(--text-secondary)" }}
           />
-          Pick something memorable
+          {t("auth.resetArtFooter")}
         </div>
       </div>
 
@@ -86,16 +88,16 @@ export default function ResetPassword() {
             className="text-[40px] leading-[1.05] tracking-tight"
             style={{ ...serif, color: "var(--text-primary)" }}
           >
-            Reset <em className="italic font-normal">password.</em>
+            {t("auth.resetTitle")} <em className="italic font-normal">{t("auth.resetTitleEmphasis")}</em>
           </h1>
           <p className="mt-3 text-[14px] text-[color:var(--text-muted)]">
-            Choose a new password for your account.
+            {t("auth.resetIntro")}
           </p>
 
           <form onSubmit={handleReset} className="mt-10 space-y-7">
             <Field
               id="newPassword"
-              label="New password"
+              label={t("common.newPassword")}
               type={showPassword ? "text" : "password"}
               name="newPassword"
               required
@@ -108,7 +110,7 @@ export default function ResetPassword() {
                   onClick={() => setShowPassword((p) => !p)}
                   tabIndex={-1}
                   className="opacity-60 hover:opacity-100 transition-opacity"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? t("common.hidePassword") : t("common.showPassword")}
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -124,7 +126,7 @@ export default function ResetPassword() {
                 color: "var(--surface-base)",
               }}
             >
-              {loading ? "Resetting…" : "Reset password"}
+              {loading ? t("auth.resetting") : t("auth.resetPassword")}
               {!loading && (
                 <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
               )}
@@ -136,7 +138,7 @@ export default function ResetPassword() {
               to="/login"
               className="underline underline-offset-4 hover:opacity-70 text-[color:var(--text-primary)]"
             >
-              Back to login
+              {t("common.backToLogin")}
             </Link>
           </p>
         </div>

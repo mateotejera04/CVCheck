@@ -1,9 +1,11 @@
 import { FaGithub, FaEnvelope } from "react-icons/fa";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const CONTACT_EMAIL = "mateotejera0207@gmail.com";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { t } = useLocale();
 
   const socialLinks = [
     { icon: FaGithub, href: "https://github.com/mateotejera04", label: "GitHub" },
@@ -25,14 +27,14 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-[14px] text-[color:var(--text-secondary)] max-w-xs leading-relaxed">
-              A quieter way to write the resume that opens the next door.
+              {t("footer.tagline")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div>
               <h3 className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-4">
-                Product
+                {t("footer.product")}
               </h3>
               <ul className="space-y-2 text-[14px]">
                 <li>
@@ -40,7 +42,7 @@ export default function Footer() {
                     href="/templates"
                     className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
-                    Templates
+                    {t("common.templates")}
                   </a>
                 </li>
                 <li>
@@ -48,7 +50,7 @@ export default function Footer() {
                     href="/dashboard"
                     className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
-                    Dashboard
+                    {t("common.dashboard")}
                   </a>
                 </li>
                 <li>
@@ -56,14 +58,14 @@ export default function Footer() {
                     href="/ats-checker"
                     className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
-                    ATS Checker
+                    {t("footer.atsChecker")}
                   </a>
                 </li>
               </ul>
             </div>
             <div>
               <h3 className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-4">
-                Account
+                {t("footer.account")}
               </h3>
               <ul className="space-y-2 text-[14px]">
                 <li>
@@ -71,7 +73,7 @@ export default function Footer() {
                     href="/login"
                     className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
-                    Log in
+                    {t("nav.login")}
                   </a>
                 </li>
                 <li>
@@ -79,7 +81,7 @@ export default function Footer() {
                     href="/signup"
                     className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
-                    Sign up
+                    {t("common.signup")}
                   </a>
                 </li>
               </ul>
@@ -88,7 +90,7 @@ export default function Footer() {
 
           <div className="md:text-right">
             <h3 className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-4">
-              Connect
+              {t("footer.connect")}
             </h3>
             <div className="flex md:justify-end gap-2">
               {socialLinks.map((s) => (
@@ -108,19 +110,19 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 pt-6 border-t border-[color:var(--border-hairline)] flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-[color:var(--text-muted)]">
-          <p>© {currentYear} CVCheck. All rights reserved.</p>
+          <p>© {currentYear} CVCheck. {t("footer.rights")}</p>
           <div className="flex gap-4">
             <a
               href={`mailto:${CONTACT_EMAIL}?subject=CVCheck%20bug%20report`}
               className="hover:text-[color:var(--text-primary)] transition-colors"
             >
-              Report a bug
+              {t("footer.reportBug")}
             </a>
             <a href="#" className="hover:text-[color:var(--text-primary)] transition-colors">
-              Privacy
+              {t("footer.privacy")}
             </a>
             <a href="#" className="hover:text-[color:var(--text-primary)] transition-colors">
-              Terms
+              {t("footer.terms")}
             </a>
           </div>
         </div>

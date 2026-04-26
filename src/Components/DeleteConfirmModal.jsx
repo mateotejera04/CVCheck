@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { FaTrash, FaTimes } from "react-icons/fa";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const DeleteConfirmModal = ({
   isOpen,
@@ -8,6 +9,7 @@ const DeleteConfirmModal = ({
   fileName,
   isDeleting = false,
 }) => {
+  const { t } = useLocale();
   if (!isOpen) return null;
 
   return (
@@ -40,7 +42,7 @@ const DeleteConfirmModal = ({
               className="text-[18px] tracking-tight text-[color:var(--text-primary)]"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              Delete resume
+              {t("deleteModal.title")}
             </h2>
             <button
               onClick={onClose}
@@ -53,7 +55,7 @@ const DeleteConfirmModal = ({
 
           <div className="px-7 py-6">
             <p className="text-sm text-[color:var(--text-secondary)]">
-              Are you sure you want to delete this resume?
+              {t("deleteModal.message")}
             </p>
             {fileName && (
               <div
@@ -67,7 +69,7 @@ const DeleteConfirmModal = ({
               </div>
             )}
             <p className="text-xs text-[color:var(--status-danger)] mt-3">
-              This action cannot be undone.
+              {t("deleteModal.warning")}
             </p>
           </div>
 
@@ -80,7 +82,7 @@ const DeleteConfirmModal = ({
               disabled={isDeleting}
               className="btn-secondary flex-1 disabled:opacity-50"
             >
-              Cancel
+              {t("common.cancel")}
             </button>
             <button
               onClick={onConfirm}
@@ -91,12 +93,12 @@ const DeleteConfirmModal = ({
               {isDeleting ? (
                 <>
                   <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  Deleting…
+                  {t("deleteModal.deleting")}
                 </>
               ) : (
                 <>
                   <FaTrash size={13} />
-                  Delete
+                  {t("common.delete")}
                 </>
               )}
             </button>

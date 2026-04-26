@@ -7,18 +7,24 @@ import {
   FaChartLine,
   FaCheckCircle,
 } from "react-icons/fa";
+import { useLocale } from "../../Contexts/LocaleContext";
 
-const steps = [
-  { id: 1, icon: FaSearch, title: "Scanning document", duration: 2500 },
-  { id: 2, icon: FaSpellCheck, title: "Analyzing keywords", duration: 3000 },
-  { id: 3, icon: FaRobot, title: "Simulating ATS filters", duration: 3500 },
-  { id: 4, icon: FaChartLine, title: "Scoring", duration: 2000 },
-  { id: 5, icon: FaCheckCircle, title: "Generating report", duration: 1500 },
+const stepConfig = [
+  { id: 1, icon: FaSearch, duration: 2500 },
+  { id: 2, icon: FaSpellCheck, duration: 3000 },
+  { id: 3, icon: FaRobot, duration: 3500 },
+  { id: 4, icon: FaChartLine, duration: 2000 },
+  { id: 5, icon: FaCheckCircle, duration: 1500 },
 ];
 
 const ATSCheckingLoader = ({ isVisible }) => {
   const [completed, setCompleted] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
+  const { t } = useLocale();
+  const steps = stepConfig.map((step, index) => ({
+    ...step,
+    title: t(`loaders.atsSteps.${index}`),
+  }));
 
   useEffect(() => {
     if (!isVisible) {
@@ -62,12 +68,13 @@ const ATSCheckingLoader = ({ isVisible }) => {
             className="px-7 pt-7 pb-5"
             style={{ borderBottom: "1px solid var(--border-hairline)" }}
           >
-            <p className="eyebrow mb-3">ATS check</p>
+            <p className="eyebrow mb-3">{t("loaders.atsCheck")}</p>
             <h2
               className="text-[20px] tracking-tight text-[color:var(--text-primary)]"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              Analyzing your <em className="italic font-normal">resume…</em>
+              {t("loaders.analyzingResume")}{" "}
+              <em className="italic font-normal">{t("loaders.resume")}</em>
             </h2>
           </div>
 
@@ -122,7 +129,7 @@ const ATSCheckingLoader = ({ isVisible }) => {
 
           <div className="px-7 pb-7">
             <div className="flex justify-between text-[10px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-              <span>Progress</span>
+              <span>{t("loaders.progress")}</span>
               <span>{progress}%</span>
             </div>
             <div

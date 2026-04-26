@@ -20,6 +20,7 @@ import ResumeUploadModal from "../Components/ResumeUploadModal";
 import DeleteConfirmModal from "../Components/DeleteConfirmModal";
 import PdfActionsModal from "../Components/PdfActionsModal";
 import toast from "react-hot-toast";
+import { useLocale } from "../Contexts/LocaleContext";
 
 export default function Dashboard() {
   const { resume } = useResumeData();
@@ -31,6 +32,7 @@ export default function Dashboard() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [loadingResumes, setLoadingResumes] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState("Classic");
+  const { locale, t } = useLocale();
 
   useEffect(() => {
     const stored = localStorage.getItem("selectedTemplate");
@@ -38,12 +40,12 @@ export default function Dashboard() {
   }, []);
 
   const memberSince = user.metadata?.creationTime
-    ? new Date(user.metadata.creationTime).toLocaleDateString("en-IN", {
+    ? new Date(user.metadata.creationTime).toLocaleDateString(locale === "es" ? "es-ES" : "en-IN", {
         day: "2-digit",
         month: "short",
         year: "numeric",
       })
-    : "Unknown";
+    : t("common.unknown");
 
   const loadUploadedResumes = async () => {
     try {
@@ -55,7 +57,7 @@ export default function Dashboard() {
       setUploadedResumes(sorted);
     } catch (err) {
       console.error("Error loading uploaded resumes:", err);
-      toast.error("Failed to load uploaded resumes");
+      toast.error(t("dashboard.loadUploadsFailed"));
     } finally {
       setLoadingResumes(false);
     }
@@ -76,11 +78,11 @@ export default function Dashboard() {
     try {
       await deleteUploadedResume(deleteModal.resume.id);
       setUploadedResumes((prev) => prev.filter((r) => r.id !== deleteModal.resume.id));
-      toast.success("Resume deleted");
+      toast.success(t("dashboard.resumeDeleted"));
       setDeleteModal({ isOpen: false, resume: null });
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete resume");
+      toast.error(t("dashboard.deleteResumeFailed"));
     } finally {
       setIsDeleting(false);
     }
@@ -95,7 +97,7 @@ export default function Dashboard() {
 
   const handleViewPdf = (r) => {
     if (r.fileUrl) window.open(r.fileUrl, "_blank");
-    else toast.error("File URL not available");
+    else toast.error(t("dashboard.fileUrlMissing"));
   };
 
   const handleDownloadPdf = async (r) => {
@@ -110,10 +112,10 @@ export default function Dashboard() {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-      toast.success("Download started");
+      toast.success(t("dashboard.downloadStarted"));
     } catch (err) {
       console.error(err);
-      toast.error("Failed to download file");
+      toast.error(t("dashboard.downloadFailed"));
     }
   };
 
@@ -121,7 +123,7 @@ export default function Dashboard() {
     if (!date) return "—";
     if (typeof date === "object" && date.seconds) date = new Date(date.seconds * 1000);
     else date = new Date(date);
-    return date.toLocaleString("en-IN", {
+    return date.toLocaleString(locale === "es" ? "es-ES" : "en-IN", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -132,26 +134,26 @@ export default function Dashboard() {
 
   const quickActions = [
     {
-      title: "Create new resume",
-      description: "Start from scratch with a guided builder.",
+      title: t("dashboard.quickActions.0.title"),
+      description: t("dashboard.quickActions.0.description"),
       icon: FiPlus,
       link: "/resume-form",
     },
     {
-      title: "Upload existing resume",
-      description: "Bring in a PDF and enhance it with AI.",
+      title: t("dashboard.quickActions.1.title"),
+      description: t("dashboard.quickActions.1.description"),
       icon: FiUpload,
       action: () => setIsUploadModalOpen(true),
     },
     {
-      title: "Run ATS check",
-      description: "See how well your resume passes filters.",
+      title: t("dashboard.quickActions.2.title"),
+      description: t("dashboard.quickActions.2.description"),
       icon: FiCpu,
       link: "/ats-checker",
     },
   ];
 
-  const greetingName = user?.displayName?.split(" ")[0] || "there";
+  const greetingName = user?.displayName?.split(" ")[0] || t("dashboard.fallbackName");
 
   return (
     <div className="surface-base min-h-screen">
@@ -159,18 +161,18 @@ export default function Dashboard() {
         <header className="mb-12">
           <div className="flex items-center gap-3 mb-5">
             <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-            <span className="eyebrow">Dashboard</span>
+            <span className="eyebrow">{t("dashboard.eyebrow")}</span>
           </div>
           <h1
             className="text-[36px] md:text-[48px] tracking-tight leading-[1.05] text-[color:var(--text-primary)]"
             style={{ fontFamily: "var(--font-serif)" }}
           >
-            Welcome back, <em className="italic font-normal">{greetingName}.</em>
+            {t("dashboard.welcome")} <em className="italic font-normal">{greetingName}.</em>
           </h1>
           <p className="mt-4 text-[15px] text-[color:var(--text-secondary)]">
             {resume?.name
-              ? "Pick up where you left off, or start something new."
-              : "Let's get your first resume set up."}
+              ? t("dashboard.hasResumeIntro")
+              : t("dashboard.noResumeIntro")}
           </p>
         </header>
 
@@ -230,10 +232,10 @@ export default function Dashboard() {
             }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="eyebrow">Current resume</h2>
+              <h2 className="eyebrow">{t("dashboard.currentResume")}</h2>
               {resume?.name && (
                 <span className="inline-flex items-center gap-1.5 text-[12px] text-[color:var(--status-success)]">
-                  <FiCheckCircle /> Ready
+                  <FiCheckCircle /> {t("common.ready")}
                 </span>
               )}
             </div>
@@ -248,7 +250,7 @@ export default function Dashboard() {
                     {resume.name}
                   </h3>
                   <p className="text-[13px] text-[color:var(--text-muted)]">
-                    Last updated {formatDate(resume.updatedOn || resume.createdOn)}
+                    {t("dashboard.lastUpdated")} {formatDate(resume.updatedOn || resume.createdOn)}
                   </p>
                 </div>
 
@@ -264,7 +266,7 @@ export default function Dashboard() {
                     style={{ borderRight: "1px solid var(--border-hairline)" }}
                   >
                     <dt className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-1.5">
-                      Template
+                      {t("common.template")}
                     </dt>
                     <dd className="text-[color:var(--text-primary)]">
                       {resume.template || selectedTemplate}
@@ -272,7 +274,7 @@ export default function Dashboard() {
                   </div>
                   <div className="p-4">
                     <dt className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-1.5">
-                      Member since
+                      {t("common.memberSince")}
                     </dt>
                     <dd className="text-[color:var(--text-primary)]">{memberSince}</dd>
                   </div>
@@ -280,10 +282,10 @@ export default function Dashboard() {
 
                 <div className="flex gap-3 flex-wrap">
                   <Link to="/resume-form" className="btn-primary inline-flex items-center gap-2">
-                    <FiEdit2 /> Edit resume
+                    <FiEdit2 /> {t("dashboard.editResume")}
                   </Link>
                   <Link to="/resume" className="btn-secondary inline-flex items-center gap-2">
-                    <FiEye /> Preview
+                    <FiEye /> {t("common.preview")}
                   </Link>
                 </div>
               </>
@@ -296,13 +298,13 @@ export default function Dashboard() {
                   className="text-[22px] tracking-tight text-[color:var(--text-primary)] mb-1"
                   style={{ fontFamily: "var(--font-serif)" }}
                 >
-                  No resume yet
+                  {t("dashboard.noResumeYet")}
                 </h3>
                 <p className="text-[14px] text-[color:var(--text-secondary)] mb-6">
-                  Create your first resume to get started.
+                  {t("dashboard.createFirstResume")}
                 </p>
                 <Link to="/resume-form" className="btn-primary inline-flex items-center gap-2">
-                  <FiPlus /> Create resume
+                  <FiPlus /> {t("dashboard.createResume")}
                 </Link>
               </div>
             )}
@@ -315,18 +317,18 @@ export default function Dashboard() {
               backgroundColor: "var(--surface-card)",
             }}
           >
-            <h2 className="eyebrow mb-6">Account</h2>
+            <h2 className="eyebrow mb-6">{t("common.account")}</h2>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start justify-between gap-3">
-                <span className="text-[color:var(--text-muted)]">Member since</span>
+                <span className="text-[color:var(--text-muted)]">{t("common.memberSince")}</span>
                 <span className="text-[color:var(--text-primary)] text-right">{memberSince}</span>
               </li>
               <li className="flex items-start justify-between gap-3">
-                <span className="text-[color:var(--text-muted)]">Resumes uploaded</span>
+                <span className="text-[color:var(--text-muted)]">{t("dashboard.resumesUploaded")}</span>
                 <span className="text-[color:var(--text-primary)]">{uploadedResumes.length}</span>
               </li>
               <li className="flex items-start justify-between gap-3">
-                <span className="text-[color:var(--text-muted)]">Last activity</span>
+                <span className="text-[color:var(--text-muted)]">{t("dashboard.lastActivity")}</span>
                 <span className="text-[color:var(--text-primary)] text-right text-xs">
                   {uploadedResumes[0]?.uploadedAt
                     ? formatDate(uploadedResumes[0].uploadedAt)
@@ -340,7 +342,7 @@ export default function Dashboard() {
               to="/profile"
               className="mt-7 inline-flex items-center gap-1.5 text-sm text-[color:var(--text-primary)] underline underline-offset-4 hover:opacity-70"
             >
-              View profile <FiArrowRight />
+              {t("dashboard.viewProfile")} <FiArrowRight />
             </Link>
           </section>
         </div>
@@ -353,21 +355,21 @@ export default function Dashboard() {
           }}
         >
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-            <h2 className="eyebrow">Recent uploads</h2>
+            <h2 className="eyebrow">{t("dashboard.recentUploads")}</h2>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setIsUploadModalOpen(true)}
                 className="btn-primary inline-flex items-center gap-2 text-sm"
               >
-                <FiUpload /> Upload
+                <FiUpload /> {t("common.upload")}
               </button>
               {uploadedResumes.length > 0 && (
                 <Link
                   to="/profile"
                   className="inline-flex items-center gap-1.5 text-sm text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] px-3 py-2"
                 >
-                  View all <FiArrowRight />
+                  {t("dashboard.viewAll")} <FiArrowRight />
                 </Link>
               )}
             </div>
@@ -376,7 +378,7 @@ export default function Dashboard() {
           {loadingResumes ? (
             <div className="flex items-center justify-center py-10 text-sm text-[color:var(--text-muted)]">
               <FiClock className="animate-spin mr-2" />
-              Loading…
+              {t("dashboard.loadingUploads")}
             </div>
           ) : uploadedResumes.length === 0 ? (
             <div
@@ -385,14 +387,14 @@ export default function Dashboard() {
             >
               <FiFileText className="text-3xl text-[color:var(--text-muted)] mx-auto mb-3 opacity-50" />
               <p className="text-sm text-[color:var(--text-secondary)] mb-4">
-                No resumes uploaded yet
+                {t("dashboard.noUploads")}
               </p>
               <button
                 type="button"
                 onClick={() => setIsUploadModalOpen(true)}
                 className="btn-secondary inline-flex items-center gap-2 text-sm"
               >
-                <FiUpload /> Upload your first
+                <FiUpload /> {t("dashboard.uploadFirst")}
               </button>
             </div>
           ) : (
@@ -405,6 +407,8 @@ export default function Dashboard() {
                   onPdfActions={handlePdfActions}
                   onView={handleViewPdf}
                   onDownload={handleDownloadPdf}
+                  locale={locale}
+                  t={t}
                 />
               ))}
             </ul>
@@ -433,7 +437,7 @@ export default function Dashboard() {
   );
 }
 
-function ResumeRow({ resume, onDelete, onPdfActions, onView, onDownload }) {
+function ResumeRow({ resume, onDelete, onPdfActions, onView, onDownload, locale, t }) {
   const formatFileSize = (bytes) => {
     if (!bytes) return "0 B";
     const k = 1024;
@@ -442,7 +446,7 @@ function ResumeRow({ resume, onDelete, onPdfActions, onView, onDownload }) {
     return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
   };
   const formatDate = (d) =>
-    new Date(d).toLocaleDateString("en-US", {
+    new Date(d).toLocaleDateString(locale === "es" ? "es-ES" : "en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -456,7 +460,7 @@ function ResumeRow({ resume, onDelete, onPdfActions, onView, onDownload }) {
       <button
         type="button"
         onClick={() => onPdfActions(resume)}
-        title="Process this resume"
+        title={t("dashboard.processResume")}
         className="flex items-center gap-3 flex-1 min-w-0 text-left"
       >
         <div className="w-9 h-9 rounded-full bg-[color:var(--accent-soft)] text-[color:var(--text-primary)] flex items-center justify-center shrink-0">
@@ -473,9 +477,9 @@ function ResumeRow({ resume, onDelete, onPdfActions, onView, onDownload }) {
       </button>
 
       <div className="flex items-center gap-1 text-[color:var(--text-muted)]">
-        <IconButton onClick={() => onView(resume)} label="View" Icon={FiEye} />
-        <IconButton onClick={() => onDownload(resume)} label="Download" Icon={FiDownload} />
-        <IconButton onClick={() => onDelete(resume)} label="Delete" Icon={FiTrash2} danger />
+        <IconButton onClick={() => onView(resume)} label={t("common.view")} Icon={FiEye} />
+        <IconButton onClick={() => onDownload(resume)} label={t("common.download")} Icon={FiDownload} />
+        <IconButton onClick={() => onDelete(resume)} label={t("common.delete")} Icon={FiTrash2} danger />
       </div>
     </li>
   );

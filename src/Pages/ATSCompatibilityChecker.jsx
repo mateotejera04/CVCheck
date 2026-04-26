@@ -14,6 +14,7 @@ import {
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import showErrorToast from "../Components/showErrorToast";
+import { useLocale } from "../Contexts/LocaleContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -24,14 +25,14 @@ const scoreText = (s) =>
     : s >= 60
     ? "text-[color:var(--status-warn)]"
     : "text-[color:var(--status-danger)]";
-const scoreLabel = (s) =>
+const scoreLabel = (s, t) =>
   s >= 80
-    ? "Excellent ATS compatibility"
+    ? t("ats.excellent")
     : s >= 60
-    ? "Good — small tweaks recommended"
-    : "Needs optimization";
+    ? t("ats.good")
+    : t("ats.needsWork");
 
-function FeedbackList({ type, items }) {
+function FeedbackList({ type, items, t }) {
   if (!items?.length) return null;
   const isPositive = type === "suggestions";
   return (
@@ -44,7 +45,7 @@ function FeedbackList({ type, items }) {
         }`}
       >
         {isPositive ? <FiThumbsUp /> : <FiThumbsDown />}
-        {isPositive ? "Suggestions" : "To improve"}
+        {isPositive ? t("ats.suggestions") : t("ats.toImprove")}
       </div>
       <ul className="space-y-1.5 text-sm text-[color:var(--text-secondary)] list-disc list-inside pl-1">
         {items.map((item, i) => (
@@ -55,7 +56,7 @@ function FeedbackList({ type, items }) {
   );
 }
 
-function LoadingState() {
+function LoadingState({ t }) {
   return (
     <div
       className="p-12 md:p-16 text-center max-w-xl mx-auto rounded-2xl"
@@ -71,10 +72,11 @@ function LoadingState() {
         className="text-[24px] tracking-tight text-[color:var(--text-primary)] mb-2"
         style={{ fontFamily: "var(--font-serif)" }}
       >
-        Analyzing your <em className="italic font-normal">resume…</em>
+        {t("ats.loadingTitle")}{" "}
+        <em className="italic font-normal">{t("ats.loadingTitleEmphasis")}</em>
       </h2>
       <p className="text-sm text-[color:var(--text-secondary)] mb-8">
-        Scanning for ATS readiness and optimization opportunities.
+        {t("ats.loadingIntro")}
       </p>
       <div
         className="w-full h-px overflow-hidden"
@@ -92,6 +94,7 @@ function LoadingState() {
 export default function ATSCompatibilityChecker() {
   const { resume } = useResumeData();
   const location = useLocation();
+  const { locale, t } = useLocale();
   const [currentStep, setCurrentStep] = useState("intro");
   const [atsResult, setAtsResult] = useState(() => {
     if (location.state?.atsResult) return location.state.atsResult;
@@ -111,16 +114,16 @@ export default function ATSCompatibilityChecker() {
 
   const handleCheckATS = async () => {
     if (!resume?.name) {
-      showErrorToast("Please create or upload your resume first.");
+      showErrorToast(t("ats.createFirstToast"));
       return;
     }
     setCurrentStep("loading");
     try {
       await new Promise((r) => setTimeout(r, 3000));
-      const result = await atsScore(resume);
+      const result = await atsScore(resume, locale);
       setAtsResult(result);
     } catch (err) {
-      showErrorToast("Failed to check ATS compatibility. Please try again.");
+      showErrorToast(t("ats.checkFailed"));
       console.error(err);
       setCurrentStep("intro");
     }
@@ -141,18 +144,18 @@ export default function ATSCompatibilityChecker() {
             <div className="text-center mb-10">
               <div className="inline-flex items-center gap-3 mb-6">
                 <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-                <span className="eyebrow">ATS Checker</span>
+                <span className="eyebrow">{t("ats.checker")}</span>
                 <span className="h-px w-10 bg-[color:var(--text-muted)]" />
               </div>
               <h1
                 className="text-[36px] md:text-[44px] tracking-tight leading-[1.05] text-[color:var(--text-primary)] mb-5"
                 style={{ fontFamily: "var(--font-serif)" }}
               >
-                Is your resume <em className="italic font-normal">ATS-ready?</em>
+                {t("ats.introTitle")}{" "}
+                <em className="italic font-normal">{t("ats.introTitleEmphasis")}</em>
               </h1>
               <p className="text-[color:var(--text-secondary)]">
-                Most companies use Applicant Tracking Systems to filter resumes.
-                Run a quick analysis to see how yours scores.
+                {t("ats.intro")}
               </p>
             </div>
 
@@ -168,31 +171,32 @@ export default function ATSCompatibilityChecker() {
                 disabled={!resume?.name}
                 className="btn-primary w-full inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <FiSearch /> Check my resume
+                <FiSearch /> {t("ats.checkMyResume")}
               </button>
               {!resume?.name && (
                 <p className="text-xs text-[color:var(--status-danger)] mt-3 text-center">
-                  Create or upload a resume first to use this feature.
+                  {t("ats.createFirst")}
                 </p>
               )}
             </div>
           </div>
         )}
 
-        {currentStep === "loading" && <LoadingState />}
+        {currentStep === "loading" && <LoadingState t={t} />}
 
         {currentStep === "result" && atsResult && (
           <div className="max-w-6xl mx-auto">
             <header className="mb-10">
               <div className="flex items-center gap-3 mb-5">
                 <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-                <span className="eyebrow">ATS Report</span>
+                <span className="eyebrow">{t("ats.report")}</span>
               </div>
               <h1
                 className="text-[36px] md:text-[44px] tracking-tight leading-[1.05] text-[color:var(--text-primary)] mb-3"
                 style={{ fontFamily: "var(--font-serif)" }}
               >
-                Compatibility <em className="italic font-normal">report.</em>
+                {t("ats.reportTitle")}{" "}
+                <em className="italic font-normal">{t("ats.reportTitleEmphasis")}</em>
               </h1>
               {uploadedFile && (
                 <p className="text-sm text-[color:var(--text-muted)] inline-flex items-center gap-1.5">
@@ -209,7 +213,7 @@ export default function ATSCompatibilityChecker() {
                   backgroundColor: "var(--surface-card)",
                 }}
               >
-                <h2 className="eyebrow text-center mb-5">Overall score</h2>
+                <h2 className="eyebrow text-center mb-5">{t("ats.overallScore")}</h2>
                 <div className="relative w-40 h-40 mx-auto mb-6">
                   <Doughnut
                     data={{
@@ -247,7 +251,7 @@ export default function ATSCompatibilityChecker() {
                       {atsResult.atsScore}%
                     </span>
                     <span className="text-[10px] tracking-[0.18em] uppercase text-[color:var(--text-muted)] mt-2">
-                      ATS friendly
+                      {t("ats.friendly")}
                     </span>
                   </div>
                 </div>
@@ -257,21 +261,21 @@ export default function ATSCompatibilityChecker() {
                     atsResult.atsScore
                   )}`}
                 >
-                  {scoreLabel(atsResult.atsScore)}
+                  {scoreLabel(atsResult.atsScore, t)}
                 </p>
                 <p className="text-xs text-[color:var(--text-secondary)] text-center mb-6">
                   {atsResult.atsScore >= 80
-                    ? "Your resume is well-structured for ATS."
+                    ? t("ats.excellentDetail")
                     : atsResult.atsScore >= 60
-                    ? "Some tweaks can improve parsing accuracy."
-                    : "Consider significant updates for better performance."}
+                    ? t("ats.goodDetail")
+                    : t("ats.needsWorkDetail")}
                 </p>
 
                 <button
                   onClick={handleReset}
                   className="btn-secondary w-full inline-flex items-center justify-center gap-2 text-sm"
                 >
-                  <FiRefreshCw /> Recheck resume
+                  <FiRefreshCw /> {t("ats.recheck")}
                 </button>
               </aside>
 
@@ -285,7 +289,7 @@ export default function ATSCompatibilityChecker() {
                         backgroundColor: "var(--surface-card)",
                       }}
                     >
-                      <h3 className="eyebrow mb-5">Section breakdown</h3>
+                      <h3 className="eyebrow mb-5">{t("ats.sectionBreakdown")}</h3>
                       <div className="space-y-5">
                         {Object.entries(atsResult.sectionWiseFeedback).map(
                           ([section, feedback]) => (
@@ -305,16 +309,17 @@ export default function ATSCompatibilityChecker() {
                               <FeedbackList
                                 type="missing"
                                 items={feedback.missing}
+                                t={t}
                               />
                               <FeedbackList
                                 type="suggestions"
                                 items={feedback.suggestions}
+                                t={t}
                               />
                               {!feedback.missing?.length &&
                                 !feedback.suggestions?.length && (
                                   <p className="text-xs text-[color:var(--text-muted)] italic mt-2">
-                                    Looks good — no specific feedback for this
-                                    section.
+                                    {t("ats.sectionGood")}
                                   </p>
                                 )}
                             </div>
@@ -332,7 +337,7 @@ export default function ATSCompatibilityChecker() {
                       backgroundColor: "var(--surface-card)",
                     }}
                   >
-                    <h3 className="eyebrow mb-4">General tips</h3>
+                    <h3 className="eyebrow mb-4">{t("ats.generalTips")}</h3>
                     <ul className="space-y-3">
                       {atsResult.generalTips.map((tip, i) => (
                         <li
@@ -361,10 +366,10 @@ export default function ATSCompatibilityChecker() {
                         className="text-[20px] tracking-tight text-[color:var(--text-primary)] mb-1"
                         style={{ fontFamily: "var(--font-serif)" }}
                       >
-                        All clear
+                        {t("ats.allClear")}
                       </h3>
                       <p className="text-sm text-[color:var(--text-secondary)]">
-                        Your resume looks well-optimized for ATS.
+                        {t("ats.allClearDetail")}
                       </p>
                     </section>
                   )}

@@ -29,13 +29,9 @@ import {
 } from "../db/database";
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
+import { useLocale } from "../Contexts/LocaleContext";
 
-const templates = [
-  { value: "classic", label: "Classic" },
-  { value: "sidebar", label: "Sidebar" },
-  { value: "standard", label: "Standard" },
-  { value: "modern", label: "Modern" },
-];
+const templates = ["classic", "sidebar", "standard", "modern"];
 
 export default function Resume() {
   const navigate = useNavigate();
@@ -44,6 +40,7 @@ export default function Resume() {
   const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
   const { standardSettings, setStandardSettings } = useStandardSetting();
   const { modernSettings, setModernSettings } = useModernSetting();
+  const { t } = useLocale();
 
   const [selectedTemplate, setSelectedTemplate] = useState(
     () => localStorage.getItem("selectedTemplate") || "classic"
@@ -83,9 +80,9 @@ export default function Resume() {
         editModernSettings(modernSettings),
         updateResume(resume),
       ]);
-      showSuccessToast("Changes saved");
+      showSuccessToast(t("resumePage.changesSaved"));
     } catch (err) {
-      showErrorToast("Failed to save changes.");
+      showErrorToast(t("resumePage.saveFailed"));
       console.error(err);
     }
   };
@@ -108,16 +105,17 @@ export default function Resume() {
               className="text-[28px] tracking-tight text-[color:var(--text-primary)] mb-3"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              Resume details <em className="italic font-normal">missing.</em>
+              {t("resumePage.missingTitle")}{" "}
+              <em className="italic font-normal">{t("resumePage.missingTitleEmphasis")}</em>
             </h2>
             <p className="text-[color:var(--text-secondary)] mb-7">
-              Fill in your details to start building a resume.
+              {t("resumePage.missingIntro")}
             </p>
             <button
               onClick={() => navigate("/resume-form")}
               className="btn-primary inline-flex items-center gap-2"
             >
-              Create resume <FiArrowRight />
+              {t("resumePage.createResume")} <FiArrowRight />
             </button>
           </div>
         </div>
@@ -154,23 +152,23 @@ export default function Resume() {
           }}
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="eyebrow">Template</span>
+            <span className="eyebrow">{t("common.template")}</span>
             <div
               className="inline-flex items-center rounded-full p-1 flex-wrap"
               style={{ backgroundColor: "var(--accent-soft)" }}
             >
-              {templates.map((t) => (
+              {templates.map((template) => (
                 <button
-                  key={t.value}
+                  key={template}
                   type="button"
-                  onClick={() => setSelectedTemplate(t.value)}
+                  onClick={() => setSelectedTemplate(template)}
                   className={`px-4 py-1.5 rounded-full text-sm transition-colors ${
-                    selectedTemplate === t.value
+                    selectedTemplate === template
                       ? "bg-[color:var(--text-primary)] text-[color:var(--surface-base)]"
                       : "text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
                   }`}
                 >
-                  {t.label}
+                  {t(`resumePage.templateNames.${template}`)}
                 </button>
               ))}
             </div>
@@ -181,7 +179,7 @@ export default function Resume() {
               className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.14em] px-3 py-1.5 rounded-full text-[color:var(--text-secondary)]"
               style={{ border: "1px solid var(--border-hairline)" }}
             >
-              <FiEye /> {isEditable ? "Edit mode" : "View mode"}
+              <FiEye /> {isEditable ? t("resumePage.editMode") : t("resumePage.viewMode")}
             </span>
             <button
               type="button"
@@ -193,11 +191,11 @@ export default function Resume() {
             >
               {isEditable ? (
                 <>
-                  <FiSave /> Save changes
+                  <FiSave /> {t("resumePage.saveChanges")}
                 </>
               ) : (
                 <>
-                  <FiEdit2 /> Edit resume
+                  <FiEdit2 /> {t("resumePage.editResume")}
                 </>
               )}
             </button>
@@ -224,19 +222,19 @@ export default function Resume() {
                 backgroundColor: "var(--surface-card)",
               }}
             >
-              <h3 className="eyebrow mb-4">Quick actions</h3>
+              <h3 className="eyebrow mb-4">{t("resumePage.quickActions")}</h3>
               <div className="space-y-2">
                 <button
                   onClick={() => navigate("/resume-form")}
                   className="btn-secondary w-full inline-flex items-center justify-between text-sm"
                 >
-                  Edit details <FiArrowRight />
+                  {t("resumePage.editDetails")} <FiArrowRight />
                 </button>
                 <button
                   onClick={() => navigate("/ats-checker")}
                   className="btn-secondary w-full inline-flex items-center justify-between text-sm"
                 >
-                  Check ATS score <FiArrowRight />
+                  {t("resumePage.checkAts")} <FiArrowRight />
                 </button>
               </div>
             </div>
@@ -250,12 +248,12 @@ export default function Resume() {
             >
               <div className="flex items-center gap-2 mb-4">
                 <FiInfo className="text-[color:var(--text-primary)]" />
-                <h3 className="eyebrow">Tips</h3>
+                <h3 className="eyebrow">{t("resumePage.tips")}</h3>
               </div>
               <ul className="text-sm text-[color:var(--text-secondary)] space-y-2.5 leading-relaxed">
-                <li>Edit on a desktop for better layout control.</li>
-                <li>Tweak the font size to balance density and readability.</li>
-                <li>If a section feels too long, summarize. Too short — add specifics.</li>
+                {t("resumePage.tipItems", []).map((tip) => (
+                  <li key={tip}>{tip}</li>
+                ))}
               </ul>
             </div>
           </aside>

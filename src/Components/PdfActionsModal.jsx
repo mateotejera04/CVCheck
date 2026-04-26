@@ -10,6 +10,7 @@ import { parseResumeFromUpload, checkATSFromUpload } from "../utils/ai";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 import ResumeCreationLoader from "./Loaders/ResumeCreationLoader";
 import ATSCheckingLoader from "./Loaders/ATSCheckingLoader";
+import { useLocale } from "../Contexts/LocaleContext";
 
 // Transform OpenAI parsed data to match the expected resume structure
 const transformParsedDataToResumeFormat = (parsedData) => {
@@ -79,6 +80,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
 
   const navigate = useNavigate();
   const { setResume } = useResumeData();
+  const { locale, t } = useLocale();
 
   // Handle option selection - only allow one option at a time
   const handleOptionSelect = (option) => {
@@ -88,12 +90,12 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
   // Process selected option
   const handleProcess = async () => {
     if (!selectedResume) {
-      toast.error("No resume selected");
+      toast.error(t("uploadModal.noResumeSelected"));
       return;
     }
 
     if (!selectedOption) {
-      toast.error("Please select an option");
+      toast.error(t("uploadModal.selectOptionError"));
       return;
     }
 
@@ -103,9 +105,9 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
       // Process Create Resume
       if (selectedOption === "createResume") {
         setShowResumeLoader(true);
-        setProcessingStep("Creating resume...");
+        setProcessingStep(t("uploadModal.creatingResume"));
 
-        const parsedData = await parseResumeFromUpload(selectedResume.fileUrl);
+        const parsedData = await parseResumeFromUpload(selectedResume.fileUrl, locale);
         console.log("Parsed data from AI:", parsedData);
 
         const transformedData = transformParsedDataToResumeFormat(parsedData);
@@ -113,7 +115,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
 
         // Ensure we have a name, use a fallback if needed
         if (!transformedData.name || transformedData.name.trim() === "") {
-          transformedData.name = "User";
+          transformedData.name = t("profile.userFallback");
         }
 
         await createResume(transformedData);
@@ -124,7 +126,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
         // Wait a bit for the loader to complete its animation
         setTimeout(() => {
           setShowResumeLoader(false);
-          toast.success("Resume created successfully!");
+          toast.success(t("uploadModal.resumeCreated"));
 
           // Close modal and navigate to resume page
           onClose();
@@ -135,9 +137,9 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
       // Process ATS Check
       else if (selectedOption === "checkATS") {
         setShowATSLoader(true);
-        setProcessingStep("Checking ATS compatibility...");
+        setProcessingStep(t("uploadModal.checkingAts"));
 
-        const atsData = await checkATSFromUpload(selectedResume.fileUrl);
+        const atsData = await checkATSFromUpload(selectedResume.fileUrl, locale);
 
         // Wait a bit for the loader to complete its animation
         setTimeout(() => {
@@ -154,7 +156,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
 
     } catch (error) {
       console.error("Processing error:", error);
-      toast.error("Failed to process resume. Please try again.");
+      toast.error(t("uploadModal.processFailed"));
 
       // Hide all loaders on error
       setShowResumeLoader(false);
@@ -207,7 +209,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
               className="text-[18px] tracking-tight text-[color:var(--text-primary)]"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              Process resume
+              {t("uploadModal.processTitle")}
             </h2>
             <button
               onClick={handleClose}
@@ -227,7 +229,7 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
                 }}
               >
                 <p className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-1">
-                  Selected file
+                  {t("uploadModal.selectedFile")}
                 </p>
                 <p className="text-sm text-[color:var(--text-primary)] truncate">
                   {selectedResume.fileName}
@@ -235,20 +237,20 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
               </div>
             )}
 
-            <p className="eyebrow">What would you like to do?</p>
+            <p className="eyebrow">{t("uploadModal.question")}</p>
 
             <div className="space-y-2">
               <OptionRadio
                 icon={<FaUpload />}
-                label="Create resume"
-                description="Build a new resume from this file"
+                label={t("uploadModal.createResume")}
+                description={t("uploadModal.createResumeDescription")}
                 checked={selectedOption === "createResume"}
                 onChange={() => handleOptionSelect("createResume")}
               />
               <OptionRadio
                 icon={<FaRobot />}
-                label="Check ATS score"
-                description="Analyze ATS compatibility"
+                label={t("uploadModal.checkAts")}
+                description={t("uploadModal.checkAtsDescription")}
                 checked={selectedOption === "checkATS"}
                 onChange={() => handleOptionSelect("checkATS")}
               />
@@ -267,10 +269,10 @@ const PdfActionsModal = ({ isOpen, onClose, selectedResume }) => {
               {isProcessing ? (
                 <>
                   <FaSpinner className="animate-spin" />
-                  {processingStep || "Processing…"}
+                  {processingStep || t("common.processing")}
                 </>
               ) : (
-                "Continue"
+                t("common.continue")
               )}
             </button>
           </div>

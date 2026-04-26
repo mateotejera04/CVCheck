@@ -6,10 +6,12 @@ import {
   FaListOl,
   FaListUl,
 } from "react-icons/fa";
+import { useLocale } from "../Contexts/LocaleContext";
 
-const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
+const RichTextInput = ({ value, onChange, placeholder }) => {
   const ref = useRef();
   const [isEmpty, setIsEmpty] = useState(true);
+  const { t } = useLocale();
 
   useEffect(() => {
     if (ref.current && value !== ref.current.innerHTML) {
@@ -32,11 +34,11 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
   };
 
   const tools = [
-    { cmd: "bold", icon: FaBold, label: "Bold" },
-    { cmd: "italic", icon: FaItalic, label: "Italic" },
-    { cmd: "underline", icon: FaUnderline, label: "Underline" },
-    { cmd: "insertOrderedList", icon: FaListOl, label: "Ordered list" },
-    { cmd: "insertUnorderedList", icon: FaListUl, label: "Bullet list" },
+    { cmd: "bold", icon: FaBold, label: t("richText.bold") },
+    { cmd: "italic", icon: FaItalic, label: t("richText.italic") },
+    { cmd: "underline", icon: FaUnderline, label: t("richText.underline") },
+    { cmd: "insertOrderedList", icon: FaListOl, label: t("richText.orderedList") },
+    { cmd: "insertUnorderedList", icon: FaListUl, label: t("richText.bulletList") },
   ];
 
   return (
@@ -50,7 +52,7 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
       <div className="relative">
         {isEmpty && (
           <div className="absolute left-3 top-3 text-[color:var(--text-muted)] opacity-60 text-sm pointer-events-none select-none">
-            {placeholder}
+            {placeholder || t("richText.defaultPlaceholder")}
           </div>
         )}
         <div

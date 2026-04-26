@@ -17,6 +17,7 @@ import { parseResumeFromUpload, checkATSFromUpload } from "../utils/ai";
 import { useResumeData } from "../Contexts/ResumeDataContext";
 import ResumeCreationLoader from "./Loaders/ResumeCreationLoader";
 import ATSCheckingLoader from "./Loaders/ATSCheckingLoader";
+import { useLocale } from "../Contexts/LocaleContext";
 
 // Transform OpenAI parsed data to match the expected resume structure
 const transformParsedDataToResumeFormat = (parsedData) => {
@@ -92,6 +93,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
   const navigate = useNavigate();
   const { setResume } = useResumeData();
+  const { locale, t } = useLocale();
 
   // Handle file upload
   const handleFileUpload = async (files) => {
@@ -99,14 +101,14 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
     if (!file) return;
 
     // Validate file
-    const validation = validateResumeFile(file);
+    const validation = validateResumeFile(file, t);
     if (!validation.isValid) {
       validation.errors.forEach((error) => toast.error(error));
       return;
     }
 
     setIsUploading(true);
-    const uploadToastId = toast.loading("Uploading your resume...");
+    const uploadToastId = toast.loading(t("uploadModal.uploadingToast"));
 
     try {
       // Upload to Appwrite
@@ -116,7 +118,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
       await saveUploadedFile(uploadResult);
 
       setUploadedFile(uploadResult);
-      toast.success("Resume uploaded successfully!", { id: uploadToastId });
+      toast.success(t("uploadModal.uploadSuccessToast"), { id: uploadToastId });
 
       // Notify parent component
       if (onUploadSuccess) {
@@ -125,13 +127,11 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
     } catch (error) {
       console.error("Upload error:", error);
 
-      let errorMessage = "Failed to upload resume. Please try again.";
+      let errorMessage = t("uploadModal.uploadFailed");
       if (error.message.includes("size")) {
-        errorMessage =
-          "File is too large. Please upload a file smaller than 10MB.";
+        errorMessage = t("uploadModal.fileTooLarge");
       } else if (error.message.includes("type")) {
-        errorMessage =
-          "Invalid file type. Please upload PDF, DOC, DOCX, or TXT files.";
+        errorMessage = t("uploadModal.invalidFileType");
       }
 
       toast.error(errorMessage, { id: uploadToastId });
@@ -181,13 +181,13 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
   // Process selected options
   const handleDone = async () => {
     if (!uploadedFile) {
-      toast.error("Please upload a resume first");
+      toast.error(t("uploadModal.uploadFirstError"));
       return;
     }
 
     const selectedCount = Object.values(selectedOptions).filter(Boolean).length;
     if (selectedCount === 0) {
-      toast.error("Please select an option");
+      toast.error(t("uploadModal.selectOptionError"));
       return;
     }
 
@@ -197,9 +197,9 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
       // Process Create Resume
       if (selectedOptions.createResume) {
         setShowResumeLoader(true);
-        setProcessingStep("Creating resume...");
+        setProcessingStep(t("uploadModal.creatingResume"));
 
-        const parsedData = await parseResumeFromUpload(uploadedFile.fileUrl);
+        const parsedData = await parseResumeFromUpload(uploadedFile.fileUrl, locale);
         console.log("Parsed data from AI:", parsedData);
 
         const transformedData = transformParsedDataToResumeFormat(parsedData);
@@ -207,7 +207,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
         // Ensure we have a name, use a fallback if needed
         if (!transformedData.name || transformedData.name.trim() === "") {
-          transformedData.name = "User";
+          transformedData.name = t("profile.userFallback");
         }
 
         await createResume(transformedData);
@@ -218,7 +218,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
         // Wait a bit for the loader to complete its animation
         setTimeout(() => {
           setShowResumeLoader(false);
-          toast.success("Resume created successfully!");
+          toast.success(t("uploadModal.resumeCreated"));
 
           // Close modal and navigate to resume page
           onClose();
@@ -229,9 +229,9 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
       // Process ATS Check
       else if (selectedOptions.checkATS) {
         setShowATSLoader(true);
-        setProcessingStep("Checking ATS compatibility...");
+        setProcessingStep(t("uploadModal.checkingAts"));
 
-        const atsData = await checkATSFromUpload(uploadedFile.fileUrl);
+        const atsData = await checkATSFromUpload(uploadedFile.fileUrl, locale);
 
         // Wait a bit for the loader to complete its animation
         setTimeout(() => {
@@ -248,7 +248,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
     } catch (error) {
       console.error("Processing error:", error);
-      toast.error("Failed to process resume. Please try again.");
+      toast.error(t("uploadModal.processFailed"));
 
       // Hide all loaders on error
       setShowResumeLoader(false);
@@ -305,7 +305,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
               className="text-[18px] tracking-tight text-[color:var(--text-primary)]"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              Upload resume
+              {t("uploadModal.title")}
             </h2>
             <button
               onClick={handleClose}
@@ -346,7 +346,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
                 <div className="flex flex-col items-center py-2">
                   <FaSpinner className="animate-spin text-[color:var(--text-primary)] text-2xl mb-3" />
                   <p className="text-sm text-[color:var(--text-secondary)]">
-                    Uploading…
+                    {t("uploadModal.uploading")}
                   </p>
                 </div>
               ) : uploadedFile ? (
@@ -359,7 +359,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
                     {uploadedFile.fileName}
                   </p>
                   <p className="text-xs text-[color:var(--status-success)] mt-1">
-                    Upload successful
+                    {t("uploadModal.uploadSuccess")}
                   </p>
                 </div>
               ) : (
@@ -369,10 +369,10 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
                     className="text-[15px] tracking-tight text-[color:var(--text-primary)]"
                     style={{ fontFamily: "var(--font-serif)" }}
                   >
-                    Drop your resume here
+                    {t("uploadModal.dropHere")}
                   </p>
                   <p className="text-xs text-[color:var(--text-muted)] mt-1.5">
-                    or click to browse — PDF, DOC, DOCX, TXT (max 10 MB)
+                    {t("uploadModal.browseHint")}
                   </p>
                 </div>
               )}
@@ -380,18 +380,18 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
             {uploadedFile && (
               <div className="space-y-2">
-                <p className="eyebrow">What would you like to do?</p>
+                <p className="eyebrow">{t("uploadModal.question")}</p>
                 <OptionCheckbox
                   icon={<FaUpload />}
-                  label="Create resume"
-                  description="Build a new resume from this file"
+                  label={t("uploadModal.createResume")}
+                  description={t("uploadModal.createResumeDescription")}
                   checked={selectedOptions.createResume}
                   onChange={() => handleOptionToggle("createResume")}
                 />
                 <OptionCheckbox
                   icon={<FaRobot />}
-                  label="Check ATS score"
-                  description="Analyze ATS compatibility"
+                  label={t("uploadModal.checkAts")}
+                  description={t("uploadModal.checkAtsDescription")}
                   checked={selectedOptions.checkATS}
                   onChange={() => handleOptionToggle("checkATS")}
                 />
@@ -415,10 +415,10 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
                 {isProcessing ? (
                   <>
                     <FaSpinner className="animate-spin" />
-                    {processingStep || "Processing…"}
+                    {processingStep || t("common.processing")}
                   </>
                 ) : (
-                  "Get started"
+                  t("common.getStarted")
                 )}
               </button>
             </div>

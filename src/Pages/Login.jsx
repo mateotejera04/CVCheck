@@ -5,6 +5,7 @@ import { useAuth } from "../Contexts/AuthContext";
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
 import { toast } from "react-hot-toast";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const serif = { fontFamily: "Merriweather, ui-serif, Georgia, serif" };
 
@@ -14,6 +15,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { t } = useLocale();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +25,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const toastId = toast.loading("Logging in…");
+    const toastId = toast.loading(t("auth.loggingIn"));
     try {
       const result = await login({
         email: form.email,
@@ -31,14 +33,14 @@ export default function Login() {
       });
       toast.dismiss(toastId);
       if (result.success) {
-        showSuccessToast("Login successful");
+        showSuccessToast(t("auth.loginSuccess"));
         navigate("/dashboard");
       } else {
-        toast.error(result.error || "Login failed");
+        toast.error(result.error || t("auth.loginFailed"));
       }
     } catch (err) {
       toast.dismiss(toastId);
-      showErrorToast(err.message || "Login failed. Please try again.");
+      showErrorToast(err.message || t("auth.loginFailedLong"));
     } finally {
       setLoading(false);
     }
@@ -80,16 +82,15 @@ export default function Login() {
             className="text-[44px] leading-[1.05] tracking-tight"
             style={{ ...serif, color: "#1a120b" }}
           >
-            Resumes that
+            {t("auth.loginArtTitleLine1")}
             <br />
-            <em className="italic font-normal">read like you.</em>
+            <em className="italic font-normal">{t("auth.loginArtTitleEmphasis")}</em>
           </p>
           <p
             className="mt-6 text-[15px] leading-relaxed max-w-sm"
             style={{ color: "#4a3a2a" }}
           >
-            A quiet workspace for crafting the document that opens the
-            next door.
+            {t("auth.loginArtIntro")}
           </p>
         </div>
 
@@ -98,7 +99,7 @@ export default function Login() {
           style={{ color: "#5a4a3a" }}
         >
           <span className="h-px w-8" style={{ backgroundColor: "#5a4a3a" }} />
-          A calmer way to apply
+          {t("auth.loginArtFooter")}
         </div>
       </div>
 
@@ -109,19 +110,19 @@ export default function Login() {
             className="text-[40px] leading-[1.05] tracking-tight"
             style={{ ...serif, color: "#1a120b" }}
           >
-            Welcome <em className="italic font-normal">back.</em>
+            {t("auth.welcomeBack")} <em className="italic font-normal">{t("auth.welcomeBackEmphasis")}</em>
           </h1>
           <p
             className="mt-3 text-[14px]"
             style={{ color: "#6b5a4a" }}
           >
-            Sign in to continue building your resume.
+            {t("auth.loginIntro")}
           </p>
 
           <form onSubmit={handleSubmit} className="mt-10 space-y-7">
             <Field
               id="email"
-              label="Email"
+              label={t("common.email")}
               type="email"
               name="email"
               value={form.email}
@@ -133,7 +134,7 @@ export default function Login() {
             <div>
               <Field
                 id="password"
-                label="Password"
+                label={t("common.password")}
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={form.password}
@@ -147,7 +148,7 @@ export default function Login() {
                     tabIndex={-1}
                     className="opacity-60 hover:opacity-100 transition-opacity"
                     style={{ color: "#1a120b" }}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={showPassword ? t("common.hidePassword") : t("common.showPassword")}
                   >
                     {showPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
@@ -159,7 +160,7 @@ export default function Login() {
                   className="text-[12px] tracking-wide hover:underline"
                   style={{ color: "#6b5a4a" }}
                 >
-                  Forgot password?
+                  {t("auth.forgotPassword")}
                 </Link>
               </div>
             </div>
@@ -170,7 +171,7 @@ export default function Login() {
               className="group w-full inline-flex items-center justify-center gap-2 rounded-full py-3.5 text-[14px] tracking-wide transition-colors disabled:opacity-60"
               style={{ backgroundColor: "#1a120b", color: "#F5EFE3" }}
             >
-              {loading ? "Signing in…" : "Sign in"}
+              {loading ? t("auth.signingIn") : t("common.signIn")}
               {!loading && (
                 <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
               )}
@@ -181,13 +182,13 @@ export default function Login() {
             className="mt-10 text-[13px] text-center"
             style={{ color: "#6b5a4a" }}
           >
-            New here?{" "}
+            {t("auth.newHere")}{" "}
             <Link
               to="/signup"
               className="underline underline-offset-4 hover:opacity-70"
               style={{ color: "#1a120b" }}
             >
-              Get started
+              {t("common.getStarted")}
             </Link>
           </p>
         </div>

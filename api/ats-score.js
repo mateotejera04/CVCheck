@@ -6,13 +6,14 @@ export default async function handler(req, res) {
   }
 
   const resume = req.body;
+  const locale = req.body?.locale || "en";
 
   if (!resume) {
     return res.status(400).json({ error: "Missing input" });
   }
 
   try {
-    const atsResult = await checkATSCompatibility(resume);
+    const atsResult = await checkATSCompatibility(resume, locale);
     return res.json(atsResult);
   } catch (err) {
     console.error("AI ATS Scoring Error:", err.message);

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FiStar } from "react-icons/fi";
+import { useLocale } from "../../Contexts/LocaleContext";
 
 const testimonials = [
   {
@@ -45,6 +46,8 @@ const testimonials = [
 ];
 
 function Testimonials() {
+  const { t } = useLocale();
+  const localized = t("testimonials.items", []);
   return (
     <section
       className="surface-base"
@@ -57,12 +60,12 @@ function Testimonials() {
         <div className="max-w-2xl mb-16">
           <div className="flex items-center gap-3 mb-6">
             <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-            <span className="eyebrow">In their words</span>
+            <span className="eyebrow">{t("testimonials.eyebrow")}</span>
           </div>
           <h2 className="h-section">
-            Trusted by people who'd
+            {t("testimonials.title")}
             <br />
-            <em className="italic font-normal">rather be working.</em>
+            <em className="italic font-normal">{t("testimonials.titleEmphasis")}</em>
           </h2>
         </div>
 
@@ -92,7 +95,7 @@ function Testimonials() {
                 className="text-[15px] leading-relaxed flex-1 text-[color:var(--text-primary)]"
                 style={{ fontFamily: "var(--font-serif)" }}
               >
-                &ldquo;{t.feedback}&rdquo;
+                &ldquo;{localized[i]?.feedback || t.feedback}&rdquo;
               </p>
               <div
                 className="flex items-center gap-3 mt-6 pt-6"
@@ -108,7 +111,7 @@ function Testimonials() {
                     {t.name}
                   </p>
                   <p className="text-xs text-[color:var(--text-muted)] mt-0.5">
-                    {t.role} · {t.company}
+                    {localized[i]?.role || t.role} · {localized[i]?.company || t.company}
                   </p>
                 </div>
               </div>

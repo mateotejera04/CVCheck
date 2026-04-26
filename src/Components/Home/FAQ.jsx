@@ -1,42 +1,12 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiPlus } from "react-icons/fi";
-
-const faqs = [
-  {
-    question: "How is CVCheck different from other resume builders?",
-    answer:
-      "CVCheck offers AI-powered resume optimization, ATS-friendly templates, and real-time feedback. Our platform uses advanced algorithms to analyze your resume and ensure maximum compatibility with Applicant Tracking Systems.",
-  },
-  {
-    question: "Are the resume templates ATS-friendly?",
-    answer:
-      "Yes — every template is designed to be ATS-compatible. Proper formatting, readable fonts, and structured layouts pass through tracking systems while looking professional.",
-  },
-  {
-    question: "Can I customize the resume templates?",
-    answer:
-      "Absolutely. Customize colors, fonts, layouts, and sections — every aspect of your resume — while maintaining ATS compatibility and professional standards.",
-  },
-  {
-    question: "How many resumes can I create?",
-    answer:
-      "Unlimited. Save multiple versions to tailor different resumes for various job applications and industries without restrictions.",
-  },
-  {
-    question: "Is there a mobile app available?",
-    answer:
-      "CVCheck is a responsive web app that works seamlessly on phones and tablets. A dedicated mobile app is in development.",
-  },
-  {
-    question: "What if I need help?",
-    answer:
-      "Reach out anytime for assistance with technical issues, questions about features, or general guidance on resume building.",
-  },
-];
+import { useLocale } from "../../Contexts/LocaleContext";
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(0);
+  const { t } = useLocale();
+  const faqs = t("faq.items", []);
   const toggleFAQ = (i) => setOpenIndex(openIndex === i ? null : i);
 
   return (
@@ -49,13 +19,13 @@ const FAQ = () => {
           <div className="lg:col-span-4">
             <div className="flex items-center gap-3 mb-6">
               <span className="h-px w-10 bg-[color:var(--text-muted)]" />
-              <span className="eyebrow">FAQ</span>
+              <span className="eyebrow">{t("faq.eyebrow")}</span>
             </div>
             <h2 className="h-section mb-6">
-              Questions, <em className="italic font-normal">answered.</em>
+              {t("faq.title")} <em className="italic font-normal">{t("faq.titleEmphasis")}</em>
             </h2>
             <p className="text-[16px] leading-relaxed text-[color:var(--text-secondary)] max-w-md">
-              The short version of what you might be wondering.
+              {t("faq.intro")}
             </p>
           </div>
 

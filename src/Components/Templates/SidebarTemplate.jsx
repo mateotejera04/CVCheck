@@ -50,8 +50,10 @@ import { useReactToPrint } from "react-to-print";
 import { motion } from "framer-motion";
 import { FaFileAlt, FaDownload, FaGlobe } from "react-icons/fa";
 import { useRef } from "react";
+import { useLocale } from "../../Contexts/LocaleContext";
 
 const SidebarTemplate = ({ resume }) => {
+  const { t } = useLocale();
   const { isEditable } = useEditResume();
   const { sidebarSettings, setSidebarSettings } = useSidebarSetting();
   const contentRef = useRef(null);
@@ -677,7 +679,7 @@ const SidebarTemplate = ({ resume }) => {
                     defaultMainTextColor("h3"),
                 }}
               >
-                <span className="font-bold">Technologies :</span>{" "}
+                <span className="font-bold">{t("templateControls.technologies")}</span>{" "}
                 {exp.technologies}
               </p>
             )}
@@ -1028,10 +1030,10 @@ const SidebarTemplate = ({ resume }) => {
             </div>
             <div>
               <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
-                Resume Preview
+                {t("templateControls.resumePreview")}
               </h3>
               <p className="text-[10px] md:text-xs text-slate-600">
-                {resume.name}'s Professional Resume
+                {resume.name} {t("templateControls.professionalResume")}
               </p>
             </div>
           </div>
@@ -1042,7 +1044,7 @@ const SidebarTemplate = ({ resume }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-sky-600"
-              title="Download PDF"
+              title={t("templateControls.downloadPdf")}
             >
               <FaDownload size={12} />
             </motion.button>
@@ -1125,7 +1127,7 @@ const SidebarTemplate = ({ resume }) => {
                         }))
                       }
                       className="absolute inset-0 z-10 opacity-0 cursor-pointer"
-                      title="Pick custom color"
+                      title={t("templateControls.pickCustomColor")}
                     />
 
                     {/* Visible colored circle with icon */}
@@ -1229,7 +1231,7 @@ const SidebarTemplate = ({ resume }) => {
                         }))
                       }
                       className="absolute inset-0 z-10 opacity-0 cursor-pointer"
-                      title="Pick custom color"
+                      title={t("templateControls.pickCustomColor")}
                     />
                   </div>
                 </div>
@@ -1290,7 +1292,7 @@ const SidebarTemplate = ({ resume }) => {
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "font" ? null : "font"))
               }
-              title="Change Font"
+              title={t("templateControls.changeFont")}
               className={`md:p-2 rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "font" ? "bg-gray-100 " : ""
               }`}
@@ -1358,7 +1360,7 @@ const SidebarTemplate = ({ resume }) => {
           {/* Font Size Adjuster */}
           <div className="flex items-center gap-3">
             <button
-              title="Decrease Font Size"
+              title={t("templateControls.decreaseFontSize")}
               onClick={() =>
                 setSidebarSettings((prev) => ({
                   ...prev,
@@ -1373,7 +1375,7 @@ const SidebarTemplate = ({ resume }) => {
             </button>
 
             <button
-              title="Increase Font Size"
+              title={t("templateControls.increaseFontSize")}
               onClick={() =>
                 setSidebarSettings((prev) => ({
                   ...prev,
@@ -1400,7 +1402,7 @@ const SidebarTemplate = ({ resume }) => {
                 className={`md:p-2 align-middle  rounded hover:bg-gray-200 ${
                   openDropdown === "skillColor" ? "bg-gray-200" : ""
                 }`}
-                title="Customize Skill Colors"
+                title={t("templateControls.customizeSkillColors")}
               >
                 <span className="text-lg align-middle md:text-xl">
                   <MdOutlineFormatColorFill />
@@ -1472,7 +1474,7 @@ const SidebarTemplate = ({ resume }) => {
                 className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
                   openDropdown === "linkColor" ? "bg-gray-100" : ""
                 }`}
-                title="Change Project Link Color"
+                title={t("templateControls.changeProjectLinkColor")}
               >
                 <FaLink className="text-sm md:text-lg text-gray-700" />
               </button>
@@ -1528,7 +1530,7 @@ const SidebarTemplate = ({ resume }) => {
                           }))
                         }
                         className="absolute inset-0 z-10 opacity-0 cursor-pointer"
-                        title="Pick custom color"
+                        title={t("templateControls.pickCustomColor")}
                       />
                       <div
                         className="absolute inset-0 z-0 rounded-full"
@@ -1552,7 +1554,7 @@ const SidebarTemplate = ({ resume }) => {
               className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "textSidebar" ? "bg-gray-100" : ""
               }`}
-              title="Sidebar Text Color"
+              title={t("templateControls.sidebarTextColor")}
               onClick={() =>
                 setOpenDropdown((prev) =>
                   prev === "textSidebar" ? null : "textSidebar"
@@ -1613,7 +1615,7 @@ const SidebarTemplate = ({ resume }) => {
               className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "mainTextColor" ? "bg-gray-100" : ""
               }`}
-              title="Mainbar Text Color"
+              title={t("templateControls.mainbarTextColor")}
               onClick={() =>
                 setOpenDropdown((prev) =>
                   prev === "mainTextColor" ? null : "mainTextColor"
@@ -1676,7 +1678,7 @@ const SidebarTemplate = ({ resume }) => {
               className={`md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "gap" ? "bg-gray-100" : ""
               }`}
-              title="Adjust Section Spacing"
+              title={t("templateControls.adjustSectionSpacing")}
             >
               <CgSpaceBetweenV className="text-lg md:text-xl text-gray-700" />
             </button>
@@ -1732,7 +1734,7 @@ const SidebarTemplate = ({ resume }) => {
               className={`md:p-2 rounded-md align-middle hover:bg-gray-100 transition ${
                 openDropdown === "toggleSection" ? "bg-gray-100" : ""
               }`}
-              title="Show/Hide Sections"
+              title={t("templateControls.showHideSections")}
               onClick={() =>
                 setOpenDropdown((prev) =>
                   prev === "toggleSection" ? null : "toggleSection"
@@ -1798,7 +1800,7 @@ const SidebarTemplate = ({ resume }) => {
               className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "reorder" ? "bg-gray-100" : ""
               }`}
-              title="Reorder Sections"
+              title={t("templateControls.reorderSections")}
               onClick={() =>
                 setOpenDropdown((prev) =>
                   prev === "reorder" ? null : "reorder"
@@ -1902,7 +1904,7 @@ const SidebarTemplate = ({ resume }) => {
           </div>
         </div>
       )}
-      {/* Resume Preview - A4 sized, scaled to fit container */}
+      {/* {t("templateControls.resumePreview")} - A4 sized, scaled to fit container */}
       <div ref={scaleWrapperRef} className="m-2.5 mx-2.5 mb-2.5 a4-scale-wrapper">
         <div
           ref={contentRef}

@@ -46,8 +46,10 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { useStandardSetting } from "../../Contexts/CombinedTemplateContext";
 import { useReactToPrint } from "react-to-print";
 import { useRef } from "react";
+import { useLocale } from "../../Contexts/LocaleContext";
 
 const StandardTemplate = ({ resume }) => {
+  const { t } = useLocale();
   const { isEditable } = useEditResume();
   const { standardSettings, setStandardSettings } = useStandardSetting();
   const contentRef = useRef(null);
@@ -774,7 +776,7 @@ const StandardTemplate = ({ resume }) => {
                       color: standardSettings.TextColors?.["h4"] || "#64748b",
                     }}
                   >
-                    <span className="font-bold">Technologies:</span>{" "}
+                    <span className="font-bold">{t("templateControls.technologies")}</span>{" "}
                     {a.technologies}
                   </p>
                 )}
@@ -886,10 +888,10 @@ const StandardTemplate = ({ resume }) => {
             </div>
             <div>
               <h3 className="text-[14px] md:text-sm font-semibold text-slate-900">
-                Resume Preview
+                {t("templateControls.resumePreview")}
               </h3>
               <p className="text-[10px] md:text-xs text-slate-600">
-                {resume.name}'s Professional Resume
+                {resume.name} {t("templateControls.professionalResume")}
               </p>
             </div>
           </div>
@@ -900,7 +902,7 @@ const StandardTemplate = ({ resume }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="p-1.5 bg-white/80 flex hover:bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-slate-600 hover:text-sky-600"
-              title="Download PDF"
+              title={t("templateControls.downloadPdf")}
             >
               <FaDownload size={12} />
             </motion.button>
@@ -918,7 +920,7 @@ const StandardTemplate = ({ resume }) => {
               className={`md:p-2 rounded-md hover:bg-gray-200 transition relative group ${
                 openDropdown === "bgColor" ? "bg-gray-200" : ""
               }`}
-              title={`Background Color`}
+              title={t("templateControls.backgroundColor")}
               onClick={() =>
                 setOpenDropdown((prev) =>
                   prev === "bgColor" ? null : "bgColor"
@@ -996,7 +998,7 @@ const StandardTemplate = ({ resume }) => {
                         }))
                       }
                       className="absolute inset-0 z-10 opacity-0 cursor-pointer"
-                      title="Pick custom color"
+                      title={t("templateControls.pickCustomColor")}
                     />
                   </div>
                 </div>
@@ -1057,7 +1059,7 @@ const StandardTemplate = ({ resume }) => {
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "font" ? null : "font"))
               }
-              title="Change Font"
+              title={t("templateControls.changeFont")}
               className={`md:p-2 rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "font" ? "bg-gray-100" : ""
               }`}
@@ -1125,7 +1127,7 @@ const StandardTemplate = ({ resume }) => {
           {/* Font Size Adjustments */}
           <div className="flex items-center gap-3">
             <button
-              title="Decrease Font Size"
+              title={t("templateControls.decreaseFontSize")}
               onClick={() =>
                 setStandardSettings((prev) => ({
                   ...prev,
@@ -1140,7 +1142,7 @@ const StandardTemplate = ({ resume }) => {
             </button>
 
             <button
-              title="Increase Font Size"
+              title={t("templateControls.increaseFontSize")}
               onClick={() =>
                 setStandardSettings((prev) => ({
                   ...prev,
@@ -1164,7 +1166,7 @@ const StandardTemplate = ({ resume }) => {
               className={`md:p-2   text-center align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "gap" ? "bg-gray-100" : ""
               }`}
-              title="Adjust Section Spacing"
+              title={t("templateControls.adjustSectionSpacing")}
             >
               <CgSpaceBetweenV className="text-lg md:text-xl text-gray-700" />
             </button>
@@ -1222,7 +1224,7 @@ const StandardTemplate = ({ resume }) => {
                   prev === "padding" ? null : "padding"
                 )
               }
-              title="Margin"
+              title={t("templateControls.margin")}
               className={`md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition ${
                 openDropdown === "padding" ? "bg-gray-100" : ""
               }`}
@@ -1285,7 +1287,7 @@ const StandardTemplate = ({ resume }) => {
                   prev === "borderTopWidth" ? null : "borderTopWidth"
                 )
               }
-              title="Sections Border Width"
+              title={t("templateControls.sectionsBorderWidth")}
               className={`md:p-2 rounded-md text-center align-middle hover:bg-gray-100 transition ${
                 openDropdown === "borderTopWidth" ? "bg-gray-100" : ""
               }`}
@@ -1351,7 +1353,7 @@ const StandardTemplate = ({ resume }) => {
                   prev === "borderStyles" ? null : "borderStyles"
                 )
               }
-              title="Section Border style and color"
+              title={t("templateControls.sectionBorderStyleColor")}
               className={`md:p-2 text-center align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "borderStyles" ? "bg-gray-100" : ""
               }`}
@@ -1380,14 +1382,14 @@ const StandardTemplate = ({ resume }) => {
                     }
                     className="w-full border text-xs md:text-sm rounded px-2 py-1 focus:outline-none"
                   >
-                    <option value="solid">Solid</option>
-                    <option value="dotted">Dotted</option>
-                    <option value="dashed">Dashed</option>
-                    <option value="double">Double</option>
-                    <option value="groove">Groove</option>
-                    <option value="ridge">Ridge</option>
-                    <option value="inset">Inset</option>
-                    <option value="outset">Outset</option>
+                    <option value="solid">{t("templateControls.borderStyles.solid")}</option>
+                    <option value="dotted">{t("templateControls.borderStyles.dotted")}</option>
+                    <option value="dashed">{t("templateControls.borderStyles.dashed")}</option>
+                    <option value="double">{t("templateControls.borderStyles.double")}</option>
+                    <option value="groove">{t("templateControls.borderStyles.groove")}</option>
+                    <option value="ridge">{t("templateControls.borderStyles.ridge")}</option>
+                    <option value="inset">{t("templateControls.borderStyles.inset")}</option>
+                    <option value="outset">{t("templateControls.borderStyles.outset")}</option>
                   </select>
                 </div>
 
@@ -1418,7 +1420,7 @@ const StandardTemplate = ({ resume }) => {
               className={`md:p-2 align-middle text-center rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "TextColor" ? "bg-gray-100" : ""
               }`}
-              title="Text Color"
+              title={t("templateControls.textColor")}
               onClick={() =>
                 setOpenDropdown((prev) =>
                   prev === "TextColor" ? null : "TextColor"
@@ -1481,7 +1483,7 @@ const StandardTemplate = ({ resume }) => {
                 className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
                   openDropdown === "linkColor" ? "bg-gray-100" : ""
                 }`}
-                title="Change Project Link Color"
+                title={t("templateControls.changeProjectLinkColor")}
               >
                 <FaLink className="text-sm md:text-lg text-gray-700" />
               </button>
@@ -1537,7 +1539,7 @@ const StandardTemplate = ({ resume }) => {
                           }))
                         }
                         className="absolute inset-0 z-10 opacity-0 cursor-pointer"
-                        title="Pick custom color"
+                        title={t("templateControls.pickCustomColor")}
                       />
                       <div
                         className="absolute inset-0 z-0 rounded-full"
@@ -1561,7 +1563,7 @@ const StandardTemplate = ({ resume }) => {
               className={`md:p-2 rounded-md align-middle hover:bg-gray-100 transition ${
                 openDropdown === "toggle" ? "bg-gray-100" : ""
               }`}
-              title="Show/Hide Sections"
+              title={t("templateControls.showHideSections")}
               onClick={() =>
                 setOpenDropdown((prev) => (prev === "toggle" ? null : "toggle"))
               }
@@ -1627,7 +1629,7 @@ const StandardTemplate = ({ resume }) => {
               className={`md:p-2 align-middle rounded-md hover:bg-gray-100 transition ${
                 openDropdown === "reorder" ? "bg-gray-100" : ""
               }`}
-              title="Reorder Sections"
+              title={t("templateControls.reorderSections")}
               onClick={() =>
                 setOpenDropdown((prev) =>
                   prev === "reorder" ? null : "reorder"
@@ -1688,7 +1690,7 @@ const StandardTemplate = ({ resume }) => {
         </div>
       )}
 
-      {/* Resume Preview - A4 sized, scaled to fit container */}
+      {/* {t("templateControls.resumePreview")} - A4 sized, scaled to fit container */}
       <div ref={scaleWrapperRef} className="m-3 mx-2.5 mb-2.5 a4-scale-wrapper">
         <div
           ref={contentRef}

@@ -11,12 +11,14 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../Contexts/AuthContext";
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
+import { useLocale } from "../Contexts/LocaleContext";
 
 const serif = { fontFamily: "Merriweather, ui-serif, Georgia, serif" };
 
 const Signup = () => {
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLocale();
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -52,11 +54,11 @@ const Signup = () => {
     setLoading(true);
     if (!form.password) {
       setLoading(false);
-      return toast.error("Password cannot be empty.");
+      return toast.error(t("auth.emptyPassword"));
     }
     if (form.password !== form.confirmPassword) {
       setLoading(false);
-      return toast.error("Passwords do not match.");
+      return toast.error(t("auth.passwordMismatch"));
     }
     const result = await signup({
       name: form.name,
@@ -65,10 +67,10 @@ const Signup = () => {
     });
     setLoading(false);
     if (result.success) {
-      showSuccessToast("Signup successful");
+      showSuccessToast(t("auth.signupSuccess"));
       navigate("/dashboard");
     } else {
-      showErrorToast(result.error || "Signup failed");
+      showErrorToast(result.error || t("auth.signupFailed"));
     }
   };
 
@@ -110,16 +112,15 @@ const Signup = () => {
             className="text-[44px] leading-[1.05] tracking-tight"
             style={{ ...serif, color: "#1a120b" }}
           >
-            Begin where
+            {t("auth.signupArtTitleLine1")}
             <br />
-            <em className="italic font-normal">your story does.</em>
+            <em className="italic font-normal">{t("auth.signupArtTitleEmphasis")}</em>
           </p>
           <p
             className="mt-6 text-[15px] leading-relaxed max-w-sm"
             style={{ color: "#4a3a2a" }}
           >
-            Build a resume worth reading — without the noise of a
-            thousand templates.
+            {t("auth.signupArtIntro")}
           </p>
         </div>
 
@@ -128,7 +129,7 @@ const Signup = () => {
           style={{ color: "#5a4a3a" }}
         >
           <span className="h-px w-8" style={{ backgroundColor: "#5a4a3a" }} />
-          Free to start
+          {t("auth.signupArtFooter")}
         </div>
       </div>
 
@@ -139,16 +140,16 @@ const Signup = () => {
             className="text-[40px] leading-[1.05] tracking-tight"
             style={{ ...serif, color: "#1a120b" }}
           >
-            Get <em className="italic font-normal">started.</em>
+            {t("auth.signupTitle")} <em className="italic font-normal">{t("auth.signupTitleEmphasis")}</em>
           </h1>
           <p className="mt-3 text-[14px]" style={{ color: "#6b5a4a" }}>
-            Create an account to begin.
+            {t("auth.signupIntro")}
           </p>
 
           <form onSubmit={handleSubmit} className="mt-10 space-y-7">
             <Field
               id="name"
-              label="Full name"
+              label={t("common.fullName")}
               name="name"
               type="text"
               value={form.name}
@@ -158,7 +159,7 @@ const Signup = () => {
             />
             <Field
               id="email"
-              label="Email"
+              label={t("common.email")}
               name="email"
               type="email"
               value={form.email}
@@ -168,7 +169,7 @@ const Signup = () => {
             />
             <Field
               id="password"
-              label="Password"
+              label={t("common.password")}
               name="password"
               type={showPassword ? "text" : "password"}
               value={form.password}
@@ -182,7 +183,7 @@ const Signup = () => {
                   tabIndex={-1}
                   className="opacity-60 hover:opacity-100 transition-opacity"
                   style={{ color: "#1a120b" }}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? t("common.hidePassword") : t("common.showPassword")}
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -190,7 +191,7 @@ const Signup = () => {
             />
             <Field
               id="confirmPassword"
-              label="Confirm password"
+              label={t("common.confirmPassword")}
               name="confirmPassword"
               type={showConfirm ? "text" : "password"}
               value={form.confirmPassword}
@@ -204,7 +205,7 @@ const Signup = () => {
                   tabIndex={-1}
                   className="opacity-60 hover:opacity-100 transition-opacity"
                   style={{ color: "#1a120b" }}
-                  aria-label={showConfirm ? "Hide password" : "Show password"}
+                  aria-label={showConfirm ? t("common.hidePassword") : t("common.showPassword")}
                 >
                   {showConfirm ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -224,10 +225,10 @@ const Signup = () => {
                 </div>
                 <ul className="mt-3 grid grid-cols-2 gap-y-1.5 text-[12px]" style={{ color: "#6b5a4a" }}>
                   {[
-                    ["upper", "Uppercase"],
-                    ["lower", "Lowercase"],
-                    ["number", "Number"],
-                    ["special", "Symbol"],
+                    ["upper", t("auth.passwordRules.upper")],
+                    ["lower", t("auth.passwordRules.lower")],
+                    ["number", t("auth.passwordRules.number")],
+                    ["special", t("auth.passwordRules.special")],
                   ].map(([key, label]) => (
                     <li key={key} className="flex items-center gap-1.5">
                       {passwordValid[key] ? (
@@ -248,7 +249,7 @@ const Signup = () => {
               className="group w-full inline-flex items-center justify-center gap-2 rounded-full py-3.5 text-[14px] tracking-wide transition-colors disabled:opacity-60"
               style={{ backgroundColor: "#1a120b", color: "#F5EFE3" }}
             >
-              {loading ? "Creating account…" : "Create account"}
+              {loading ? t("auth.creatingAccount") : t("auth.createAccount")}
               {!loading && (
                 <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
               )}
@@ -256,13 +257,13 @@ const Signup = () => {
           </form>
 
           <p className="mt-10 text-[13px] text-center" style={{ color: "#6b5a4a" }}>
-            Already have an account?{" "}
+            {t("auth.alreadyHaveAccount")}{" "}
             <Link
               to="/login"
               className="underline underline-offset-4 hover:opacity-70"
               style={{ color: "#1a120b" }}
             >
-              Sign in
+              {t("common.signIn")}
             </Link>
           </p>
         </div>

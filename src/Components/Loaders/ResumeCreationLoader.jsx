@@ -7,18 +7,24 @@ import {
   FaGraduationCap,
   FaCheckCircle,
 } from "react-icons/fa";
+import { useLocale } from "../../Contexts/LocaleContext";
 
-const steps = [
-  { id: 1, icon: FaFileAlt, title: "Reading document", duration: 3000 },
-  { id: 2, icon: FaUser, title: "Extracting personal info", duration: 2000 },
-  { id: 3, icon: FaBriefcase, title: "Processing experience", duration: 2500 },
-  { id: 4, icon: FaGraduationCap, title: "Organizing education", duration: 3000 },
-  { id: 5, icon: FaCheckCircle, title: "Finalizing resume", duration: 3500 },
+const stepConfig = [
+  { id: 1, icon: FaFileAlt, duration: 3000 },
+  { id: 2, icon: FaUser, duration: 2000 },
+  { id: 3, icon: FaBriefcase, duration: 2500 },
+  { id: 4, icon: FaGraduationCap, duration: 3000 },
+  { id: 5, icon: FaCheckCircle, duration: 3500 },
 ];
 
 const ResumeCreationLoader = ({ isVisible }) => {
   const [completed, setCompleted] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
+  const { t } = useLocale();
+  const steps = stepConfig.map((step, index) => ({
+    ...step,
+    title: t(`loaders.resumeSteps.${index}`),
+  }));
 
   useEffect(() => {
     if (!isVisible) {
@@ -62,12 +68,13 @@ const ResumeCreationLoader = ({ isVisible }) => {
             className="px-7 pt-7 pb-5"
             style={{ borderBottom: "1px solid var(--border-hairline)" }}
           >
-            <p className="eyebrow mb-3">Building resume</p>
+            <p className="eyebrow mb-3">{t("loaders.buildingResume")}</p>
             <h2
               className="text-[20px] tracking-tight text-[color:var(--text-primary)]"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              AI is processing your <em className="italic font-normal">document…</em>
+              {t("loaders.processingDocument")}{" "}
+              <em className="italic font-normal">{t("loaders.document")}</em>
             </h2>
           </div>
 
@@ -122,7 +129,7 @@ const ResumeCreationLoader = ({ isVisible }) => {
 
           <div className="px-7 pb-7">
             <div className="flex justify-between text-[10px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-              <span>Progress</span>
+              <span>{t("loaders.progress")}</span>
               <span>{progress}%</span>
             </div>
             <div

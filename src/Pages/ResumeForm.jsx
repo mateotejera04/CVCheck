@@ -42,19 +42,12 @@ import { createResume, updateUserProfileImage } from "../db/database"; // 🔥 F
 import { enhance } from "../utils/ai";
 import { FaWandMagicSparkles } from "react-icons/fa6"; // AI icon
 import { uploadProfileImage } from "../services/fileStorage";
-
-const steps = [
-  "Personal Info",
-  "Education",
-  "Skills",
-  "Projects",
-  "Experience",
-  "Achievements",
-  "Contact",
-];
+import { useLocale } from "../Contexts/LocaleContext";
 
 const ResumeForm = () => {
   const navigate = useNavigate();
+  const { locale, t } = useLocale();
+  const steps = t("resumeForm.steps", []);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState("");
 
@@ -75,7 +68,7 @@ const ResumeForm = () => {
     if (!value) return;
 
     setAiLoadingField(fieldKey);
-    const result = await enhance(value);
+    const result = await enhance(value, locale);
 
     setAiSuggestions((prev) => ({ ...prev, [fieldKey]: result }));
     setAiLoadingField(null);
@@ -94,7 +87,7 @@ const ResumeForm = () => {
       reader.readAsDataURL(file);
 
       // Upload to Appwrite
-      const uploadResult = await uploadProfileImage(file);
+      const uploadResult = await uploadProfileImage(file, t);
 
       // Update form data with image URL
       setFormData((prev) => ({ ...prev, imgUrl: uploadResult.fileUrl }));
@@ -102,10 +95,10 @@ const ResumeForm = () => {
       // Save to Firebase user profile
       await updateUserProfileImage(uploadResult.fileUrl);
 
-      toast.success("Profile image uploaded successfully!");
+      toast.success(t("resumeForm.profileImageUploaded"));
     } catch (error) {
       console.error("Image upload error:", error);
-      toast.error(error.message || "Failed to upload image");
+      toast.error(error.message || t("resumeForm.imageUploadFailed"));
       setImagePreview(null);
     } finally {
       setImageUploading(false);
@@ -250,7 +243,7 @@ const ResumeForm = () => {
 
   const nextStep = () => {
     if (step === 0 && !formData.name.trim())
-      return toast.error("Name is required!");
+      return toast.error(t("resumeForm.requiredName"));
     setStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
@@ -260,10 +253,10 @@ const ResumeForm = () => {
     try {
       await createResume(formData);
       setResume(formData);
-      showSuccessToast("Resume saved successfully!");
+      showSuccessToast(t("resumeForm.saved"));
       navigate("/resume");
     } catch (err) {
-      toast.error("Failed to save resume!");
+      toast.error(t("resumeForm.saveFailed"));
       console.error("Firestore error:", err.message);
     }
   };
@@ -283,12 +276,12 @@ const ResumeForm = () => {
             <div className="relative group">
               <label className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                 <FiUser className="text-[color:var(--text-primary)]" />
-                Full Name *
+                {t("resumeForm.labels.name")} *
               </label>
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder={t("resumeForm.placeholders.name")}
                   value={formData.name}
                   onChange={(e) => handleChange(e, "name")}
                   className="w-full pl-10 pr-3 py-3 border border-[color:var(--border-hairline)] rounded-xl focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -300,24 +293,24 @@ const ResumeForm = () => {
             {/* Headline / Subtitle */}
             <div className="relative group">
               <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                Headline
+                {t("resumeForm.labels.headline")}
               </label>
               <input
                 type="text"
-                placeholder="e.g. SOFTWARE ENGINEERING STUDENT"
+                placeholder={t("resumeForm.placeholders.headline")}
                 value={formData.headline || ""}
                 onChange={(e) => handleChange(e, "headline")}
                 className="w-full px-3 py-3 border border-[color:var(--border-hairline)] rounded-xl focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Short tagline shown under your name (used by the Modern template).
+                {t("resumeForm.headlineHint")}
               </p>
             </div>
 
             {/* Description Field */}
             <div className="relative group">
               <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                Professional Summary
+                {t("resumeForm.labels.summary")}
               </label>
 
               <div className="relative">
@@ -326,13 +319,13 @@ const ResumeForm = () => {
                   onChange={(html) =>
                     handleChange({ target: { value: html } }, "description")
                   }
-                  placeholder="A compelling summary of your professional background and career objectives"
+                  placeholder={t("resumeForm.placeholders.summary")}
                 />
 
                 {/* Enhanced AI Button */}
                 <motion.button
                   type="button"
-                  title="Enhance with AI"
+                  title={t("resumeForm.enhanceWithAi")}
                   disabled={aiLoadingField === "description"}
                   onClick={() => handleEnhanceField("description")}
                   whileHover={{ scale: 1.05 }}
@@ -357,7 +350,7 @@ const ResumeForm = () => {
                   <div className="flex items-center gap-2 mb-2">
                     <FaWandMagicSparkles className="text-[color:var(--text-primary)]" />
                     <span className="text-sm font-semibold text-[color:var(--text-primary)]">
-                      AI Enhancement
+                      {t("resumeForm.aiSuggestion")}
                     </span>
                   </div>
                   <p
@@ -370,7 +363,7 @@ const ResumeForm = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="absolute top-3 right-3 p-2 bg-[color:var(--text-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--surface-base)] rounded-lg transition-colors"
-                    title="Apply Enhancement"
+                    title={t("resumeForm.applyEnhancement")}
                     onClick={() => {
                       handleChange(
                         { target: { value: aiSuggestions["description"] } },
@@ -392,7 +385,7 @@ const ResumeForm = () => {
             <div className="relative group">
               <label className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                 <FiCamera className="text-[color:var(--text-primary)]" />
-                Profile Photo
+                {t("resumeForm.labels.profilePhoto")}
               </label>
 
               <div className="flex items-center gap-4">
@@ -401,7 +394,7 @@ const ResumeForm = () => {
                   {imagePreview || formData.imgUrl ? (
                     <img
                       src={imagePreview || formData.imgUrl}
-                      alt="Profile preview"
+                      alt={t("profile.avatarAlt")}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -429,20 +422,20 @@ const ResumeForm = () => {
                       <>
                         <BsArrowClockwise className="text-[color:var(--text-primary)] animate-spin" />
                         <span className="text-sm text-gray-600">
-                          Uploading...
+                          {t("resumeForm.uploadingPhoto")}
                         </span>
                       </>
                     ) : (
                       <>
                         <FiUpload className="text-[color:var(--text-primary)]" />
                         <span className="text-sm text-gray-600">
-                          {formData.imgUrl ? "Change Photo" : "Upload Photo"}
+                          {formData.imgUrl ? t("resumeForm.changePhoto") : t("resumeForm.uploadPhoto")}
                         </span>
                       </>
                     )}
                   </label>
                   <p className="text-xs text-gray-500 mt-1">
-                    JPEG, PNG, WebP or GIF (max 5MB)
+                    {t("resumeForm.photoHint")}
                   </p>
                 </div>
               </div>
@@ -460,13 +453,13 @@ const ResumeForm = () => {
                 htmlFor="college"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                College Name
+                {t("resumeForm.labels.college")}
               </label>
               <FiBookOpen className="absolute top-9 left-3 text-gray-500 text-sm" />
               <input
                 id="college"
                 type="text"
-                placeholder="e.g., MIT"
+                placeholder={t("resumeForm.placeholders.college")}
                 value={formData.education.college}
                 onChange={(e) => handleChange(e, "education.college")}
                 className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -478,13 +471,13 @@ const ResumeForm = () => {
                 htmlFor="college"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                Degree Or Program
+                {t("resumeForm.labels.degree")}
               </label>
               <FaBookReader className="absolute top-9 left-3 text-gray-500 text-sm" />
               <input
                 id="college"
                 type="text"
-                placeholder="e.g., B.Tech in Computer Science"
+                placeholder={t("resumeForm.placeholders.degree")}
                 value={formData.education.degree}
                 onChange={(e) => handleChange(e, "education.degree")}
                 className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -496,13 +489,13 @@ const ResumeForm = () => {
                 htmlFor="college"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                Specialization if any
+                {t("resumeForm.labels.specialization")}
               </label>
               <GiBookCover className="absolute top-9 left-3 text-gray-500 text-sm" />
               <input
                 id="college"
                 type="text"
-                placeholder="e.g., Artificial Intelligence"
+                placeholder={t("resumeForm.placeholders.specialization")}
                 value={formData.education.specialization}
                 onChange={(e) => handleChange(e, "education.specialization")}
                 className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -514,13 +507,13 @@ const ResumeForm = () => {
                 htmlFor="college"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                Location
+                {t("resumeForm.labels.location")}
               </label>
               <GoLocation className="absolute top-9 left-3 text-gray-500 text-sm" />
               <input
                 id="college"
                 type="text"
-                placeholder="City and state/country of the college"
+                placeholder={t("resumeForm.placeholders.collegeLocation")}
                 value={formData.education.location}
                 onChange={(e) => handleChange(e, "education.location")}
                 className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -534,13 +527,13 @@ const ResumeForm = () => {
                   htmlFor="startYear"
                   className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
                 >
-                  Start Year
+                  {t("resumeForm.labels.startYear")}
                 </label>
                 <FiCalendar className="absolute top-9 left-3 text-gray-500 text-sm" />
                 <input
                   id="startYear"
                   type="text"
-                  placeholder="e.g., 2021"
+                  placeholder={t("resumeForm.placeholders.startYear")}
                   value={formData.education.startYear}
                   onChange={(e) => handleChange(e, "education.startYear")}
                   className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -551,13 +544,13 @@ const ResumeForm = () => {
                   htmlFor="endYear"
                   className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
                 >
-                  End Year
+                  {t("resumeForm.labels.endYear")}
                 </label>
                 <FiCalendar className="absolute top-9 left-3 text-gray-500 text-sm" />
                 <input
                   id="endYear"
                   type="text"
-                  placeholder="e.g., 2025"
+                  placeholder={t("resumeForm.placeholders.endYear")}
                   value={formData.education.endYear}
                   onChange={(e) => handleChange(e, "education.endYear")}
                   className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -571,13 +564,13 @@ const ResumeForm = () => {
                 htmlFor="cgpa "
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                College CGPA
+                {t("resumeForm.labels.cgpa")}
               </label>
               <FiBarChart2 className="absolute top-9 left-3 text-gray-500 text-sm" />
               <input
                 id="cgpa"
                 type="text"
-                placeholder="e.g., 9.0"
+                placeholder={t("resumeForm.placeholders.cgpa")}
                 value={formData.education.cgpa}
                 onChange={(e) => handleChange(e, "education.cgpa")}
                 className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -590,13 +583,13 @@ const ResumeForm = () => {
                 htmlFor="school"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                School Name
+                {t("resumeForm.labels.school")}
               </label>
               <FiBookOpen className="absolute top-9 left-3 text-gray-500 text-sm" />
               <input
                 id="school"
                 type="text"
-                placeholder="e.g., DPS Delhi"
+                placeholder={t("resumeForm.placeholders.school")}
                 value={formData.education.school}
                 onChange={(e) => handleChange(e, "education.school")}
                 className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -610,13 +603,13 @@ const ResumeForm = () => {
                   htmlFor="tenth"
                   className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
                 >
-                  10th %
+                  {t("resumeForm.labels.tenth")}
                 </label>
                 <FiBarChart2 className="absolute top-9 left-3 text-gray-500 text-sm" />
                 <input
                   id="tenth"
                   type="text"
-                  placeholder="e.g., 92%"
+                  placeholder={t("resumeForm.placeholders.tenth")}
                   value={formData.education.tenth}
                   onChange={(e) => handleChange(e, "education.tenth")}
                   className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -629,13 +622,13 @@ const ResumeForm = () => {
                   htmlFor="twelfth"
                   className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
                 >
-                  12th %
+                  {t("resumeForm.labels.twelfth")}
                 </label>
                 <FiBarChart2 className="absolute top-9 left-3 text-gray-500 text-sm" />
                 <input
                   id="twelfth"
                   type="text"
-                  placeholder="e.g., 89%"
+                  placeholder={t("resumeForm.placeholders.twelfth")}
                   value={formData.education.twelfth}
                   onChange={(e) => handleChange(e, "education.twelfth")}
                   className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
@@ -657,7 +650,7 @@ const ResumeForm = () => {
                 {/* Domain Header */}
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="text-sm font-medium text-[color:var(--text-primary)]">
-                    Domain {domainIndex + 1}
+                    {t("resumeForm.cards.skillDomain")} {domainIndex + 1}
                   </h3>
                   <button
                     type="button"
@@ -671,7 +664,7 @@ const ResumeForm = () => {
                 {/* Domain Input */}
                 <input
                   type="text"
-                  placeholder="e.g., Frontend, Backend, DevOps"
+                  placeholder={t("resumeForm.placeholders.skillDomain")}
                   value={skill.domain}
                   onChange={(e) =>
                     handleDomainChange(domainIndex, e.target.value)
@@ -684,7 +677,7 @@ const ResumeForm = () => {
                   <div key={langIndex} className="mb-2 flex items-center gap-2">
                     <input
                       type="text"
-                      placeholder={`Skill ${langIndex + 1}`}
+                      placeholder={`${t("resumeForm.labels.skill")} ${langIndex + 1}`}
                       value={lang}
                       onChange={(e) =>
                         handleSkillChange(
@@ -711,7 +704,7 @@ const ResumeForm = () => {
                   onClick={() => addItem("skills", domainIndex)}
                   className="mt-4 text-sm px-4 py-1.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
                 >
-                  + Add Skill
+                  + {t("resumeForm.add.skill")}
                 </button>
               </div>
             ))}
@@ -722,7 +715,7 @@ const ResumeForm = () => {
               onClick={() => addItem("skills")}
               className="w-full py-2.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
             >
-              + Add New Domain
+              + {t("resumeForm.add.skillDomain")}
             </button>
           </div>
         );
@@ -749,13 +742,13 @@ const ResumeForm = () => {
 
                 <div className="mb-3 relative">
                   <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                    Project Name
+                    {t("resumeForm.labels.projectName")}
                   </label>
                   <div className="relative">
                     <FaLink className="absolute top-3 left-3 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="e.g. Portfolio Website"
+                      placeholder={t("resumeForm.placeholders.projectName")}
                       value={project.name}
                       onChange={(e) =>
                         handleArrayChange(
@@ -772,7 +765,7 @@ const ResumeForm = () => {
 
                 <div className="mb-3 relative">
                   <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                    Description
+                    {t("resumeForm.labels.description")}
                   </label>
 
                   <div className="relative">
@@ -787,13 +780,13 @@ const ResumeForm = () => {
                           html
                         )
                       }
-                      placeholder="A brief project description"
+                      placeholder={t("resumeForm.placeholders.projectDescription")}
                     />
 
                     {/* AI Button */}
                     <button
                       type="button"
-                      title="Enhance with AI"
+                      title={t("resumeForm.enhanceWithAi")}
                       disabled={
                         aiLoadingField === `projects[${index}].description`
                       }
@@ -822,7 +815,7 @@ const ResumeForm = () => {
                       />
                       <button
                         className="absolute top-2 right-2 text-sm px-2 py-2 bg-[color:var(--surface-base)] hover:opacity-80 text-[color:var(--text-primary)] rounded-full"
-                        title="Copy AI Suggestion"
+                        title={t("resumeForm.copyAiSuggestion")}
                         onClick={() => {
                           handleArrayChange(
                             "projects",
@@ -844,13 +837,13 @@ const ResumeForm = () => {
 
                 <div className="mb-3 relative">
                   <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                    GitHub Link
+                    {t("resumeForm.labels.github")}
                   </label>
                   <div className="relative">
                     <FaGithub className="absolute top-3 left-3 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="https://github.com/username/repo"
+                      placeholder={t("resumeForm.placeholders.githubRepo")}
                       value={project.github}
                       onChange={(e) =>
                         handleArrayChange(
@@ -867,13 +860,13 @@ const ResumeForm = () => {
 
                 <div className="relative">
                   <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                    Live Demo Link
+                    {t("resumeForm.labels.demo")}
                   </label>
                   <div className="relative">
                     <TbWorld className="absolute top-3 left-3 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="https://project-demo.com"
+                      placeholder={t("resumeForm.placeholders.projectDemo")}
                       value={project.demo}
                       onChange={(e) =>
                         handleArrayChange(
@@ -895,7 +888,7 @@ const ResumeForm = () => {
               onClick={() => addItem("projects")}
               className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
             >
-              <FaPlus /> Add Project
+              <FaPlus /> {t("resumeForm.add.project")}
             </button>
           </div>
         );
@@ -922,12 +915,12 @@ const ResumeForm = () => {
                   {/* Company Name */}
                   <div className="relative mb-3">
                     <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                      Company Name
+                      {t("resumeForm.labels.company")}
                     </label>
                     <FiBriefcase className="absolute top-9 left-3 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="e.g., Google"
+                      placeholder={t("resumeForm.placeholders.company")}
                       value={exp.company}
                       onChange={(e) =>
                         handleArrayChange(
@@ -943,12 +936,12 @@ const ResumeForm = () => {
 
                   <div className="relative mb-3">
                     <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                      Role
+                      {t("resumeForm.labels.role")}
                     </label>
                     <FaRegUser className="absolute top-9 left-3 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="e.g., Event Manager"
+                      placeholder={t("resumeForm.placeholders.role")}
                       value={exp.role}
                       onChange={(e) =>
                         handleArrayChange(
@@ -964,12 +957,12 @@ const ResumeForm = () => {
 
                   <div className="relative mb-3">
                     <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                      Technologies Used
+                      {t("resumeForm.labels.technologies")}
                     </label>
                     <GrTechnology className="absolute top-9 left-3 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="e.g., React, Node.js, MongoDB"
+                      placeholder={t("resumeForm.placeholders.technologies")}
                       value={exp.technologies}
                       onChange={(e) =>
                         handleArrayChange(
@@ -986,12 +979,12 @@ const ResumeForm = () => {
                   {/* Duration */}
                   <div className="relative mb-3">
                     <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                      Duration (Years)
+                      {t("resumeForm.labels.years")}
                     </label>
                     <FiCalendar className="absolute top-9 left-3 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="e.g., 2021 - 2023"
+                      placeholder={t("resumeForm.placeholders.years")}
                       value={exp.years}
                       onChange={(e) =>
                         handleArrayChange(
@@ -1008,7 +1001,7 @@ const ResumeForm = () => {
                   {/* Description */}
                   <div className="relative">
                     <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
-                      Description
+                      {t("resumeForm.labels.description")}
                     </label>
 
                     <div className="relative">
@@ -1022,12 +1015,12 @@ const ResumeForm = () => {
                             html
                           )
                         }
-                        placeholder="e.g., Worked on scalable frontend apps..."
+                        placeholder={t("resumeForm.placeholders.workDescription")}
                       />
                       {/* AI Button */}
                       <button
                         type="button"
-                        title="Enhance with AI"
+                        title={t("resumeForm.enhanceWithAi")}
                         disabled={
                           aiLoadingField === `experience[${index}].description`
                         }
@@ -1057,7 +1050,7 @@ const ResumeForm = () => {
                         />
                         <button
                           className="absolute top-2 right-2 text-sm px-2 py-2 bg-[color:var(--surface-base)] hover:opacity-80 text-[color:var(--text-primary)] rounded-full"
-                          title="Copy AI Suggestion"
+                          title={t("resumeForm.copyAiSuggestion")}
                           onClick={() => {
                             handleArrayChange(
                               "experience",
@@ -1085,7 +1078,7 @@ const ResumeForm = () => {
                 onClick={() => addItem("experience")}
                 className="w-full py-2.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
               >
-                + Add Experience
+                + {t("resumeForm.add.experience")}
               </button>
             </div>
           </div>
@@ -1113,12 +1106,12 @@ const ResumeForm = () => {
                   {/* Title */}
                   <div className="relative mb-3">
                     <label className="block mb-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
-                      Achievement Title
+                      {t("resumeForm.labels.achievementTitle")}
                     </label>
                     <FiAward className="absolute top-9 left-3 text-gray-500" />
                     <input
                       type="text"
-                      placeholder="e.g., Hackathon Winner"
+                      placeholder={t("resumeForm.placeholders.achievementTitle")}
                       value={achieve.title}
                       onChange={(e) =>
                         handleArrayChange(
@@ -1135,7 +1128,7 @@ const ResumeForm = () => {
                   {/* Description */}
                   <div className="relative mb-3">
                     <label className="block mb-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
-                      Description
+                      {t("resumeForm.labels.description")}
                     </label>
 
                     <div className="relative">
@@ -1149,12 +1142,12 @@ const ResumeForm = () => {
                             html
                           )
                         }
-                        placeholder="e.g., Secured 1st place among 100+ teams"
+                        placeholder={t("resumeForm.placeholders.achievementDescription")}
                       />
                       {/* AI Button */}
                       <button
                         type="button"
-                        title="Enhance with AI"
+                        title={t("resumeForm.enhanceWithAi")}
                         disabled={
                           aiLoadingField ===
                           `achievements[${index}].description`
@@ -1189,7 +1182,7 @@ const ResumeForm = () => {
                         />
                         <button
                           className="absolute top-2 right-2 text-sm px-2 py-2 bg-[color:var(--surface-base)] hover:opacity-80 text-[color:var(--text-primary)] rounded-full"
-                          title="Copy AI Suggestion"
+                          title={t("resumeForm.copyAiSuggestion")}
                           onClick={() => {
                             handleArrayChange(
                               "achievements",
@@ -1215,12 +1208,12 @@ const ResumeForm = () => {
                   <div className="flex gap-2">
                     <div className="relative w-1/2">
                       <label className="block mb-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
-                        Month
+                        {t("resumeForm.labels.month")}
                       </label>
                       <FiCalendar className="absolute top-8.5 md:top-9 left-1.5 md:left-3 text-gray-500" />
                       <input
                         type="text"
-                        placeholder="e.g., March"
+                        placeholder={t("resumeForm.placeholders.month")}
                         value={achieve.month}
                         onChange={(e) =>
                           handleArrayChange(
@@ -1236,12 +1229,12 @@ const ResumeForm = () => {
 
                     <div className="relative w-1/2">
                       <label className="block mb-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
-                        Year
+                        {t("resumeForm.labels.year")}
                       </label>
                       <FiCalendar className="absolute top-8.5 md:top-9 left-1.5 md:left-3 text-gray-500" />
                       <input
                         type="text"
-                        placeholder="e.g., 2024"
+                        placeholder={t("resumeForm.placeholders.year")}
                         value={achieve.year}
                         onChange={(e) =>
                           handleArrayChange(
@@ -1264,7 +1257,7 @@ const ResumeForm = () => {
                 onClick={() => addItem("achievements")}
                 className="w-full mt-4 py-2.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
               >
-                + Add Achievement
+                + {t("resumeForm.add.achievement")}
               </button>
             </div>
           </div>
@@ -1279,13 +1272,13 @@ const ResumeForm = () => {
                 htmlFor="phone"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                Phone Number
+                {t("resumeForm.labels.phone")}
               </label>
               <FiPhone className="absolute top-9 left-3 text-gray-500" />
               <input
                 id="phone"
                 type="text"
-                placeholder="e.g., +91 98765 43210"
+                placeholder={t("resumeForm.placeholders.phone")}
                 value={formData.contact.phone}
                 onChange={(e) =>
                   handleSingleChange("contact", "phone", e.target.value)
@@ -1300,13 +1293,13 @@ const ResumeForm = () => {
                 htmlFor="email"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                Email Address
+                {t("resumeForm.labels.email")}
               </label>
               <FiMail className="absolute top-9 left-3 text-gray-500" />
               <input
                 id="email"
                 type="email"
-                placeholder="e.g., you@example.com"
+                placeholder={t("resumeForm.placeholders.email")}
                 value={formData.contact.email}
                 onChange={(e) =>
                   handleSingleChange("contact", "email", e.target.value)
@@ -1321,13 +1314,13 @@ const ResumeForm = () => {
                 htmlFor="github"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                GitHub Profile
+                {t("resumeForm.labels.github")}
               </label>
               <FiGithub className="absolute top-9 left-3 text-gray-500" />
               <input
                 id="github"
                 type="text"
-                placeholder="e.g., https://github.com/yourhandle"
+                placeholder={t("resumeForm.placeholders.githubProfile")}
                 value={formData.contact.github}
                 onChange={(e) =>
                   handleSingleChange("contact", "github", e.target.value)
@@ -1342,13 +1335,13 @@ const ResumeForm = () => {
                 htmlFor="linkedin"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                LinkedIn Profile
+                {t("resumeForm.labels.linkedin")}
               </label>
               <FiLinkedin className="absolute top-9 left-3 text-gray-500" />
               <input
                 id="linkedin"
                 type="text"
-                placeholder="e.g., https://linkedin.com/in/yourname"
+                placeholder={t("resumeForm.placeholders.linkedin")}
                 value={formData.contact.linkedin}
                 onChange={(e) =>
                   handleSingleChange("contact", "linkedin", e.target.value)
@@ -1363,13 +1356,13 @@ const ResumeForm = () => {
                 htmlFor="location"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                Location
+                {t("resumeForm.labels.location")}
               </label>
               <FiMapPin className="absolute top-9 left-3 text-gray-500" />
               <input
                 id="location"
                 type="text"
-                placeholder="e.g., Jaipur, India"
+                placeholder={t("resumeForm.placeholders.location")}
                 value={formData.contact.location}
                 onChange={(e) =>
                   handleSingleChange("contact", "location", e.target.value)
@@ -1384,13 +1377,13 @@ const ResumeForm = () => {
                 htmlFor="websiteURL"
                 className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
-                Website URL
+                {t("resumeForm.labels.website")}
               </label>
               <FiGlobe className="absolute top-9 left-3 text-gray-500" />
               <input
                 id="websiteURL"
                 type="text"
-                placeholder="e.g., https://yourwebsite.com"
+                placeholder={t("resumeForm.placeholders.website")}
                 value={formData.contact.websiteURL}
                 onChange={(e) =>
                   handleSingleChange("contact", "websiteURL", e.target.value)
@@ -1403,7 +1396,7 @@ const ResumeForm = () => {
       // You can add similar UI for Projects, Experience, Achievements, and Contact here...
       default:
         return (
-          <p className="text-center text-gray-500">More sections coming…</p>
+          <p className="text-center text-gray-500">{t("resumeForm.moreComing")}</p>
         );
     }
   };
@@ -1417,17 +1410,17 @@ const ResumeForm = () => {
           <div className="flex items-center gap-3 mb-5">
             <span className="h-px w-10 bg-[color:var(--text-muted)]" />
             <span className="eyebrow">
-              Step {step + 1} of {steps.length}
+              {t("resumeForm.eyebrow")} {step + 1} / {steps.length}
             </span>
           </div>
           <h1
             className="text-[36px] md:text-[48px] tracking-tight leading-[1.05] text-[color:var(--text-primary)]"
             style={{ fontFamily: "var(--font-serif)" }}
           >
-            {steps[step].toLowerCase()}<em className="italic font-normal">.</em>
+            {steps[step]?.toLowerCase()}<em className="italic font-normal">.</em>
           </h1>
           <p className="mt-4 text-[14px] text-[color:var(--text-secondary)]">
-            Let's build your professional story.
+            {t("resumeForm.intro")}
           </p>
         </header>
 
@@ -1489,7 +1482,7 @@ const ResumeForm = () => {
             disabled={step === 0}
             className="btn-secondary inline-flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <FaArrowLeft /> Back
+            <FaArrowLeft /> {t("resumeForm.previous")}
           </button>
 
           {step === steps.length - 1 ? (
@@ -1498,7 +1491,7 @@ const ResumeForm = () => {
               onClick={saveResumeToFirebase}
               className="btn-primary inline-flex items-center gap-2"
             >
-              <FaCheckCircle /> Build resume
+              <FaCheckCircle /> {t("resumeForm.saveResume")}
             </button>
           ) : (
             <button
@@ -1506,7 +1499,7 @@ const ResumeForm = () => {
               onClick={nextStep}
               className="btn-primary inline-flex items-center gap-2"
             >
-              Next <FaArrowRight />
+              {t("resumeForm.next")} <FaArrowRight />
             </button>
           )}
         </div>

@@ -9,20 +9,23 @@ import { AuthProvider } from "./Contexts/AuthContext";
 import { EditResumeProvider } from "./Contexts/EditResumeContext";
 import { ResumeDataProvider } from "./Contexts/ResumeDataContext";
 import { CombinedTemplateProvider } from "./Contexts/CombinedTemplateContext";
+import { LocaleProvider } from "./Contexts/LocaleContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <ResumeDataProvider>
-          <CombinedTemplateProvider>
-            <EditResumeProvider>
-              <div className="overflow-x-hidden [font-family:'Raleway',sans-serif]">
-                <App />
-              </div>
-            </EditResumeProvider>
-          </CombinedTemplateProvider>
-        </ResumeDataProvider>
+        <LocaleProvider>
+          <ResumeDataProvider>
+            <CombinedTemplateProvider>
+              <EditResumeProvider>
+                <div className="overflow-x-hidden [font-family:'Raleway',sans-serif]">
+                  <App />
+                </div>
+              </EditResumeProvider>
+            </CombinedTemplateProvider>
+          </ResumeDataProvider>
+        </LocaleProvider>
       </AuthProvider>
       <Toaster
         position="top-right"
