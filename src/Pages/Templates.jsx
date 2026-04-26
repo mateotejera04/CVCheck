@@ -1,32 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
+import TemplatePreview from "../Components/ui/TemplatePreview";
 
 const templates = [
   {
     id: 1,
     name: "Sidebar",
-    image: "/sidebar.jpg",
+    variant: "sidebar",
     description: "Two-column layout with a clean sidebar for skills and contact.",
     badge: "Popular",
   },
   {
     id: 2,
     name: "Classic",
-    image: "/classic.jpg",
+    variant: "classic",
     description: "A timeless single-column design that reads well in any context.",
     badge: "Timeless",
   },
   {
     id: 3,
     name: "Standard",
-    image: "/standard.jpg",
+    variant: "standard",
     description: "A balanced standard layout that works for most industries.",
     badge: "Standard",
   },
   {
     id: 4,
     name: "Modern",
-    image: "/standard.jpg",
+    variant: "modern",
     description: "Profile-style header with photo and personal summary up top.",
     badge: "New",
   },
@@ -64,16 +65,8 @@ export default function Templates() {
                 backgroundColor: "var(--surface-card)",
               }}
             >
-              <div
-                className="relative aspect-[3/4] overflow-hidden"
-                style={{ backgroundColor: "var(--surface-muted)" }}
-              >
-                <img
-                  src={t.image}
-                  alt={`${t.name} template preview`}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+              <div className="relative aspect-[3/4] overflow-hidden">
+                <TemplatePreview variant={t.variant} />
                 <span
                   className="absolute top-3 left-3 text-[11px] tracking-[0.14em] uppercase px-2.5 py-1 rounded-full text-[color:var(--text-primary)]"
                   style={{

@@ -2,34 +2,31 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
+import TemplatePreview from "../ui/TemplatePreview";
 
 const templates = [
   {
     id: 1,
     name: "Sidebar",
-    image:
-      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157828/sidebar_hduvee.jpg",
+    variant: "sidebar",
     description: "Clean and modern with a color sidebar accent.",
   },
   {
     id: 2,
     name: "Classic",
-    image:
-      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157768/classic_fjq31b.jpg",
+    variant: "classic",
     description: "Traditional, formal, timeless.",
   },
   {
     id: 3,
     name: "Standard",
-    image:
-      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157832/standard_vjm4w9.jpg",
+    variant: "standard",
     description: "Clean, simple, gets the job done.",
   },
   {
     id: 4,
     name: "Modern",
-    image:
-      "https://res.cloudinary.com/dyetf2h9n/image/upload/v1757157832/standard_vjm4w9.jpg",
+    variant: "modern",
     description: "Profile-style with circular photo.",
   },
 ];
@@ -78,16 +75,8 @@ const TemplateCarousel = () => {
                 backgroundColor: "var(--surface-card)",
               }}
             >
-              <div
-                className="aspect-[3/4] overflow-hidden"
-                style={{ backgroundColor: "var(--surface-muted)" }}
-              >
-                <img
-                  src={t.image}
-                  alt={t.name}
-                  loading="lazy"
-                  className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
-                />
+              <div className="aspect-[3/4] overflow-hidden">
+                <TemplatePreview variant={t.variant} />
               </div>
               <div className="p-5 flex items-start justify-between gap-3">
                 <div>
