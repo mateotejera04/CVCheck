@@ -40,34 +40,49 @@ const FAQ = () => {
   const toggleFAQ = (i) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section className="surface-base">
+    <section
+      className="surface-base"
+      style={{ borderTop: "1px solid var(--border-hairline)" }}
+    >
       <div className="container-page section-py">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-4">
-            <p className="eyebrow mb-3">FAQ</p>
-            <h2 className="h-section mb-4">Frequently asked questions</h2>
-            <p className="body-lg max-w-md">
-              Everything you need to know about CVCheck's AI-powered resume building platform.
+            <div className="flex items-center gap-3 mb-6">
+              <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+              <span className="eyebrow">FAQ</span>
+            </div>
+            <h2 className="h-section mb-6">
+              Questions, <em className="italic font-normal">answered.</em>
+            </h2>
+            <p className="text-[16px] leading-relaxed text-[color:var(--text-secondary)] max-w-md">
+              The short version of what you might be wondering.
             </p>
           </div>
 
           <div className="lg:col-span-8">
-            <div className="border-t border-zinc-200">
+            <div style={{ borderTop: "1px solid var(--border-hairline)" }}>
               {faqs.map((faq, index) => {
                 const open = openIndex === index;
                 return (
-                  <div key={index} className="border-b border-zinc-200">
+                  <div
+                    key={index}
+                    style={{ borderBottom: "1px solid var(--border-hairline)" }}
+                  >
                     <button
                       onClick={() => toggleFAQ(index)}
-                      className="w-full py-5 text-left flex items-center justify-between gap-6 group"
+                      className="w-full py-6 text-left flex items-center justify-between gap-6 group"
                     >
-                      <span className="text-base md:text-lg font-medium text-zinc-900 group-hover:text-sky-700 transition-colors">
+                      <span
+                        className="text-[18px] md:text-[20px] tracking-tight text-[color:var(--text-primary)] transition-opacity group-hover:opacity-70"
+                        style={{ fontFamily: "var(--font-serif)" }}
+                      >
                         {faq.question}
                       </span>
                       <motion.span
                         animate={{ rotate: open ? 45 : 0 }}
                         transition={{ duration: 0.2 }}
-                        className="flex-shrink-0 w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-700"
+                        className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-[color:var(--text-primary)]"
+                        style={{ border: "1px solid var(--text-primary)" }}
                       >
                         <FiPlus />
                       </motion.span>
@@ -81,7 +96,7 @@ const FAQ = () => {
                           transition={{ duration: 0.2 }}
                           className="overflow-hidden"
                         >
-                          <p className="pb-6 pr-12 text-zinc-600 leading-relaxed">
+                          <p className="pb-7 pr-12 text-[15px] leading-relaxed text-[color:var(--text-secondary)]">
                             {faq.answer}
                           </p>
                         </motion.div>

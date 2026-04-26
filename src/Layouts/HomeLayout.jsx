@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 const HomeLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col surface-base text-zinc-900">
+    <div className="min-h-screen flex flex-col surface-base text-[color:var(--text-primary)]">
       <Navbar />
       <motion.main
         className="flex-grow pt-16"

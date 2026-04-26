@@ -9,7 +9,7 @@ const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen surface-base text-zinc-900 flex flex-col">
+    <div className="min-h-screen surface-base text-[color:var(--text-primary)] flex flex-col">
       <Navbar
         toggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
         isSidebarOpen={isSidebarOpen}

@@ -26,7 +26,8 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       {isOpen && (
         <>
           <motion.div
-            className="fixed inset-0 z-30 bg-zinc-900/30 lg:hidden"
+            className="fixed inset-0 z-30 lg:hidden"
+            style={{ backgroundColor: "rgba(26, 18, 11, 0.3)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -39,9 +40,9 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
             animate={{ x: 0 }}
             exit={{ x: -240 }}
             transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
-            className="fixed top-16 left-0 z-40 w-64 h-[calc(100vh-4rem)] py-6 px-3 bg-white border-r border-zinc-200 overflow-y-auto"
+            className="fixed top-16 left-0 z-40 w-64 h-[calc(100vh-4rem)] py-6 px-3 bg-[color:var(--surface-base)] border-r border-[color:var(--border-hairline)] overflow-y-auto"
           >
-            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500 px-3 mb-3">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] px-3 mb-4">
               Navigation
             </p>
             <ul className="space-y-1 text-sm">
@@ -56,13 +57,13 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
                       className={classNames(
                         "flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-lg transition-colors border-l-2",
                         isActive
-                          ? "bg-sky-50 text-sky-700 border-sky-600 font-medium"
-                          : "text-zinc-700 border-transparent hover:bg-zinc-50 hover:text-zinc-900"
+                          ? "bg-[color:var(--accent-soft)] text-[color:var(--text-primary)] border-[color:var(--text-primary)]"
+                          : "text-[color:var(--text-secondary)] border-transparent hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--text-primary)]"
                       )}
                     >
                       <Icon
                         size={16}
-                        className={isActive ? "text-sky-600" : "text-zinc-400"}
+                        className={isActive ? "opacity-100" : "opacity-50"}
                       />
                       {item.label}
                     </Link>

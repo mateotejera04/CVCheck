@@ -117,23 +117,42 @@ const Profile = () => {
   const initials = (user?.displayName || user?.email || "U").charAt(0).toUpperCase();
 
   const inputCls =
-    "w-full px-4 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white";
+    "w-full bg-transparent border-0 border-b border-[#cdbda6] py-2.5 text-[15px] focus:outline-none focus:border-[color:var(--text-primary)] transition-colors text-[color:var(--text-primary)]";
 
   return (
     <div className="surface-base min-h-screen">
-      <div className="container-page py-10 md:py-14 max-w-3xl">
-        <header className="mb-10">
-          <p className="eyebrow mb-2">Profile</p>
-          <h1 className="h-section mb-2">Account settings</h1>
-          <p className="text-zinc-600">
+      <div className="container-page py-12 md:py-16 max-w-3xl">
+        <header className="mb-12">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+            <span className="eyebrow">Profile</span>
+          </div>
+          <h1
+            className="text-[36px] md:text-[48px] tracking-tight leading-[1.05] text-[color:var(--text-primary)]"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            Account <em className="italic font-normal">settings.</em>
+          </h1>
+          <p className="mt-4 text-[15px] text-[color:var(--text-secondary)]">
             Manage your profile information and uploaded resumes.
           </p>
         </header>
 
-        {/* Profile card */}
-        <section className="card-flat overflow-hidden mb-8">
-          <div className="p-6 md:p-8 flex items-center gap-5 border-b border-zinc-100">
-            <div className="w-16 h-16 rounded-full overflow-hidden bg-sky-100 text-sky-700 flex items-center justify-center text-2xl font-semibold shrink-0">
+        <section
+          className="overflow-hidden mb-8 rounded-2xl"
+          style={{
+            border: "1px solid var(--border-hairline)",
+            backgroundColor: "var(--surface-card)",
+          }}
+        >
+          <div
+            className="p-7 md:p-8 flex items-center gap-5"
+            style={{ borderBottom: "1px solid var(--border-hairline)" }}
+          >
+            <div
+              className="w-16 h-16 rounded-full overflow-hidden bg-[color:var(--text-primary)] text-[color:var(--surface-base)] flex items-center justify-center text-2xl shrink-0"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
               {userProfile?.imgUrl ? (
                 <img
                   src={userProfile.imgUrl}
@@ -145,18 +164,23 @@ const Profile = () => {
               )}
             </div>
             <div className="min-w-0">
-              <h2 className="text-lg font-semibold text-zinc-900 truncate">
+              <h2
+                className="text-[22px] tracking-tight text-[color:var(--text-primary)] truncate"
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
                 {user?.displayName || "User"}
               </h2>
-              <p className="text-sm text-zinc-500 truncate">{user?.email}</p>
+              <p className="text-sm text-[color:var(--text-muted)] truncate mt-0.5">
+                {user?.email}
+              </p>
             </div>
           </div>
 
-          <div className="p-6 md:p-8">
+          <div className="p-7 md:p-8">
             {editing ? (
-              <div className="space-y-5">
+              <div className="space-y-7">
                 <div>
-                  <label className="text-sm font-medium text-zinc-700 mb-2 block">
+                  <label className="block text-[11px] tracking-[0.18em] uppercase mb-2 text-[color:var(--text-muted)]">
                     Full name
                   </label>
                   <input
@@ -168,16 +192,16 @@ const Profile = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-zinc-700 mb-2 block">
+                  <label className="block text-[11px] tracking-[0.18em] uppercase mb-2 text-[color:var(--text-muted)]">
                     Email
                   </label>
                   <input
                     name="email"
                     disabled
                     value={form.email}
-                    className={`${inputCls} bg-zinc-50 text-zinc-500 cursor-not-allowed`}
+                    className={`${inputCls} text-[color:var(--text-muted)] cursor-not-allowed`}
                   />
-                  <p className="text-xs text-zinc-500 mt-2">
+                  <p className="text-xs text-[color:var(--text-muted)] mt-2">
                     Email cannot be changed.
                   </p>
                 </div>
@@ -194,10 +218,10 @@ const Profile = () => {
                 </div>
               </div>
             ) : (
-              <div className="space-y-5">
-                <Field icon={FiUser} label="Full name" value={user?.displayName || "Not provided"} />
-                <Field icon={FiMail} label="Email" value={user?.email} />
-                <div className="flex gap-3 pt-2">
+              <div className="space-y-6">
+                <ProfileField icon={FiUser} label="Full name" value={user?.displayName || "Not provided"} />
+                <ProfileField icon={FiMail} label="Email" value={user?.email} />
+                <div className="flex gap-3 pt-3 flex-wrap">
                   <button
                     onClick={() => setEditing(true)}
                     className="btn-primary inline-flex items-center gap-2"
@@ -206,7 +230,7 @@ const Profile = () => {
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="btn-secondary inline-flex items-center gap-2 hover:!border-red-200 hover:!text-red-600"
+                    className="btn-secondary inline-flex items-center gap-2"
                   >
                     <FiLogOut /> Sign out
                   </button>
@@ -216,10 +240,15 @@ const Profile = () => {
           </div>
         </section>
 
-        {/* Uploaded resumes */}
-        <section className="card-flat p-6 md:p-8">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-semibold text-zinc-900">Uploaded resumes</h2>
+        <section
+          className="p-7 md:p-8 rounded-2xl"
+          style={{
+            border: "1px solid var(--border-hairline)",
+            backgroundColor: "var(--surface-card)",
+          }}
+        >
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+            <h2 className="eyebrow">Uploaded resumes</h2>
             <button
               type="button"
               onClick={() => setIsUploadModalOpen(true)}
@@ -230,16 +259,24 @@ const Profile = () => {
           </div>
 
           {loadingResumes ? (
-            <div className="flex items-center justify-center py-10 text-sm text-zinc-500">
+            <div className="flex items-center justify-center py-10 text-sm text-[color:var(--text-muted)]">
               <FiClock className="animate-spin mr-2" /> Loading…
             </div>
           ) : uploadedResumes.length === 0 ? (
-            <div className="text-center py-10 border border-dashed border-zinc-200 rounded-xl">
-              <FiFileText className="text-3xl text-zinc-300 mx-auto mb-3" />
-              <p className="text-sm text-zinc-600">No resumes uploaded yet</p>
+            <div
+              className="text-center py-10 rounded-xl"
+              style={{ border: "1px dashed var(--border-hairline)" }}
+            >
+              <FiFileText className="text-3xl text-[color:var(--text-muted)] mx-auto mb-3 opacity-50" />
+              <p className="text-sm text-[color:var(--text-secondary)]">
+                No resumes uploaded yet
+              </p>
             </div>
           ) : (
-            <ul className="divide-y divide-zinc-100 max-h-[500px] overflow-y-auto">
+            <ul
+              className="max-h-[500px] overflow-y-auto"
+              style={{ borderTop: "1px solid var(--border-hairline)" }}
+            >
               {uploadedResumes.map((r) => (
                 <ProfileResumeRow key={r.id} resume={r} onDelete={handleDeleteResume} />
               ))}
@@ -264,13 +301,15 @@ const Profile = () => {
   );
 };
 
-function Field({ icon: Icon, label, value }) {
+function ProfileField({ icon: Icon, label, value }) {
   return (
     <div>
-      <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-zinc-500 mb-1">
+      <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-1.5">
         <Icon /> {label}
       </div>
-      <p className="text-base text-zinc-900 break-words">{value}</p>
+      <p className="text-[16px] text-[color:var(--text-primary)] break-words">
+        {value}
+      </p>
     </div>
   );
 }
@@ -309,27 +348,40 @@ function ProfileResumeRow({ resume, onDelete }) {
   };
 
   return (
-    <li className="flex items-center gap-3 py-3">
-      <div className="w-9 h-9 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+    <li
+      className="flex items-center gap-3 py-4"
+      style={{ borderBottom: "1px solid var(--border-hairline)" }}
+    >
+      <div className="w-9 h-9 rounded-full bg-[color:var(--accent-soft)] text-[color:var(--text-primary)] flex items-center justify-center shrink-0">
         <FiFileText />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-zinc-900 truncate">{resume.fileName}</p>
-        <p className="text-xs text-zinc-500">
+        <p className="text-sm text-[color:var(--text-primary)] truncate">
+          {resume.fileName}
+        </p>
+        <p className="text-xs text-[color:var(--text-muted)] mt-0.5">
           {formatFileSize(resume.fileSize)} · {formatDate(resume.uploadedAt)}
         </p>
       </div>
-      <div className="flex items-center gap-1 text-zinc-400">
-        <button onClick={open} title="View" className="p-2 rounded-md hover:bg-zinc-100 hover:text-zinc-900 transition-colors">
+      <div className="flex items-center gap-1 text-[color:var(--text-muted)]">
+        <button
+          onClick={open}
+          title="View"
+          className="p-2 rounded-md hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--text-primary)] transition-colors"
+        >
           <FiEye />
         </button>
-        <button onClick={download} title="Download" className="p-2 rounded-md hover:bg-zinc-100 hover:text-zinc-900 transition-colors">
+        <button
+          onClick={download}
+          title="Download"
+          className="p-2 rounded-md hover:bg-[color:var(--accent-soft)] hover:text-[color:var(--text-primary)] transition-colors"
+        >
           <FiDownload />
         </button>
         <button
           onClick={() => onDelete(resume)}
           title="Delete"
-          className="p-2 rounded-md hover:bg-red-50 hover:text-red-600 transition-colors"
+          className="p-2 rounded-md hover:bg-[color:var(--status-danger-soft)] hover:text-[color:var(--status-danger)] transition-colors"
         >
           <FiTrash2 />
         </button>

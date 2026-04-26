@@ -281,7 +281,8 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-zinc-900/40 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ backgroundColor: "rgba(26, 18, 11, 0.4)" }}
         onClick={handleClose}
       >
         <motion.div
@@ -289,28 +290,44 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 8 }}
           transition={{ duration: 0.15 }}
-          className="bg-white max-h-[95vh] no-scrollbar overflow-y-auto rounded-2xl max-w-md w-full mx-auto border border-zinc-200 shadow-xl"
+          className="max-h-[95vh] no-scrollbar overflow-y-auto rounded-2xl max-w-md w-full mx-auto shadow-xl"
+          style={{
+            backgroundColor: "var(--surface-card)",
+            border: "1px solid var(--border-hairline)",
+          }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200">
-            <h2 className="text-base font-semibold text-zinc-900">
+          <div
+            className="flex items-center justify-between px-7 py-5"
+            style={{ borderBottom: "1px solid var(--border-hairline)" }}
+          >
+            <h2
+              className="text-[18px] tracking-tight text-[color:var(--text-primary)]"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
               Upload resume
             </h2>
             <button
               onClick={handleClose}
-              className="text-zinc-400 hover:text-zinc-600"
+              className="text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)]"
             >
               <FaTimes size={16} />
             </button>
           </div>
 
-          <div className="px-6 py-5 space-y-5">
+          <div className="px-7 py-6 space-y-5">
             <div
-              className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
-                dragActive
-                  ? "border-sky-500 bg-sky-50"
-                  : "border-zinc-300 hover:border-sky-400 hover:bg-zinc-50"
-              } ${isUploading ? "pointer-events-none opacity-60" : ""}`}
+              className={`relative rounded-xl p-7 text-center transition-colors ${
+                isUploading ? "pointer-events-none opacity-60" : ""
+              }`}
+              style={{
+                border: `2px dashed ${
+                  dragActive ? "var(--text-primary)" : "var(--border-hairline)"
+                }`,
+                backgroundColor: dragActive
+                  ? "var(--accent-soft)"
+                  : "transparent",
+              }}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
@@ -327,28 +344,34 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
               {isUploading ? (
                 <div className="flex flex-col items-center py-2">
-                  <FaSpinner className="animate-spin text-sky-600 text-2xl mb-3" />
-                  <p className="text-sm font-medium text-zinc-700">
+                  <FaSpinner className="animate-spin text-[color:var(--text-primary)] text-2xl mb-3" />
+                  <p className="text-sm text-[color:var(--text-secondary)]">
                     Uploading…
                   </p>
                 </div>
               ) : uploadedFile ? (
                 <div className="flex flex-col items-center py-2">
-                  <FaCheckCircle className="text-green-600 text-2xl mb-2" />
-                  <p className="text-sm font-semibold text-zinc-900 truncate max-w-full">
+                  <FaCheckCircle className="text-[color:var(--status-success)] text-2xl mb-2" />
+                  <p
+                    className="text-[15px] tracking-tight text-[color:var(--text-primary)] truncate max-w-full"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
                     {uploadedFile.fileName}
                   </p>
-                  <p className="text-xs text-green-700 mt-1">
+                  <p className="text-xs text-[color:var(--status-success)] mt-1">
                     Upload successful
                   </p>
                 </div>
               ) : (
                 <div className="flex flex-col items-center py-2">
-                  <FaUpload className="text-sky-600 text-2xl mb-3" />
-                  <p className="text-sm font-semibold text-zinc-900">
+                  <FaUpload className="text-[color:var(--text-primary)] text-2xl mb-3" />
+                  <p
+                    className="text-[15px] tracking-tight text-[color:var(--text-primary)]"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
                     Drop your resume here
                   </p>
-                  <p className="text-xs text-zinc-500 mt-1">
+                  <p className="text-xs text-[color:var(--text-muted)] mt-1.5">
                     or click to browse — PDF, DOC, DOCX, TXT (max 10 MB)
                   </p>
                 </div>
@@ -357,9 +380,7 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
 
             {uploadedFile && (
               <div className="space-y-2">
-                <p className="text-sm font-medium text-zinc-700">
-                  What would you like to do?
-                </p>
+                <p className="eyebrow">What would you like to do?</p>
                 <OptionCheckbox
                   icon={<FaUpload />}
                   label="Create resume"
@@ -379,7 +400,10 @@ const ResumeUploadModal = ({ isOpen, onClose, onUploadSuccess }) => {
           </div>
 
           {uploadedFile && (
-            <div className="px-6 py-4 border-t border-zinc-200">
+            <div
+              className="px-7 py-5"
+              style={{ borderTop: "1px solid var(--border-hairline)" }}
+            >
               <button
                 onClick={handleDone}
                 disabled={
@@ -415,35 +439,48 @@ const OptionCheckbox = ({ icon, label, description, checked, onChange }) => (
   <button
     type="button"
     onClick={onChange}
-    className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-colors text-left ${
-      checked
-        ? "border-sky-300 bg-sky-50"
-        : "border-zinc-200 bg-white hover:border-zinc-300"
-    }`}
+    className="w-full flex items-center gap-3 p-3 rounded-xl transition-colors text-left"
+    style={{
+      border: `1px solid ${
+        checked ? "var(--text-primary)" : "var(--border-hairline)"
+      }`,
+      backgroundColor: checked ? "var(--accent-soft)" : "transparent",
+    }}
   >
     <span
-      className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm shrink-0 ${
-        checked ? "bg-sky-600 text-white" : "bg-zinc-100 text-zinc-600"
-      }`}
+      className="w-9 h-9 rounded-full flex items-center justify-center text-sm shrink-0"
+      style={{
+        backgroundColor: checked
+          ? "var(--text-primary)"
+          : "var(--surface-muted)",
+        color: checked ? "var(--surface-base)" : "var(--text-primary)",
+      }}
     >
       {icon}
     </span>
     <span className="flex-1 min-w-0">
-      <span
-        className={`block text-sm font-semibold ${
-          checked ? "text-sky-700" : "text-zinc-900"
-        }`}
-      >
+      <span className="block text-sm text-[color:var(--text-primary)]">
         {label}
       </span>
-      <span className="block text-xs text-zinc-500 mt-0.5">{description}</span>
+      <span className="block text-xs text-[color:var(--text-muted)] mt-0.5">
+        {description}
+      </span>
     </span>
     <span
-      className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
-        checked ? "border-sky-600 bg-sky-600" : "border-zinc-300"
-      }`}
+      className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
+      style={{
+        border: `2px solid ${
+          checked ? "var(--text-primary)" : "var(--border-hairline)"
+        }`,
+        backgroundColor: checked ? "var(--text-primary)" : "transparent",
+      }}
     >
-      {checked && <FaCheckCircle className="text-white text-xs" />}
+      {checked && (
+        <span
+          className="w-1.5 h-1.5 rounded-full"
+          style={{ backgroundColor: "var(--surface-base)" }}
+        />
+      )}
     </span>
   </button>
 );

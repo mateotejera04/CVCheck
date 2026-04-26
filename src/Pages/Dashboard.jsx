@@ -155,34 +155,50 @@ export default function Dashboard() {
 
   return (
     <div className="surface-base min-h-screen">
-      <div className="container-page py-10 md:py-14">
-        <header className="mb-10">
-          <p className="eyebrow mb-2">Dashboard</p>
-          <h1 className="h-section mb-2">Welcome back, {greetingName}</h1>
-          <p className="text-zinc-600">
+      <div className="container-page py-12 md:py-16">
+        <header className="mb-12">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+            <span className="eyebrow">Dashboard</span>
+          </div>
+          <h1
+            className="text-[36px] md:text-[48px] tracking-tight leading-[1.05] text-[color:var(--text-primary)]"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            Welcome back, <em className="italic font-normal">{greetingName}.</em>
+          </h1>
+          <p className="mt-4 text-[15px] text-[color:var(--text-secondary)]">
             {resume?.name
               ? "Pick up where you left off, or start something new."
               : "Let's get your first resume set up."}
           </p>
         </header>
 
-        {/* Quick actions */}
-        <section className="mb-10">
+        <section className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {quickActions.map((a) => {
               const Icon = a.icon;
               const inner = (
-                <div className="card-flat p-5 h-full hover:border-zinc-300 transition-colors text-left group">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
+                <div
+                  className="p-6 h-full text-left group rounded-2xl transition-colors"
+                  style={{
+                    border: "1px solid var(--border-hairline)",
+                    backgroundColor: "var(--surface-card)",
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="w-10 h-10 rounded-full bg-[color:var(--accent-soft)] text-[color:var(--text-primary)] flex items-center justify-center">
                       <Icon className="text-lg" />
                     </div>
-                    <FiArrowRight className="text-zinc-300 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-all" />
+                    <FiArrowRight className="text-[color:var(--text-muted)] group-hover:text-[color:var(--text-primary)] group-hover:translate-x-0.5 transition-all" />
                   </div>
-                  <h3 className="text-base font-semibold text-zinc-900 mb-1">
+                  <h3
+                    className="text-[18px] tracking-tight text-[color:var(--text-primary)] mb-2"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
                     {a.title}
                   </h3>
-                  <p className="text-sm text-zinc-600 leading-relaxed">
+                  <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed">
                     {a.description}
                   </p>
                 </div>
@@ -206,14 +222,17 @@ export default function Dashboard() {
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Resume status */}
-          <section className="lg:col-span-2 card-flat p-6">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-base font-semibold text-zinc-900">
-                Current resume
-              </h2>
+          <section
+            className="lg:col-span-2 p-7 rounded-2xl"
+            style={{
+              border: "1px solid var(--border-hairline)",
+              backgroundColor: "var(--surface-card)",
+            }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="eyebrow">Current resume</h2>
               {resume?.name && (
-                <span className="inline-flex items-center gap-1.5 text-xs text-green-700">
+                <span className="inline-flex items-center gap-1.5 text-[12px] text-[color:var(--status-success)]">
                   <FiCheckCircle /> Ready
                 </span>
               )}
@@ -221,29 +240,45 @@ export default function Dashboard() {
 
             {resume?.name ? (
               <>
-                <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-zinc-900 mb-1">
+                <div className="mb-7">
+                  <h3
+                    className="text-[26px] tracking-tight text-[color:var(--text-primary)] mb-1"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
                     {resume.name}
                   </h3>
-                  <p className="text-sm text-zinc-500">
+                  <p className="text-[13px] text-[color:var(--text-muted)]">
                     Last updated {formatDate(resume.updatedOn || resume.createdOn)}
                   </p>
                 </div>
 
-                <dl className="grid grid-cols-2 gap-px bg-zinc-200 border border-zinc-200 rounded-xl overflow-hidden text-sm mb-6">
-                  <div className="bg-white p-4">
-                    <dt className="text-xs text-zinc-500 mb-1">Template</dt>
-                    <dd className="font-medium text-zinc-900">
+                <dl
+                  className="grid grid-cols-2 text-sm mb-7"
+                  style={{
+                    borderTop: "1px solid var(--border-hairline)",
+                    borderBottom: "1px solid var(--border-hairline)",
+                  }}
+                >
+                  <div
+                    className="p-4"
+                    style={{ borderRight: "1px solid var(--border-hairline)" }}
+                  >
+                    <dt className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-1.5">
+                      Template
+                    </dt>
+                    <dd className="text-[color:var(--text-primary)]">
                       {resume.template || selectedTemplate}
                     </dd>
                   </div>
-                  <div className="bg-white p-4">
-                    <dt className="text-xs text-zinc-500 mb-1">Member since</dt>
-                    <dd className="font-medium text-zinc-900">{memberSince}</dd>
+                  <div className="p-4">
+                    <dt className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-1.5">
+                      Member since
+                    </dt>
+                    <dd className="text-[color:var(--text-primary)]">{memberSince}</dd>
                   </div>
                 </dl>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
                   <Link to="/resume-form" className="btn-primary inline-flex items-center gap-2">
                     <FiEdit2 /> Edit resume
                   </Link>
@@ -254,13 +289,16 @@ export default function Dashboard() {
               </>
             ) : (
               <div className="text-center py-10">
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-zinc-100 flex items-center justify-center">
-                  <FiFileText className="text-zinc-400 text-xl" />
+                <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-[color:var(--accent-soft)] flex items-center justify-center text-[color:var(--text-primary)]">
+                  <FiFileText className="text-xl" />
                 </div>
-                <h3 className="text-base font-semibold text-zinc-900 mb-1">
+                <h3
+                  className="text-[22px] tracking-tight text-[color:var(--text-primary)] mb-1"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
                   No resume yet
                 </h3>
-                <p className="text-sm text-zinc-600 mb-5">
+                <p className="text-[14px] text-[color:var(--text-secondary)] mb-6">
                   Create your first resume to get started.
                 </p>
                 <Link to="/resume-form" className="btn-primary inline-flex items-center gap-2">
@@ -270,23 +308,26 @@ export default function Dashboard() {
             )}
           </section>
 
-          {/* Account snapshot */}
-          <section className="card-flat p-6">
-            <h2 className="text-base font-semibold text-zinc-900 mb-5">
-              Account
-            </h2>
+          <section
+            className="p-7 rounded-2xl"
+            style={{
+              border: "1px solid var(--border-hairline)",
+              backgroundColor: "var(--surface-card)",
+            }}
+          >
+            <h2 className="eyebrow mb-6">Account</h2>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start justify-between gap-3">
-                <span className="text-zinc-500">Member since</span>
-                <span className="font-medium text-zinc-900 text-right">{memberSince}</span>
+                <span className="text-[color:var(--text-muted)]">Member since</span>
+                <span className="text-[color:var(--text-primary)] text-right">{memberSince}</span>
               </li>
               <li className="flex items-start justify-between gap-3">
-                <span className="text-zinc-500">Resumes uploaded</span>
-                <span className="font-medium text-zinc-900">{uploadedResumes.length}</span>
+                <span className="text-[color:var(--text-muted)]">Resumes uploaded</span>
+                <span className="text-[color:var(--text-primary)]">{uploadedResumes.length}</span>
               </li>
               <li className="flex items-start justify-between gap-3">
-                <span className="text-zinc-500">Last activity</span>
-                <span className="font-medium text-zinc-900 text-right text-xs">
+                <span className="text-[color:var(--text-muted)]">Last activity</span>
+                <span className="text-[color:var(--text-primary)] text-right text-xs">
                   {uploadedResumes[0]?.uploadedAt
                     ? formatDate(uploadedResumes[0].uploadedAt)
                     : resume?.updatedOn
@@ -297,17 +338,22 @@ export default function Dashboard() {
             </ul>
             <Link
               to="/profile"
-              className="mt-6 inline-flex items-center gap-1.5 text-sm text-sky-700 font-medium hover:underline"
+              className="mt-7 inline-flex items-center gap-1.5 text-sm text-[color:var(--text-primary)] underline underline-offset-4 hover:opacity-70"
             >
               View profile <FiArrowRight />
             </Link>
           </section>
         </div>
 
-        {/* Recent uploads */}
-        <section className="mt-10 card-flat p-6">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-semibold text-zinc-900">Recent uploads</h2>
+        <section
+          className="mt-10 p-7 rounded-2xl"
+          style={{
+            border: "1px solid var(--border-hairline)",
+            backgroundColor: "var(--surface-card)",
+          }}
+        >
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+            <h2 className="eyebrow">Recent uploads</h2>
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -317,7 +363,10 @@ export default function Dashboard() {
                 <FiUpload /> Upload
               </button>
               {uploadedResumes.length > 0 && (
-                <Link to="/profile" className="btn-ghost inline-flex items-center gap-1.5 text-sm">
+                <Link
+                  to="/profile"
+                  className="inline-flex items-center gap-1.5 text-sm text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] px-3 py-2"
+                >
                   View all <FiArrowRight />
                 </Link>
               )}
@@ -325,14 +374,19 @@ export default function Dashboard() {
           </div>
 
           {loadingResumes ? (
-            <div className="flex items-center justify-center py-10 text-sm text-zinc-500">
+            <div className="flex items-center justify-center py-10 text-sm text-[color:var(--text-muted)]">
               <FiClock className="animate-spin mr-2" />
               Loading…
             </div>
           ) : uploadedResumes.length === 0 ? (
-            <div className="text-center py-10 border border-dashed border-zinc-200 rounded-xl">
-              <FiFileText className="text-3xl text-zinc-300 mx-auto mb-3" />
-              <p className="text-sm text-zinc-600 mb-4">No resumes uploaded yet</p>
+            <div
+              className="text-center py-10 rounded-xl"
+              style={{ border: "1px dashed var(--border-hairline)" }}
+            >
+              <FiFileText className="text-3xl text-[color:var(--text-muted)] mx-auto mb-3 opacity-50" />
+              <p className="text-sm text-[color:var(--text-secondary)] mb-4">
+                No resumes uploaded yet
+              </p>
               <button
                 type="button"
                 onClick={() => setIsUploadModalOpen(true)}
@@ -342,7 +396,7 @@ export default function Dashboard() {
               </button>
             </div>
           ) : (
-            <ul className="divide-y divide-zinc-100">
+            <ul style={{ borderTop: "1px solid var(--border-hairline)" }}>
               {uploadedResumes.map((r) => (
                 <ResumeRow
                   key={r.id}
@@ -395,27 +449,30 @@ function ResumeRow({ resume, onDelete, onPdfActions, onView, onDownload }) {
     });
 
   return (
-    <li className="flex items-center gap-4 py-3 group">
+    <li
+      className="flex items-center gap-4 py-4 group"
+      style={{ borderBottom: "1px solid var(--border-hairline)" }}
+    >
       <button
         type="button"
         onClick={() => onPdfActions(resume)}
         title="Process this resume"
         className="flex items-center gap-3 flex-1 min-w-0 text-left"
       >
-        <div className="w-9 h-9 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+        <div className="w-9 h-9 rounded-full bg-[color:var(--accent-soft)] text-[color:var(--text-primary)] flex items-center justify-center shrink-0">
           <FiFileText />
         </div>
         <div className="min-w-0">
-          <p className="text-sm font-medium text-zinc-900 truncate">
+          <p className="text-sm text-[color:var(--text-primary)] truncate">
             {resume.fileName}
           </p>
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-[color:var(--text-muted)] mt-0.5">
             {formatFileSize(resume.fileSize)} · {formatDate(resume.uploadedAt)}
           </p>
         </div>
       </button>
 
-      <div className="flex items-center gap-1 text-zinc-400">
+      <div className="flex items-center gap-1 text-[color:var(--text-muted)]">
         <IconButton onClick={() => onView(resume)} label="View" Icon={FiEye} />
         <IconButton onClick={() => onDownload(resume)} label="Download" Icon={FiDownload} />
         <IconButton onClick={() => onDelete(resume)} label="Delete" Icon={FiTrash2} danger />
@@ -434,8 +491,10 @@ function IconButton({ onClick, label, Icon, danger }) {
       }}
       title={label}
       aria-label={label}
-      className={`p-2 rounded-md hover:bg-zinc-100 transition-colors ${
-        danger ? "hover:text-red-600" : "hover:text-zinc-900"
+      className={`p-2 rounded-md hover:bg-[color:var(--accent-soft)] transition-colors ${
+        danger
+          ? "hover:text-[color:var(--status-danger)]"
+          : "hover:text-[color:var(--text-primary)]"
       }`}
     >
       <Icon />

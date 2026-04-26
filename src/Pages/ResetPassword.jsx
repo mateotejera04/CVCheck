@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { confirmPasswordReset, getAuth } from "firebase/auth";
-import { FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 
 import showSuccessToast from "../Components/showSuccessToast";
 import showErrorToast from "../Components/showErrorToast";
+import Field from "../Components/ui/Field";
+
+const serif = { fontFamily: "var(--font-serif)" };
 
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
@@ -35,57 +38,108 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center surface-base px-4 py-12">
-      <div className="w-full max-w-md card-flat p-8 md:p-10">
-        <h1 className="h-section mb-2">Reset password</h1>
-        <p className="text-sm text-zinc-600 mb-8">
-          Choose a new password for your account.
-        </p>
-
-        <form onSubmit={handleReset} className="space-y-5">
-          <div>
-            <label
-              htmlFor="newPassword"
-              className="text-sm font-medium text-zinc-700 mb-2 block"
-            >
-              New password
-            </label>
-            <div className="relative">
-              <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
-              <input
-                id="newPassword"
-                type={showPassword ? "text" : "password"}
-                required
-                placeholder="••••••••"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full pl-10 pr-10 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((p) => !p)}
-                tabIndex={-1}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
-              >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
-              </button>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading || !oobCode}
-            className="btn-primary w-full"
+    <div
+      className="min-h-[calc(100vh-4rem)] grid lg:grid-cols-2"
+      style={{ backgroundColor: "var(--surface-base)" }}
+    >
+      <div className="relative hidden lg:flex flex-col justify-between overflow-hidden p-10">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 70% 20%, #E9B8D2 0%, transparent 55%), radial-gradient(circle at 25% 75%, #C9B6E4 0%, transparent 55%), linear-gradient(135deg, #EAD3BF 0%, #F2E2C8 100%)",
+          }}
+        />
+        <div className="relative">
+          <span
+            className="text-[13px] tracking-[0.18em] uppercase"
+            style={{ color: "#3a2a1a" }}
           >
-            {loading ? "Resetting…" : "Reset password"}
-          </button>
-        </form>
+            CVCheck
+          </span>
+        </div>
+        <div className="relative max-w-md">
+          <p
+            className="text-[44px] leading-[1.05] tracking-tight"
+            style={{ ...serif, color: "var(--text-primary)" }}
+          >
+            A fresh start,
+            <br />
+            <em className="italic font-normal">one keystroke away.</em>
+          </p>
+        </div>
+        <div
+          className="relative flex items-center gap-2 text-[12px] tracking-[0.14em] uppercase"
+          style={{ color: "var(--text-secondary)" }}
+        >
+          <span
+            className="h-px w-8"
+            style={{ backgroundColor: "var(--text-secondary)" }}
+          />
+          Pick something memorable
+        </div>
+      </div>
 
-        <p className="mt-6 text-sm text-center text-zinc-600">
-          <Link to="/login" className="text-sky-700 font-medium hover:underline">
-            Back to login
-          </Link>
-        </p>
+      <div className="flex items-center justify-center px-6 py-16 sm:px-12">
+        <div className="w-full max-w-sm">
+          <h1
+            className="text-[40px] leading-[1.05] tracking-tight"
+            style={{ ...serif, color: "var(--text-primary)" }}
+          >
+            Reset <em className="italic font-normal">password.</em>
+          </h1>
+          <p className="mt-3 text-[14px] text-[color:var(--text-muted)]">
+            Choose a new password for your account.
+          </p>
+
+          <form onSubmit={handleReset} className="mt-10 space-y-7">
+            <Field
+              id="newPassword"
+              label="New password"
+              type={showPassword ? "text" : "password"}
+              name="newPassword"
+              required
+              placeholder="••••••••"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              trailing={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((p) => !p)}
+                  tabIndex={-1}
+                  className="opacity-60 hover:opacity-100 transition-opacity"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+              }
+            />
+
+            <button
+              type="submit"
+              disabled={loading || !oobCode}
+              className="group w-full inline-flex items-center justify-center gap-2 rounded-full py-3.5 text-[14px] tracking-wide transition-colors disabled:opacity-60"
+              style={{
+                backgroundColor: "var(--text-primary)",
+                color: "var(--surface-base)",
+              }}
+            >
+              {loading ? "Resetting…" : "Reset password"}
+              {!loading && (
+                <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
+              )}
+            </button>
+          </form>
+
+          <p className="mt-10 text-[13px] text-center text-[color:var(--text-muted)]">
+            <Link
+              to="/login"
+              className="underline underline-offset-4 hover:opacity-70 text-[color:var(--text-primary)]"
+            >
+              Back to login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -44,57 +44,74 @@ const ResumeCreationLoader = ({ isVisible }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-zinc-900/40 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ backgroundColor: "rgba(26, 18, 11, 0.4)" }}
       >
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 8 }}
           transition={{ duration: 0.15 }}
-          className="bg-white max-w-md w-full mx-auto rounded-2xl border border-zinc-200 shadow-xl overflow-hidden"
+          className="max-w-md w-full mx-auto rounded-2xl shadow-xl overflow-hidden"
+          style={{
+            backgroundColor: "var(--surface-card)",
+            border: "1px solid var(--border-hairline)",
+          }}
         >
-          <div className="px-6 pt-6 pb-4 border-b border-zinc-200">
-            <p className="eyebrow mb-2">Building resume</p>
-            <h2 className="text-lg font-semibold text-zinc-900">
-              AI is processing your document…
+          <div
+            className="px-7 pt-7 pb-5"
+            style={{ borderBottom: "1px solid var(--border-hairline)" }}
+          >
+            <p className="eyebrow mb-3">Building resume</p>
+            <h2
+              className="text-[20px] tracking-tight text-[color:var(--text-primary)]"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              AI is processing your <em className="italic font-normal">document…</em>
             </h2>
           </div>
 
-          <div className="px-6 py-5 space-y-3">
+          <div className="px-7 py-6 space-y-3">
             {steps.map((step, i) => {
               const isCompleted = completed.includes(step.id);
               const isCurrent = currentIdx === i && !isCompleted;
               const Icon = step.icon;
               return (
-                <div
-                  key={step.id}
-                  className="flex items-center gap-3 text-sm"
-                >
+                <div key={step.id} className="flex items-center gap-3 text-sm">
                   <span
-                    className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
-                      isCompleted
-                        ? "bg-sky-600 text-white"
+                    className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                    style={{
+                      backgroundColor: isCompleted
+                        ? "var(--text-primary)"
                         : isCurrent
-                        ? "bg-sky-100 text-sky-700"
-                        : "bg-zinc-100 text-zinc-400"
-                    }`}
+                        ? "var(--accent-soft)"
+                        : "var(--surface-muted)",
+                      color: isCompleted
+                        ? "var(--surface-base)"
+                        : "var(--text-primary)",
+                    }}
                   >
                     {isCompleted ? (
                       <FaCheckCircle size={12} />
                     ) : isCurrent ? (
-                      <span className="w-3 h-3 border-2 border-sky-600 border-t-transparent rounded-full animate-spin" />
+                      <span
+                        className="w-3 h-3 rounded-full animate-spin"
+                        style={{
+                          border: "2px solid var(--text-primary)",
+                          borderTopColor: "transparent",
+                        }}
+                      />
                     ) : (
                       <Icon size={12} />
                     )}
                   </span>
                   <span
-                    className={`flex-1 ${
-                      isCompleted
-                        ? "text-zinc-900"
-                        : isCurrent
-                        ? "text-zinc-900 font-medium"
-                        : "text-zinc-500"
-                    }`}
+                    className="flex-1"
+                    style={{
+                      color: isCompleted || isCurrent
+                        ? "var(--text-primary)"
+                        : "var(--text-muted)",
+                    }}
                   >
                     {step.title}
                   </span>
@@ -103,17 +120,21 @@ const ResumeCreationLoader = ({ isVisible }) => {
             })}
           </div>
 
-          <div className="px-6 pb-6">
-            <div className="flex justify-between text-xs text-zinc-500 mb-2">
+          <div className="px-7 pb-7">
+            <div className="flex justify-between text-[10px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
               <span>Progress</span>
               <span>{progress}%</span>
             </div>
-            <div className="w-full bg-zinc-100 rounded-full h-1.5 overflow-hidden">
+            <div
+              className="w-full h-px overflow-hidden"
+              style={{ backgroundColor: "var(--border-hairline)" }}
+            >
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.4 }}
-                className="bg-sky-600 h-full"
+                className="h-full"
+                style={{ backgroundColor: "var(--text-primary)" }}
               />
             </div>
           </div>

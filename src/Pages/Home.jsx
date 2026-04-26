@@ -17,6 +17,12 @@ import Steps from "../Components/Home/Steps";
 import TemplateCarousel from "../Components/Home/TemplateCarousel";
 import FAQ from "../Components/Home/FAQ";
 
+const serif = { fontFamily: "Merriweather, ui-serif, Georgia, serif" };
+const cream = "#F5EFE3";
+const ink = "#1a120b";
+const muted = "#6b5a4a";
+const hairline = "#e2d4bd";
+
 const features = [
   {
     icon: FiEdit,
@@ -69,65 +75,135 @@ const Home = () => {
   };
 
   return (
-    <div className="surface-base text-zinc-900">
+    <div style={{ backgroundColor: cream, color: ink }}>
       {/* Hero */}
-      <section className="container-page pt-24 md:pt-32 pb-20 md:pb-28">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-3xl"
-        >
-          <p className="eyebrow mb-4">AI-powered resume builder</p>
-          <h1 className="h-display mb-6">
-            Build a resume that lands the interview.
-          </h1>
-          <p className="body-lg max-w-xl mb-8">
-            CVCheck combines a clean editor, ATS-friendly templates, and an AI
-            bullet enhancer so you spend less time formatting and more time
-            applying.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <button onClick={handleCTA} className="btn-primary">
-              Get started
-              <FiArrowRight />
-            </button>
-            <button
-              onClick={() => navigate("/templates")}
-              className="btn-secondary"
+      <section className="relative overflow-hidden">
+        {/* Soft gradient art, top right */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-40 -right-40 h-[640px] w-[640px] opacity-80"
+          style={{
+            background:
+              "radial-gradient(circle at 30% 30%, #F4C9A8 0%, transparent 55%), radial-gradient(circle at 70% 60%, #E9B8D2 0%, transparent 55%), radial-gradient(circle at 50% 80%, #C9B6E4 0%, transparent 60%)",
+            filter: "blur(20px)",
+          }}
+        />
+
+        <div className="container-page relative pt-24 md:pt-36 pb-24 md:pb-36">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl"
+          >
+            <div className="flex items-center gap-3 mb-8">
+              <span
+                className="h-px w-10"
+                style={{ backgroundColor: muted }}
+              />
+              <span
+                className="text-[12px] tracking-[0.18em] uppercase"
+                style={{ color: muted }}
+              >
+                AI-powered resume builder
+              </span>
+            </div>
+            <h1
+              className="text-[44px] sm:text-[60px] md:text-[76px] leading-[1.02] tracking-tight"
+              style={{ ...serif, color: ink }}
             >
-              View templates
-            </button>
-          </div>
-        </motion.div>
+              Build a resume that
+              <br />
+              <em className="italic font-normal">lands the interview.</em>
+            </h1>
+            <p
+              className="mt-8 text-[17px] md:text-[18px] leading-relaxed max-w-xl"
+              style={{ color: muted }}
+            >
+              CVCheck combines a clean editor, ATS-friendly templates, and an
+              AI bullet enhancer — so you spend less time formatting and more
+              time applying.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <button
+                onClick={handleCTA}
+                className="group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[14px] tracking-wide transition-colors"
+                style={{ backgroundColor: ink, color: cream }}
+              >
+                Get started
+                <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
+              </button>
+              <button
+                onClick={() => navigate("/templates")}
+                className="inline-flex items-center justify-center rounded-full px-7 py-3.5 text-[14px] tracking-wide transition-colors hover:bg-black/5"
+                style={{ color: ink, border: `1px solid ${ink}` }}
+              >
+                View templates
+              </button>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Features */}
-      <section className="surface-base">
-        <div className="container-page section-py">
-          <div className="max-w-2xl mb-14 md:mb-16">
-            <p className="eyebrow mb-3">Features</p>
-            <h2 className="h-section mb-4">
-              Everything you need to ship a great resume
+      <section style={{ borderTop: `1px solid ${hairline}` }}>
+        <div className="container-page py-24 md:py-32">
+          <div className="max-w-2xl mb-16 md:mb-20">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="h-px w-10" style={{ backgroundColor: muted }} />
+              <span
+                className="text-[12px] tracking-[0.18em] uppercase"
+                style={{ color: muted }}
+              >
+                Features
+              </span>
+            </div>
+            <h2
+              className="text-[34px] sm:text-[44px] md:text-[52px] leading-[1.05] tracking-tight"
+              style={{ ...serif, color: ink }}
+            >
+              Everything you need to ship
+              <br />
+              <em className="italic font-normal">a great resume.</em>
             </h2>
-            <p className="body-lg">
+            <p
+              className="mt-6 text-[16px] md:text-[17px] leading-relaxed"
+              style={{ color: muted }}
+            >
               Built for job seekers who'd rather focus on the content than the
               format.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-zinc-200 border border-zinc-200 rounded-2xl overflow-hidden">
+
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+            style={{
+              borderTop: `1px solid ${hairline}`,
+              borderLeft: `1px solid ${hairline}`,
+            }}
+          >
             {features.map((f) => {
               const Icon = f.icon;
               return (
                 <div
                   key={f.title}
-                  className="bg-white p-7 flex flex-col gap-3 hover:bg-zinc-50 transition-colors"
+                  className="p-8 transition-colors"
+                  style={{
+                    borderRight: `1px solid ${hairline}`,
+                    borderBottom: `1px solid ${hairline}`,
+                  }}
                 >
-                  <Icon className="text-sky-600 text-2xl" />
-                  <h3 className="text-base font-semibold text-zinc-900">
+                  <Icon className="text-[22px]" style={{ color: ink }} />
+                  <h3
+                    className="mt-6 text-[18px] tracking-tight"
+                    style={{ ...serif, color: ink }}
+                  >
                     {f.title}
                   </h3>
-                  <p className="text-sm text-zinc-600 leading-relaxed">
+                  <p
+                    className="mt-3 text-[14px] leading-relaxed"
+                    style={{ color: muted }}
+                  >
                     {f.desc}
                   </p>
                 </div>
@@ -142,20 +218,38 @@ const Home = () => {
       <FAQ />
 
       {/* Final CTA */}
-      <section className="bg-zinc-900 text-white">
-        <div className="container-page py-20 md:py-28 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-            Ready to land your next role?
+      <section style={{ backgroundColor: ink, color: cream }}>
+        <div className="container-page relative overflow-hidden py-24 md:py-36 text-center">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 -bottom-40 mx-auto h-[520px] w-[680px] opacity-30"
+            style={{
+              background:
+                "radial-gradient(circle at 50% 50%, #F4C9A8 0%, transparent 55%), radial-gradient(circle at 35% 60%, #E9B8D2 0%, transparent 55%), radial-gradient(circle at 65% 60%, #C9B6E4 0%, transparent 60%)",
+              filter: "blur(30px)",
+            }}
+          />
+          <h2
+            className="relative text-[36px] sm:text-[52px] md:text-[64px] leading-[1.05] tracking-tight max-w-3xl mx-auto"
+            style={{ ...serif, color: cream }}
+          >
+            Ready to land
+            <br />
+            <em className="italic font-normal">your next role?</em>
           </h2>
-          <p className="text-lg text-zinc-300 max-w-xl mx-auto mb-8">
+          <p
+            className="relative mt-6 text-[16px] md:text-[17px] max-w-xl mx-auto"
+            style={{ color: "#cdbda6" }}
+          >
             Join thousands of job seekers building better resumes with CVCheck.
           </p>
           <button
             onClick={handleCTA}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-full transition-colors"
+            className="group relative mt-10 inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[14px] tracking-wide transition-colors"
+            style={{ backgroundColor: cream, color: ink }}
           >
             Get started
-            <FiArrowRight />
+            <FiArrowRight className="transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
       </section>

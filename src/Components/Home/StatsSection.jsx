@@ -31,19 +31,47 @@ const StatsSection = () => {
   ];
 
   return (
-    <section ref={ref} className="surface-base">
+    <section
+      ref={ref}
+      className="surface-base"
+      style={{ borderTop: "1px solid var(--border-hairline)" }}
+    >
       <div className="container-page section-py">
-        <p className="eyebrow text-center mb-3">By the numbers</p>
-        <h2 className="h-section text-center mb-16">
-          Helping careers take off
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-zinc-200 border-y border-zinc-200">
-          {items.map((s) => (
-            <div key={s.label} className="px-6 py-12 text-center">
-              <div className="text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 tabular-nums">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-3 mb-6">
+            <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+            <span className="eyebrow">By the numbers</span>
+            <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+          </div>
+          <h2 className="h-section">
+            Helping careers <em className="italic font-normal">take off.</em>
+          </h2>
+        </div>
+        <div
+          className="grid grid-cols-1 md:grid-cols-3"
+          style={{
+            borderTop: "1px solid var(--border-hairline)",
+            borderBottom: "1px solid var(--border-hairline)",
+          }}
+        >
+          {items.map((s, i) => (
+            <div
+              key={s.label}
+              className="px-6 py-14 text-center"
+              style={{
+                borderRight:
+                  i < items.length - 1
+                    ? "1px solid var(--border-hairline)"
+                    : "none",
+              }}
+            >
+              <div
+                className="text-[56px] md:text-[72px] tracking-tight text-[color:var(--text-primary)] tabular-nums leading-none"
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
                 {s.value}
               </div>
-              <p className="mt-3 text-xs uppercase tracking-wider text-zinc-500 font-medium">
+              <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
                 {s.label}
               </p>
             </div>

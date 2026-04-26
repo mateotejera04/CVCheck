@@ -9,14 +9,22 @@ const showErrorToast = (msg) => {
       animate={{ opacity: 1, scale: 1, x: 0 }}
       exit={{ opacity: 0, scale: 0.9, x: 40 }}
       transition={{ duration: 0.3 }}
-      className="flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border border-red-200 bg-red-50 text-red-700"
+      className="flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg"
+      style={{
+        backgroundColor: "var(--status-danger-soft)",
+        border: "1px solid #c97a68",
+        color: "var(--status-danger)",
+      }}
     >
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1.2 }}
         transition={{ type: "spring", stiffness: 500, damping: 15 }}
       >
-        <MdErrorOutline className="text-red-600 text-xl" />
+        <MdErrorOutline
+          className="text-xl"
+          style={{ color: "var(--status-danger)" }}
+        />
       </motion.div>
       <span className="text-sm font-medium">{msg}</span>
     </motion.div>

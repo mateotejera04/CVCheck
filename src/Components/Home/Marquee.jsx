@@ -243,9 +243,15 @@ const CompanyItem = memo(({ company }) => (
 
 const Companies = () => {
   return (
-    <section className="surface-base border-y border-zinc-200">
-      <div className="container-page py-12">
-        <p className="eyebrow text-center mb-8">
+    <section
+      className="surface-base"
+      style={{
+        borderTop: "1px solid var(--border-hairline)",
+        borderBottom: "1px solid var(--border-hairline)",
+      }}
+    >
+      <div className="container-page py-14">
+        <p className="eyebrow text-center mb-10">
           Trusted by professionals at top companies
         </p>
         <div className="relative w-full overflow-hidden">

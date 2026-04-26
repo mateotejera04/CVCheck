@@ -94,13 +94,24 @@ export default function Resume() {
     return (
       <div className="surface-base min-h-screen">
         <div className="container-page py-20 max-w-xl mx-auto text-center">
-          <div className="card-flat p-10">
-            <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center">
+          <div
+            className="p-12 rounded-2xl"
+            style={{
+              border: "1px solid var(--border-hairline)",
+              backgroundColor: "var(--surface-card)",
+            }}
+          >
+            <div className="w-14 h-14 mx-auto mb-6 rounded-full bg-[color:var(--accent-soft)] text-[color:var(--text-primary)] flex items-center justify-center">
               <FiFileText className="text-2xl" />
             </div>
-            <h2 className="h-section mb-3">Resume details missing</h2>
-            <p className="text-zinc-600 mb-6">
-              Fill in your details to get started building a resume.
+            <h2
+              className="text-[28px] tracking-tight text-[color:var(--text-primary)] mb-3"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              Resume details <em className="italic font-normal">missing.</em>
+            </h2>
+            <p className="text-[color:var(--text-secondary)] mb-7">
+              Fill in your details to start building a resume.
             </p>
             <button
               onClick={() => navigate("/resume-form")}
@@ -134,23 +145,29 @@ export default function Resume() {
 
   return (
     <div className="surface-base min-h-screen">
-      <div className="container-page py-8 md:py-10">
-        {/* Toolbar */}
-        <div className="card-flat p-4 mb-6 flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
+      <div className="container-page py-8 md:py-12">
+        <div
+          className="p-4 mb-6 flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between rounded-2xl"
+          style={{
+            border: "1px solid var(--border-hairline)",
+            backgroundColor: "var(--surface-card)",
+          }}
+        >
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="text-xs uppercase tracking-wider text-zinc-500 font-medium">
-              Template
-            </span>
-            <div className="inline-flex items-center bg-zinc-100 rounded-lg p-1 flex-wrap">
+            <span className="eyebrow">Template</span>
+            <div
+              className="inline-flex items-center rounded-full p-1 flex-wrap"
+              style={{ backgroundColor: "var(--accent-soft)" }}
+            >
               {templates.map((t) => (
                 <button
                   key={t.value}
                   type="button"
                   onClick={() => setSelectedTemplate(t.value)}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-4 py-1.5 rounded-full text-sm transition-colors ${
                     selectedTemplate === t.value
-                      ? "bg-white text-zinc-900 shadow-sm"
-                      : "text-zinc-600 hover:text-zinc-900"
+                      ? "bg-[color:var(--text-primary)] text-[color:var(--surface-base)]"
+                      : "text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]"
                   }`}
                 >
                   {t.label}
@@ -159,8 +176,11 @@ export default function Resume() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs text-zinc-500 px-2.5 py-1 rounded-md bg-zinc-100">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span
+              className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.14em] px-3 py-1.5 rounded-full text-[color:var(--text-secondary)]"
+              style={{ border: "1px solid var(--border-hairline)" }}
+            >
               <FiEye /> {isEditable ? "Edit mode" : "View mode"}
             </span>
             <button
@@ -184,17 +204,27 @@ export default function Resume() {
           </div>
         </div>
 
-        {/* Preview + side panel */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 items-start">
-          <div key={selectedTemplate} className="bg-white rounded-2xl border border-zinc-200 overflow-hidden">
+          <div
+            key={selectedTemplate}
+            className="rounded-2xl overflow-hidden"
+            style={{
+              backgroundColor: "#ffffff",
+              border: "1px solid var(--border-hairline)",
+            }}
+          >
             {renderTemplate()}
           </div>
 
           <aside className="space-y-4 lg:sticky lg:top-24">
-            <div className="card-flat p-5">
-              <h3 className="text-sm font-semibold text-zinc-900 mb-3">
-                Quick actions
-              </h3>
+            <div
+              className="p-6 rounded-2xl"
+              style={{
+                border: "1px solid var(--border-hairline)",
+                backgroundColor: "var(--surface-card)",
+              }}
+            >
+              <h3 className="eyebrow mb-4">Quick actions</h3>
               <div className="space-y-2">
                 <button
                   onClick={() => navigate("/resume-form")}
@@ -211,12 +241,18 @@ export default function Resume() {
               </div>
             </div>
 
-            <div className="border border-zinc-200 rounded-2xl p-5 bg-white">
-              <div className="flex items-center gap-2 mb-3">
-                <FiInfo className="text-sky-600" />
-                <h3 className="text-sm font-semibold text-zinc-900">Tips</h3>
+            <div
+              className="p-6 rounded-2xl"
+              style={{
+                border: "1px solid var(--border-hairline)",
+                backgroundColor: "var(--surface-card)",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <FiInfo className="text-[color:var(--text-primary)]" />
+                <h3 className="eyebrow">Tips</h3>
               </div>
-              <ul className="text-sm text-zinc-600 space-y-2.5 leading-relaxed">
+              <ul className="text-sm text-[color:var(--text-secondary)] space-y-2.5 leading-relaxed">
                 <li>Edit on a desktop for better layout control.</li>
                 <li>Tweak the font size to balance density and readability.</li>
                 <li>If a section feels too long, summarize. Too short — add specifics.</li>

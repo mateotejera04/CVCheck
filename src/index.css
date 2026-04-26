@@ -1,23 +1,32 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   Design system tokens — Mistral-style palette with sky-blue accent
+   Design system tokens — Hume-inspired cream + ink palette
    ========================================================================== */
 :root {
-  --surface-base: #fafaf9;
-  --surface-card: #ffffff;
-  --surface-muted: #f4f4f5;
+  --surface-base: #f5efe3;
+  --surface-card: #fbf7ee;
+  --surface-muted: #ede3cf;
 
-  --text-primary: #18181b;
-  --text-secondary: #52525b;
-  --text-muted: #71717a;
+  --text-primary: #1a120b;
+  --text-secondary: #5a4a3a;
+  --text-muted: #8a7559;
 
-  --accent: #0284c7;
-  --accent-hover: #0369a1;
-  --accent-soft: #e0f2fe;
-  --accent-ring: rgba(2, 132, 199, 0.15);
+  --accent: #1a120b;
+  --accent-hover: #3a2a1a;
+  --accent-soft: #ede0c7;
+  --accent-ring: rgba(26, 18, 11, 0.12);
 
-  --border-hairline: #e4e4e7;
+  --border-hairline: #e2d4bd;
+
+  --status-success: #3f6b3a;
+  --status-success-soft: #dde6d2;
+  --status-warn: #9a6b1f;
+  --status-warn-soft: #f1e2bf;
+  --status-danger: #9a3a2a;
+  --status-danger-soft: #e5bba9;
+
+  --font-serif: "Merriweather", ui-serif, Georgia, serif;
 }
 
 /* Component primitives — applied via className */
@@ -27,12 +36,14 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
+    padding: 0.875rem 1.75rem;
     background-color: var(--accent);
-    color: #fff;
+    color: var(--surface-base);
     font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
     border-radius: 9999px;
-    transition: background-color 200ms ease;
+    transition: background-color 200ms ease, transform 200ms ease;
     cursor: pointer;
     line-height: 1.2;
   }
@@ -49,19 +60,21 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    background-color: #fff;
+    padding: 0.875rem 1.75rem;
+    background-color: transparent;
     color: var(--text-primary);
     font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
     border-radius: 9999px;
-    border: 1px solid #e4e4e7;
-    transition: border-color 200ms ease, background-color 200ms ease;
+    border: 1px solid var(--text-primary);
+    transition: background-color 200ms ease, color 200ms ease;
     cursor: pointer;
     line-height: 1.2;
   }
   .btn-secondary:hover {
-    border-color: #d4d4d8;
-    background-color: #fafafa;
+    background-color: var(--accent);
+    color: var(--surface-base);
   }
 
   .btn-ghost {
@@ -116,33 +129,35 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    font-weight: 600;
-    color: var(--accent-hover);
+    font-weight: 500;
+    color: var(--text-muted);
   }
 
   .h-display {
-    font-size: 2.25rem;
-    font-weight: 700;
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 400;
     letter-spacing: -0.02em;
     color: var(--text-primary);
-    line-height: 1.05;
+    line-height: 1.02;
   }
   @media (min-width: 768px) {
-    .h-display { font-size: 3rem; }
+    .h-display { font-size: 3.5rem; }
   }
   @media (min-width: 1024px) {
-    .h-display { font-size: 3.75rem; }
+    .h-display { font-size: 4.5rem; }
   }
 
   .h-section {
-    font-size: 1.875rem;
-    font-weight: 700;
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 400;
     letter-spacing: -0.02em;
     color: var(--text-primary);
-    line-height: 1.15;
+    line-height: 1.08;
   }
   @media (min-width: 768px) {
-    .h-section { font-size: 2.25rem; }
+    .h-section { font-size: 2.75rem; }
   }
 
   .body-lg {
@@ -217,11 +232,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f8fbff; /* slate-200 */
+  background: var(--surface-base);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #c9e3f6; /* slate-400 */
+  background-color: #cdbda6;
   border-radius: 8px;
   border: 2px solid transparent;
   background-clip: content-box;

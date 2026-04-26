@@ -38,12 +38,17 @@ export default function Templates() {
   return (
     <div className="surface-base min-h-[calc(100vh-4rem)]">
       <div className="container-page section-py">
-        <div className="max-w-2xl mb-12 md:mb-16">
-          <p className="eyebrow mb-3">Templates</p>
-          <h1 className="h-section mb-4">Pick a starting point</h1>
-          <p className="body-lg">
-            Every template is ATS-friendly and fully editable. Choose one to
-            jump straight into the editor.
+        <div className="max-w-2xl mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+            <span className="eyebrow">Templates</span>
+          </div>
+          <h1 className="h-section mb-5">
+            Pick a <em className="italic font-normal">starting point.</em>
+          </h1>
+          <p className="text-[16px] md:text-[17px] leading-relaxed text-[color:var(--text-secondary)]">
+            Every template is ATS-friendly and fully editable. Pick one to step
+            straight into the editor.
           </p>
         </div>
 
@@ -53,27 +58,43 @@ export default function Templates() {
               key={t.id}
               type="button"
               onClick={() => navigate("/resume")}
-              className="group text-left card-flat overflow-hidden hover:border-zinc-300 transition-colors"
+              className="group text-left overflow-hidden rounded-2xl transition-colors"
+              style={{
+                border: "1px solid var(--border-hairline)",
+                backgroundColor: "var(--surface-card)",
+              }}
             >
-              <div className="relative aspect-[3/4] bg-zinc-100 overflow-hidden">
+              <div
+                className="relative aspect-[3/4] overflow-hidden"
+                style={{ backgroundColor: "var(--surface-muted)" }}
+              >
                 <img
                   src={t.image}
                   alt={`${t.name} template preview`}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
-                <span className="absolute top-3 left-3 text-[11px] font-medium px-2 py-1 rounded-full bg-white/90 text-zinc-700 border border-zinc-200">
+                <span
+                  className="absolute top-3 left-3 text-[11px] tracking-[0.14em] uppercase px-2.5 py-1 rounded-full text-[color:var(--text-primary)]"
+                  style={{
+                    backgroundColor: "var(--surface-base)",
+                    border: "1px solid var(--border-hairline)",
+                  }}
+                >
                   {t.badge}
                 </span>
               </div>
               <div className="p-5">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="text-base font-semibold text-zinc-900">
+                <div className="flex items-center justify-between mb-2">
+                  <h3
+                    className="text-[18px] tracking-tight text-[color:var(--text-primary)]"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
                     {t.name}
                   </h3>
-                  <FiArrowRight className="text-zinc-400 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-all" />
+                  <FiArrowRight className="text-[color:var(--text-muted)] group-hover:text-[color:var(--text-primary)] group-hover:translate-x-0.5 transition-all" />
                 </div>
-                <p className="text-sm text-zinc-600 leading-relaxed">
+                <p className="text-[13px] text-[color:var(--text-secondary)] leading-relaxed">
                   {t.description}
                 </p>
               </div>

@@ -37,20 +37,28 @@ const templates = [
 const TemplateCarousel = () => {
   const navigate = useNavigate();
   return (
-    <section className="bg-white border-t border-zinc-200">
+    <section
+      className="surface-base"
+      style={{ borderTop: "1px solid var(--border-hairline)" }}
+    >
       <div className="container-page section-py">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
           <div className="max-w-xl">
-            <p className="eyebrow mb-3">Templates</p>
+            <div className="flex items-center gap-3 mb-6">
+              <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+              <span className="eyebrow">Templates</span>
+            </div>
             <h2 className="h-section">
-              Pick a layout that fits your story
+              Pick a layout that fits
+              <br />
+              <em className="italic font-normal">your story.</em>
             </h2>
           </div>
           <button
             onClick={() => navigate("/templates")}
-            className="btn-secondary text-sm"
+            className="btn-secondary text-sm self-start md:self-end"
           >
-            View all templates
+            View all
             <FiArrowRight />
           </button>
         </div>
@@ -64,9 +72,16 @@ const TemplateCarousel = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="card-flat overflow-hidden text-left group"
+              className="overflow-hidden text-left group rounded-2xl"
+              style={{
+                border: "1px solid var(--border-hairline)",
+                backgroundColor: "var(--surface-card)",
+              }}
             >
-              <div className="aspect-[3/4] bg-zinc-100 overflow-hidden">
+              <div
+                className="aspect-[3/4] overflow-hidden"
+                style={{ backgroundColor: "var(--surface-muted)" }}
+              >
                 <img
                   src={t.image}
                   alt={t.name}
@@ -74,16 +89,19 @@ const TemplateCarousel = () => {
                   className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
                 />
               </div>
-              <div className="p-4 flex items-start justify-between gap-3">
+              <div className="p-5 flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-zinc-900">
+                  <p
+                    className="text-[16px] tracking-tight text-[color:var(--text-primary)]"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
                     {t.name}
                   </p>
-                  <p className="text-xs text-zinc-500 mt-0.5">
+                  <p className="text-[12px] text-[color:var(--text-muted)] mt-1">
                     {t.description}
                   </p>
                 </div>
-                <FiArrowRight className="text-zinc-400 group-hover:text-sky-700 transition-colors mt-1" />
+                <FiArrowRight className="text-[color:var(--text-muted)] group-hover:text-[color:var(--text-primary)] group-hover:translate-x-0.5 transition-all mt-1" />
               </div>
             </motion.button>
           ))}

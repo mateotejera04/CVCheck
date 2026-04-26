@@ -11,33 +11,34 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="surface-base border-t border-zinc-200">
+    <footer className="surface-base border-t border-[color:var(--border-hairline)]">
       <div className="container-page py-14 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-          {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-sky-600" />
-              <span className="text-lg font-bold tracking-tight text-zinc-900">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 rounded-full bg-[color:var(--text-primary)]" />
+              <span
+                className="text-lg tracking-tight text-[color:var(--text-primary)]"
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
                 CVCheck
               </span>
             </div>
-            <p className="text-sm text-zinc-600 max-w-xs leading-relaxed">
-              AI-powered resume builder for your career success.
+            <p className="text-[14px] text-[color:var(--text-secondary)] max-w-xs leading-relaxed">
+              A quieter way to write the resume that opens the next door.
             </p>
           </div>
 
-          {/* Links */}
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+              <h3 className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-4">
                 Product
               </h3>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-[14px]">
                 <li>
                   <a
                     href="/templates"
-                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                    className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
                     Templates
                   </a>
@@ -45,7 +46,7 @@ export default function Footer() {
                 <li>
                   <a
                     href="/dashboard"
-                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                    className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
                     Dashboard
                   </a>
@@ -53,7 +54,7 @@ export default function Footer() {
                 <li>
                   <a
                     href="/ats-checker"
-                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                    className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
                     ATS Checker
                   </a>
@@ -61,14 +62,14 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+              <h3 className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-4">
                 Account
               </h3>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-[14px]">
                 <li>
                   <a
                     href="/login"
-                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                    className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
                     Log in
                   </a>
@@ -76,7 +77,7 @@ export default function Footer() {
                 <li>
                   <a
                     href="/signup"
-                    className="text-zinc-700 hover:text-sky-700 transition-colors"
+                    className="text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] transition-colors"
                   >
                     Sign up
                   </a>
@@ -85,9 +86,8 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Social */}
           <div className="md:text-right">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-3">
+            <h3 className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-4">
               Connect
             </h3>
             <div className="flex md:justify-end gap-2">
@@ -97,7 +97,7 @@ export default function Footer() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 text-zinc-500 hover:text-sky-600 hover:border-sky-300 transition-colors"
+                  className="w-9 h-9 flex items-center justify-center rounded-full border border-[color:var(--border-hairline)] text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:border-[color:var(--text-primary)] transition-colors"
                   aria-label={s.label}
                 >
                   <s.icon className="text-base" />
@@ -107,19 +107,19 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-zinc-200 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-zinc-500">
+        <div className="mt-12 pt-6 border-t border-[color:var(--border-hairline)] flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-[color:var(--text-muted)]">
           <p>© {currentYear} CVCheck. All rights reserved.</p>
           <div className="flex gap-4">
             <a
               href={`mailto:${CONTACT_EMAIL}?subject=CVCheck%20bug%20report`}
-              className="hover:text-sky-700 transition-colors"
+              className="hover:text-[color:var(--text-primary)] transition-colors"
             >
               Report a bug
             </a>
-            <a href="#" className="hover:text-sky-700 transition-colors">
+            <a href="#" className="hover:text-[color:var(--text-primary)] transition-colors">
               Privacy
             </a>
-            <a href="#" className="hover:text-sky-700 transition-colors">
+            <a href="#" className="hover:text-[color:var(--text-primary)] transition-colors">
               Terms
             </a>
           </div>

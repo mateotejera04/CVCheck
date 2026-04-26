@@ -40,10 +40,16 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
   ];
 
   return (
-    <div className="w-full border border-zinc-200 rounded-xl bg-white overflow-hidden focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-100 transition">
+    <div
+      className="w-full rounded-xl overflow-hidden transition focus-within:ring-2"
+      style={{
+        border: "1px solid var(--border-hairline)",
+        backgroundColor: "var(--surface-card)",
+      }}
+    >
       <div className="relative">
         {isEmpty && (
-          <div className="absolute left-3 top-3 text-zinc-400 text-sm pointer-events-none select-none">
+          <div className="absolute left-3 top-3 text-[color:var(--text-muted)] opacity-60 text-sm pointer-events-none select-none">
             {placeholder}
           </div>
         )}
@@ -62,12 +68,18 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
               text.replace(/\n/g, "<br>")
             );
           }}
-          className="min-h-[180px] p-3 focus:outline-none text-sm text-zinc-900"
+          className="min-h-[180px] p-3 focus:outline-none text-sm text-[color:var(--text-primary)]"
           style={{ whiteSpace: "pre-wrap" }}
         />
       </div>
 
-      <div className="flex gap-1 px-2 py-1.5 border-t border-zinc-200 bg-zinc-50">
+      <div
+        className="flex gap-1 px-2 py-1.5"
+        style={{
+          borderTop: "1px solid var(--border-hairline)",
+          backgroundColor: "var(--surface-base)",
+        }}
+      >
         {tools.map(({ cmd, icon: Icon, label }) => (
           <button
             key={cmd}
@@ -75,7 +87,7 @@ const RichTextInput = ({ value, onChange, placeholder = "Type here..." }) => {
             onClick={() => format(cmd)}
             title={label}
             aria-label={label}
-            className="p-2 rounded-md text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/70 transition-colors"
+            className="p-2 rounded-md text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--accent-soft)] transition-colors"
           >
             <Icon className="text-sm" />
           </button>

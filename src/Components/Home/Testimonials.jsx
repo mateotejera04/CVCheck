@@ -46,14 +46,24 @@ const testimonials = [
 
 function Testimonials() {
   return (
-    <section className="bg-white border-y border-zinc-200">
+    <section
+      className="surface-base"
+      style={{
+        borderTop: "1px solid var(--border-hairline)",
+        borderBottom: "1px solid var(--border-hairline)",
+      }}
+    >
       <div className="container-page section-py">
-        <div className="text-center max-w-2xl mx-auto mb-14 md:mb-16">
-          <p className="eyebrow mb-3">Customers</p>
-          <h2 className="h-section mb-4">Trusted by professionals worldwide</h2>
-          <p className="body-lg">
-            Join thousands of job seekers who landed their dream jobs using CVCheck.
-          </p>
+        <div className="max-w-2xl mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+            <span className="eyebrow">In their words</span>
+          </div>
+          <h2 className="h-section">
+            Trusted by people who'd
+            <br />
+            <em className="italic font-normal">rather be working.</em>
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -64,30 +74,40 @@ function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="card-flat p-6 flex flex-col"
+              className="p-7 flex flex-col rounded-2xl"
+              style={{
+                border: "1px solid var(--border-hairline)",
+                backgroundColor: "var(--surface-card)",
+              }}
             >
-              <div className="flex items-center gap-1 mb-4">
+              <div className="flex items-center gap-1 mb-5">
                 {[...Array(t.rating)].map((_, idx) => (
                   <FiStar
                     key={idx}
-                    className="w-4 h-4 text-zinc-900 fill-current"
+                    className="w-3.5 h-3.5 fill-current text-[color:var(--text-primary)]"
                   />
                 ))}
               </div>
-              <p className="text-sm text-zinc-700 leading-relaxed flex-1">
-                "{t.feedback}"
+              <p
+                className="text-[15px] leading-relaxed flex-1 text-[color:var(--text-primary)]"
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
+                &ldquo;{t.feedback}&rdquo;
               </p>
-              <div className="flex items-center gap-3 mt-6 pt-6 border-t border-zinc-200">
+              <div
+                className="flex items-center gap-3 mt-6 pt-6"
+                style={{ borderTop: "1px solid var(--border-hairline)" }}
+              >
                 <img
                   src={t.image}
                   alt={t.name}
                   className="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
-                  <p className="text-sm font-semibold text-zinc-900">
+                  <p className="text-sm text-[color:var(--text-primary)]">
                     {t.name}
                   </p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-[color:var(--text-muted)] mt-0.5">
                     {t.role} · {t.company}
                   </p>
                 </div>

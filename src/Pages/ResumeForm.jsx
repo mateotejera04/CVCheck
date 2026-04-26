@@ -281,8 +281,8 @@ const ResumeForm = () => {
           >
             {/* Full Name */}
             <div className="relative group">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                <FiUser className="text-sky-600" />
+              <label className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
+                <FiUser className="text-[color:var(--text-primary)]" />
                 Full Name *
               </label>
               <div className="relative">
@@ -291,15 +291,15 @@ const ResumeForm = () => {
                   placeholder="Enter your full name"
                   value={formData.name}
                   onChange={(e) => handleChange(e, "name")}
-                  className="w-full pl-10 pr-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                  className="w-full pl-10 pr-3 py-3 border border-[color:var(--border-hairline)] rounded-xl focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
                 />
-                <FiUser className="absolute left-4 top-4 text-gray-400 group-focus-within:text-sky-500 transition-colors" />
+                <FiUser className="absolute left-4 top-4 text-gray-400 group-focus-within:text-[color:var(--text-primary)] transition-colors" />
               </div>
             </div>
 
             {/* Headline / Subtitle */}
             <div className="relative group">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                 Headline
               </label>
               <input
@@ -307,7 +307,7 @@ const ResumeForm = () => {
                 placeholder="e.g. SOFTWARE ENGINEERING STUDENT"
                 value={formData.headline || ""}
                 onChange={(e) => handleChange(e, "headline")}
-                className="w-full px-3 py-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                className="w-full px-3 py-3 border border-[color:var(--border-hairline)] rounded-xl focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Short tagline shown under your name (used by the Modern template).
@@ -316,7 +316,7 @@ const ResumeForm = () => {
 
             {/* Description Field */}
             <div className="relative group">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                 Professional Summary
               </label>
 
@@ -337,7 +337,7 @@ const ResumeForm = () => {
                   onClick={() => handleEnhanceField("description")}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="absolute -top-3 right-2 p-2 rounded-full bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="absolute -top-3 right-2 p-2 rounded-full bg-[color:var(--text-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--surface-base)] shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {aiLoadingField === "description" ? (
                     <BsArrowClockwise className="text-lg animate-spin" />
@@ -352,16 +352,16 @@ const ResumeForm = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-sky-50 border border-sky-100 rounded-xl relative"
+                  className="mt-4 p-4 bg-[color:var(--accent-soft)] border border-[color:var(--border-hairline)] rounded-xl relative"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <FaWandMagicSparkles className="text-sky-600" />
-                    <span className="text-sm font-semibold text-sky-800">
+                    <FaWandMagicSparkles className="text-[color:var(--text-primary)]" />
+                    <span className="text-sm font-semibold text-[color:var(--text-primary)]">
                       AI Enhancement
                     </span>
                   </div>
                   <p
-                    className="text-sm text-gray-700 leading-relaxed"
+                    className="text-sm text-[color:var(--text-secondary)] leading-relaxed"
                     dangerouslySetInnerHTML={{
                       __html: aiSuggestions["description"],
                     }}
@@ -369,7 +369,7 @@ const ResumeForm = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="absolute top-3 right-3 p-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors"
+                    className="absolute top-3 right-3 p-2 bg-[color:var(--text-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--surface-base)] rounded-lg transition-colors"
                     title="Apply Enhancement"
                     onClick={() => {
                       handleChange(
@@ -390,8 +390,8 @@ const ResumeForm = () => {
 
             {/* Profile Photo Upload */}
             <div className="relative group">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                <FiCamera className="text-sky-600" />
+              <label className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
+                <FiCamera className="text-[color:var(--text-primary)]" />
                 Profile Photo
               </label>
 
@@ -421,20 +421,20 @@ const ResumeForm = () => {
                   />
                   <label
                     htmlFor="profile-photo"
-                    className={`inline-flex items-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-sky-400 hover:bg-sky-50 transition-all duration-300 ${
+                    className={`inline-flex items-center gap-2 px-4 py-3 border-2 border-dashed border-[color:var(--border-hairline)] rounded-xl cursor-pointer hover:border-[color:var(--text-primary)] hover:bg-[color:var(--accent-soft)] transition-all duration-300 ${
                       imageUploading ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
                     {imageUploading ? (
                       <>
-                        <BsArrowClockwise className="text-sky-600 animate-spin" />
+                        <BsArrowClockwise className="text-[color:var(--text-primary)] animate-spin" />
                         <span className="text-sm text-gray-600">
                           Uploading...
                         </span>
                       </>
                     ) : (
                       <>
-                        <FiUpload className="text-sky-600" />
+                        <FiUpload className="text-[color:var(--text-primary)]" />
                         <span className="text-sm text-gray-600">
                           {formData.imgUrl ? "Change Photo" : "Upload Photo"}
                         </span>
@@ -458,7 +458,7 @@ const ResumeForm = () => {
             <div className="relative">
               <label
                 htmlFor="college"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 College Name
               </label>
@@ -469,14 +469,14 @@ const ResumeForm = () => {
                 placeholder="e.g., MIT"
                 value={formData.education.college}
                 onChange={(e) => handleChange(e, "education.college")}
-                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
               />
             </div>
 
             <div className="relative">
               <label
                 htmlFor="college"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 Degree Or Program
               </label>
@@ -487,14 +487,14 @@ const ResumeForm = () => {
                 placeholder="e.g., B.Tech in Computer Science"
                 value={formData.education.degree}
                 onChange={(e) => handleChange(e, "education.degree")}
-                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
               />
             </div>
 
             <div className="relative">
               <label
                 htmlFor="college"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 Specialization if any
               </label>
@@ -505,14 +505,14 @@ const ResumeForm = () => {
                 placeholder="e.g., Artificial Intelligence"
                 value={formData.education.specialization}
                 onChange={(e) => handleChange(e, "education.specialization")}
-                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
               />
             </div>
 
             <div className="relative">
               <label
                 htmlFor="college"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 Location
               </label>
@@ -523,7 +523,7 @@ const ResumeForm = () => {
                 placeholder="City and state/country of the college"
                 value={formData.education.location}
                 onChange={(e) => handleChange(e, "education.location")}
-                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
               />
             </div>
 
@@ -532,7 +532,7 @@ const ResumeForm = () => {
               <div className="flex-1 relative">
                 <label
                   htmlFor="startYear"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
                 >
                   Start Year
                 </label>
@@ -543,13 +543,13 @@ const ResumeForm = () => {
                   placeholder="e.g., 2021"
                   value={formData.education.startYear}
                   onChange={(e) => handleChange(e, "education.startYear")}
-                  className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                  className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
                 />
               </div>
               <div className="flex-1 relative">
                 <label
                   htmlFor="endYear"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
                 >
                   End Year
                 </label>
@@ -560,7 +560,7 @@ const ResumeForm = () => {
                   placeholder="e.g., 2025"
                   value={formData.education.endYear}
                   onChange={(e) => handleChange(e, "education.endYear")}
-                  className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                  className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
                 />
               </div>
             </div>
@@ -569,7 +569,7 @@ const ResumeForm = () => {
             <div className="relative">
               <label
                 htmlFor="cgpa "
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 College CGPA
               </label>
@@ -580,7 +580,7 @@ const ResumeForm = () => {
                 placeholder="e.g., 9.0"
                 value={formData.education.cgpa}
                 onChange={(e) => handleChange(e, "education.cgpa")}
-                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
               />
             </div>
 
@@ -588,7 +588,7 @@ const ResumeForm = () => {
             <div className="relative">
               <label
                 htmlFor="school"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 School Name
               </label>
@@ -599,7 +599,7 @@ const ResumeForm = () => {
                 placeholder="e.g., DPS Delhi"
                 value={formData.education.school}
                 onChange={(e) => handleChange(e, "education.school")}
-                className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
               />
             </div>
 
@@ -608,7 +608,7 @@ const ResumeForm = () => {
               <div className="relative flex-1">
                 <label
                   htmlFor="tenth"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
                 >
                   10th %
                 </label>
@@ -619,7 +619,7 @@ const ResumeForm = () => {
                   placeholder="e.g., 92%"
                   value={formData.education.tenth}
                   onChange={(e) => handleChange(e, "education.tenth")}
-                  className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                  className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
                 />
               </div>
 
@@ -627,7 +627,7 @@ const ResumeForm = () => {
               <div className="relative flex-1">
                 <label
                   htmlFor="twelfth"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
                 >
                   12th %
                 </label>
@@ -638,7 +638,7 @@ const ResumeForm = () => {
                   placeholder="e.g., 89%"
                   value={formData.education.twelfth}
                   onChange={(e) => handleChange(e, "education.twelfth")}
-                  className="w-full pl-10 pr-3 py-2.5 border border-zinc-200 rounded-lg focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 text-sm text-zinc-900 bg-white"
+                  className="w-full pl-10 pr-3 py-2.5 border border-[color:var(--border-hairline)] rounded-lg focus:outline-none focus:border-[color:var(--text-primary)] focus:ring-2 focus:ring-[color:var(--accent-ring)] text-sm text-[color:var(--text-primary)] bg-[color:var(--surface-card)]"
                 />
               </div>
             </div>
@@ -652,17 +652,17 @@ const ResumeForm = () => {
             {formData.skills.map((skill, domainIndex) => (
               <div
                 key={domainIndex}
-                className="border border-gray-200 bg-white p-5 rounded-xl shadow-sm"
+                className="border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] p-5 rounded-2xl"
               >
                 {/* Domain Header */}
                 <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-sm font-semibold text-gray-800">
+                  <h3 className="text-sm font-medium text-[color:var(--text-primary)]">
                     Domain {domainIndex + 1}
                   </h3>
                   <button
                     type="button"
                     onClick={() => removeItem("skills", domainIndex)}
-                    className="text-red-600 hover:text-red-700 hover:scale-110 transition"
+                    className="text-[color:var(--status-danger)] hover:opacity-70 hover:scale-110 transition"
                   >
                     <RxCross1 size={18} />
                   </button>
@@ -676,7 +676,7 @@ const ResumeForm = () => {
                   onChange={(e) =>
                     handleDomainChange(domainIndex, e.target.value)
                   }
-                  className="w-full mb-4 px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                  className="w-full mb-4 px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                 />
 
                 {/* Skills List */}
@@ -693,12 +693,12 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      className="w-full px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                     <button
                       type="button"
                       onClick={() => removeSkill(domainIndex, langIndex)}
-                      className="text-red-600 hover:text-red-700 hover:scale-110 transition"
+                      className="text-[color:var(--status-danger)] hover:opacity-70 hover:scale-110 transition"
                     >
                       <RxCrossCircled size={18} />
                     </button>
@@ -709,7 +709,7 @@ const ResumeForm = () => {
                 <button
                   type="button"
                   onClick={() => addItem("skills", domainIndex)}
-                  className="mt-4 text-sm px-4 py-1.5 border border-sky-700 text-sky-700 rounded-md hover:bg-sky-700 hover:text-white transition"
+                  className="mt-4 text-sm px-4 py-1.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
                 >
                   + Add Skill
                 </button>
@@ -720,7 +720,7 @@ const ResumeForm = () => {
             <button
               type="button"
               onClick={() => addItem("skills")}
-              className="w-full py-2 border border-black text-black font-semibold rounded-md hover:bg-black hover:text-white transition"
+              className="w-full py-2.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
             >
               + Add New Domain
             </button>
@@ -734,7 +734,7 @@ const ResumeForm = () => {
             {formData.projects.map((project, index) => (
               <div
                 key={index}
-                className="mb-6 border border-gray-200 bg-white p-5 rounded-xl shadow-sm relative"
+                className="mb-6 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] p-5 rounded-2xl relative"
               >
                 {/* Remove Button */}
                 {formData.projects.length > 1 && (
@@ -748,7 +748,7 @@ const ResumeForm = () => {
                 )}
 
                 <div className="mb-3 relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                     Project Name
                   </label>
                   <div className="relative">
@@ -765,13 +765,13 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      className="pl-10 w-full px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                   </div>
                 </div>
 
                 <div className="mb-3 relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                     Description
                   </label>
 
@@ -800,7 +800,7 @@ const ResumeForm = () => {
                       onClick={() =>
                         handleEnhanceField(`projects[${index}].description`)
                       }
-                      className="absolute -top-3 right-2 p-2 rounded-full bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="absolute -top-3 right-2 p-2 rounded-full bg-[color:var(--text-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--surface-base)] shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {aiLoadingField === `projects[${index}].description` ? (
                         <BsArrowClockwise className="text-xl animate-spin" />
@@ -812,16 +812,16 @@ const ResumeForm = () => {
 
                   {/* AI Suggestion Output */}
                   {aiSuggestions[`projects[${index}].description`] && (
-                    <div className="bg-gray-50 border mt-3 rounded p-3 relative">
+                    <div className="bg-[color:var(--accent-soft)] border border-[color:var(--border-hairline)] mt-3 rounded p-3 relative">
                       <p
-                        className="text-sm text-gray-800"
+                        className="text-sm text-[color:var(--text-secondary)]"
                         dangerouslySetInnerHTML={{
                           __html:
                             aiSuggestions[`projects[${index}].description`],
                         }}
                       />
                       <button
-                        className="absolute top-2 right-2 text-sm px-2 py-2 bg-gray-300/90 hover:bg-gray-300 text-sky-700 rounded-full"
+                        className="absolute top-2 right-2 text-sm px-2 py-2 bg-[color:var(--surface-base)] hover:opacity-80 text-[color:var(--text-primary)] rounded-full"
                         title="Copy AI Suggestion"
                         onClick={() => {
                           handleArrayChange(
@@ -843,7 +843,7 @@ const ResumeForm = () => {
                 </div>
 
                 <div className="mb-3 relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                     GitHub Link
                   </label>
                   <div className="relative">
@@ -860,13 +860,13 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      className="pl-10 w-full px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                   </div>
                 </div>
 
                 <div className="relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                     Live Demo Link
                   </label>
                   <div className="relative">
@@ -883,7 +883,7 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      className="pl-10 w-full px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                   </div>
                 </div>
@@ -893,7 +893,7 @@ const ResumeForm = () => {
             <button
               type="button"
               onClick={() => addItem("projects")}
-              className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2 border border-black text-black font-semibold rounded-md hover:bg-black hover:text-white transition"
+              className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
             >
               <FaPlus /> Add Project
             </button>
@@ -908,7 +908,7 @@ const ResumeForm = () => {
               {formData.experience.map((exp, index) => (
                 <div
                   key={index}
-                  className="border border-gray-200 bg-white p-5 rounded-xl shadow-sm relative"
+                  className="border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] p-5 rounded-2xl relative"
                 >
                   {/* Remove Button */}
                   <button
@@ -921,7 +921,7 @@ const ResumeForm = () => {
 
                   {/* Company Name */}
                   <div className="relative mb-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                       Company Name
                     </label>
                     <FiBriefcase className="absolute top-9 left-3 text-gray-500" />
@@ -937,12 +937,12 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      className="pl-10 w-full px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                   </div>
 
                   <div className="relative mb-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                       Role
                     </label>
                     <FaRegUser className="absolute top-9 left-3 text-gray-500" />
@@ -958,12 +958,12 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      className="pl-10 w-full px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                   </div>
 
                   <div className="relative mb-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                       Technologies Used
                     </label>
                     <GrTechnology className="absolute top-9 left-3 text-gray-500" />
@@ -979,13 +979,13 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      className="pl-10 w-full px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                   </div>
 
                   {/* Duration */}
                   <div className="relative mb-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                       Duration (Years)
                     </label>
                     <FiCalendar className="absolute top-9 left-3 text-gray-500" />
@@ -1001,13 +1001,13 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="pl-10 w-full px-4 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-sky-600"
+                      className="pl-10 w-full px-4 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                   </div>
 
                   {/* Description */}
                   <div className="relative">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2">
                       Description
                     </label>
 
@@ -1034,7 +1034,7 @@ const ResumeForm = () => {
                         onClick={() =>
                           handleEnhanceField(`experience[${index}].description`)
                         }
-                        className="absolute -top-3 right-2 p-2 rounded-full bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="absolute -top-3 right-2 p-2 rounded-full bg-[color:var(--text-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--surface-base)] shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {aiLoadingField ===
                         `experience[${index}].description` ? (
@@ -1056,7 +1056,7 @@ const ResumeForm = () => {
                           }}
                         />
                         <button
-                          className="absolute top-2 right-2 text-sm px-2 py-2 bg-gray-300/90 hover:bg-gray-300 text-sky-700 rounded-full"
+                          className="absolute top-2 right-2 text-sm px-2 py-2 bg-[color:var(--surface-base)] hover:opacity-80 text-[color:var(--text-primary)] rounded-full"
                           title="Copy AI Suggestion"
                           onClick={() => {
                             handleArrayChange(
@@ -1083,7 +1083,7 @@ const ResumeForm = () => {
               <button
                 type="button"
                 onClick={() => addItem("experience")}
-                className="w-full py-2 border border-black text-black font-semibold rounded-md hover:bg-black hover:text-white transition"
+                className="w-full py-2.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
               >
                 + Add Experience
               </button>
@@ -1099,7 +1099,7 @@ const ResumeForm = () => {
               {formData.achievements.map((achieve, index) => (
                 <div
                   key={index}
-                  className="relative border border-gray-200 bg-white p-3 md:p-5 rounded-xl shadow-sm"
+                  className="relative border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] p-3 md:p-5 rounded-2xl"
                 >
                   {/* Remove Achievement */}
                   <button
@@ -1112,7 +1112,7 @@ const ResumeForm = () => {
 
                   {/* Title */}
                   <div className="relative mb-3">
-                    <label className="block mb-1 text-sm font-medium text-gray-700">
+                    <label className="block mb-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
                       Achievement Title
                     </label>
                     <FiAward className="absolute top-9 left-3 text-gray-500" />
@@ -1128,13 +1128,13 @@ const ResumeForm = () => {
                           e.target.value
                         )
                       }
-                      className="pl-10 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                      className="pl-10 w-full px-3 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                     />
                   </div>
 
                   {/* Description */}
                   <div className="relative mb-3">
-                    <label className="block mb-1 text-sm font-medium text-gray-700">
+                    <label className="block mb-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
                       Description
                     </label>
 
@@ -1164,7 +1164,7 @@ const ResumeForm = () => {
                             `achievements[${index}].description`
                           )
                         }
-                        className="absolute -top-3 right-2 p-2 rounded-full bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="absolute -top-3 right-2 p-2 rounded-full bg-[color:var(--text-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--surface-base)] shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {aiLoadingField ===
                         `achievements[${index}].description` ? (
@@ -1188,7 +1188,7 @@ const ResumeForm = () => {
                           }}
                         />
                         <button
-                          className="absolute top-2 right-2 text-sm px-2 py-2 bg-gray-300/90 hover:bg-gray-300 text-sky-700 rounded-full"
+                          className="absolute top-2 right-2 text-sm px-2 py-2 bg-[color:var(--surface-base)] hover:opacity-80 text-[color:var(--text-primary)] rounded-full"
                           title="Copy AI Suggestion"
                           onClick={() => {
                             handleArrayChange(
@@ -1214,7 +1214,7 @@ const ResumeForm = () => {
                   {/* Month & Year */}
                   <div className="flex gap-2">
                     <div className="relative w-1/2">
-                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                      <label className="block mb-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
                         Month
                       </label>
                       <FiCalendar className="absolute top-8.5 md:top-9 left-1.5 md:left-3 text-gray-500" />
@@ -1230,12 +1230,12 @@ const ResumeForm = () => {
                             e.target.value
                           )
                         }
-                        className="pl-7 md:pl-10 w-full px-0 md:px-3 py-2 border rounded-md text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                        className="pl-7 md:pl-10 w-full px-0 md:px-3 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                       />
                     </div>
 
                     <div className="relative w-1/2">
-                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                      <label className="block mb-2 text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
                         Year
                       </label>
                       <FiCalendar className="absolute top-8.5 md:top-9 left-1.5 md:left-3 text-gray-500" />
@@ -1251,7 +1251,7 @@ const ResumeForm = () => {
                             e.target.value
                           )
                         }
-                        className="pl-7 md:pl-10 w-full px-0 md:px-3 py-2 border rounded-md text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-black/50"
+                        className="pl-7 md:pl-10 w-full px-0 md:px-3 py-2 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded-md text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
                       />
                     </div>
                   </div>
@@ -1262,7 +1262,7 @@ const ResumeForm = () => {
               <button
                 type="button"
                 onClick={() => addItem("achievements")}
-                className="w-full mt-4 py-2 border border-black text-black font-semibold rounded-md hover:bg-black hover:text-white transition"
+                className="w-full mt-4 py-2.5 border border-[color:var(--text-primary)] text-[color:var(--text-primary)] rounded-full hover:bg-[color:var(--text-primary)] hover:text-[color:var(--surface-base)] transition"
               >
                 + Add Achievement
               </button>
@@ -1277,7 +1277,7 @@ const ResumeForm = () => {
             <div className="relative mb-4">
               <label
                 htmlFor="phone"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 Phone Number
               </label>
@@ -1290,7 +1290,7 @@ const ResumeForm = () => {
                 onChange={(e) =>
                   handleSingleChange("contact", "phone", e.target.value)
                 }
-                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+                className="w-full px-4 py-2 pl-10 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
               />
             </div>
 
@@ -1298,7 +1298,7 @@ const ResumeForm = () => {
             <div className="relative mb-4">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 Email Address
               </label>
@@ -1311,7 +1311,7 @@ const ResumeForm = () => {
                 onChange={(e) =>
                   handleSingleChange("contact", "email", e.target.value)
                 }
-                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+                className="w-full px-4 py-2 pl-10 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
               />
             </div>
 
@@ -1319,7 +1319,7 @@ const ResumeForm = () => {
             <div className="relative mb-4">
               <label
                 htmlFor="github"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 GitHub Profile
               </label>
@@ -1332,7 +1332,7 @@ const ResumeForm = () => {
                 onChange={(e) =>
                   handleSingleChange("contact", "github", e.target.value)
                 }
-                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+                className="w-full px-4 py-2 pl-10 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
               />
             </div>
 
@@ -1340,7 +1340,7 @@ const ResumeForm = () => {
             <div className="relative mb-4">
               <label
                 htmlFor="linkedin"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 LinkedIn Profile
               </label>
@@ -1353,7 +1353,7 @@ const ResumeForm = () => {
                 onChange={(e) =>
                   handleSingleChange("contact", "linkedin", e.target.value)
                 }
-                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+                className="w-full px-4 py-2 pl-10 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
               />
             </div>
 
@@ -1361,7 +1361,7 @@ const ResumeForm = () => {
             <div className="relative mb-4">
               <label
                 htmlFor="location"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 Location
               </label>
@@ -1374,7 +1374,7 @@ const ResumeForm = () => {
                 onChange={(e) =>
                   handleSingleChange("contact", "location", e.target.value)
                 }
-                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+                className="w-full px-4 py-2 pl-10 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
               />
             </div>
 
@@ -1382,7 +1382,7 @@ const ResumeForm = () => {
             <div className="relative mb-4">
               <label
                 htmlFor="websiteURL"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-[11px] uppercase tracking-[0.18em] text-[color:var(--text-muted)] mb-2"
               >
                 Website URL
               </label>
@@ -1395,7 +1395,7 @@ const ResumeForm = () => {
                 onChange={(e) =>
                   handleSingleChange("contact", "websiteURL", e.target.value)
                 }
-                className="w-full px-4 py-2 pl-10 border rounded focus:ring-2 focus:ring-sky-600 text-sm"
+                className="w-full px-4 py-2 pl-10 border border-[color:var(--border-hairline)] bg-[color:var(--surface-card)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:border-[color:var(--text-primary)]"
               />
             </div>
           </div>
@@ -1412,34 +1412,43 @@ const ResumeForm = () => {
 
   return (
     <div className="surface-base min-h-screen">
-      <div className="container-page py-10 md:py-14 max-w-3xl">
-        <header className="mb-8">
-          <p className="eyebrow mb-2">
-            Step {step + 1} of {steps.length}
-          </p>
-          <h1 className="h-section mb-2">{steps[step]}</h1>
-          <p className="text-zinc-600 text-sm">
+      <div className="container-page py-12 md:py-16 max-w-3xl">
+        <header className="mb-10">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+            <span className="eyebrow">
+              Step {step + 1} of {steps.length}
+            </span>
+          </div>
+          <h1
+            className="text-[36px] md:text-[48px] tracking-tight leading-[1.05] text-[color:var(--text-primary)]"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            {steps[step].toLowerCase()}<em className="italic font-normal">.</em>
+          </h1>
+          <p className="mt-4 text-[14px] text-[color:var(--text-secondary)]">
             Let's build your professional story.
           </p>
         </header>
 
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="hidden md:flex justify-between items-center mb-3">
+        <div className="mb-10">
+          <div className="hidden md:flex justify-between items-center mb-4">
             {steps.map((stepName, index) => (
               <div
                 key={stepName}
-                className={`flex items-center gap-2 text-xs font-medium ${
-                  index <= step ? "text-zinc-900" : "text-zinc-400"
+                className={`flex items-center gap-2 text-[11px] tracking-wide ${
+                  index <= step
+                    ? "text-[color:var(--text-primary)]"
+                    : "text-[color:var(--text-muted)]"
                 }`}
               >
                 <span
-                  className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-semibold border ${
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${
                     index < step
-                      ? "bg-sky-600 text-white border-sky-600"
+                      ? "bg-[color:var(--text-primary)] text-[color:var(--surface-base)]"
                       : index === step
-                      ? "bg-white text-sky-600 border-sky-600"
-                      : "bg-white text-zinc-400 border-zinc-200"
+                      ? "bg-[color:var(--surface-card)] text-[color:var(--text-primary)] border border-[color:var(--text-primary)]"
+                      : "bg-transparent text-[color:var(--text-muted)] border border-[color:var(--border-hairline)]"
                   }`}
                 >
                   {index < step ? "✓" : index + 1}
@@ -1448,20 +1457,31 @@ const ResumeForm = () => {
               </div>
             ))}
           </div>
-          <div className="w-full bg-zinc-100 rounded-full h-1 overflow-hidden">
+          <div
+            className="w-full h-px overflow-hidden"
+            style={{ backgroundColor: "var(--border-hairline)" }}
+          >
             <div
-              className="bg-sky-600 h-full rounded-full transition-all"
-              style={{ width: `${progressPct}%` }}
+              className="h-full transition-all"
+              style={{
+                width: `${progressPct}%`,
+                backgroundColor: "var(--text-primary)",
+              }}
             />
           </div>
         </div>
 
-        {/* Form */}
-        <div key={step} className="card-flat p-5 md:p-8">
+        <div
+          key={step}
+          className="p-6 md:p-9 rounded-2xl"
+          style={{
+            border: "1px solid var(--border-hairline)",
+            backgroundColor: "var(--surface-card)",
+          }}
+        >
           {renderStep()}
         </div>
 
-        {/* Navigation */}
         <div className="flex justify-between items-center mt-6">
           <button
             type="button"

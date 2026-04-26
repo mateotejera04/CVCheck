@@ -45,17 +45,22 @@ const steps = [
 
 const Steps = () => {
   return (
-    <section className="surface-base">
+    <section className="surface-base" style={{ borderTop: "1px solid var(--border-hairline)" }}>
       <div className="container-page section-py">
-        <div className="text-center max-w-2xl mx-auto mb-16 md:mb-20">
-          <p className="eyebrow mb-3">Process</p>
-          <h2 className="h-section mb-4">How CVCheck works</h2>
-          <p className="body-lg">
-            Follow these simple steps to create your perfect professional resume in minutes.
+        <div className="max-w-2xl mb-20 md:mb-28">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="h-px w-10 bg-[color:var(--text-muted)]" />
+            <span className="eyebrow">Process</span>
+          </div>
+          <h2 className="h-section mb-6">
+            How it <em className="italic font-normal">works.</em>
+          </h2>
+          <p className="text-[16px] md:text-[17px] leading-relaxed text-[color:var(--text-secondary)]">
+            Five quiet steps from blank page to ready-to-send PDF.
           </p>
         </div>
 
-        <div className="space-y-20 md:space-y-32">
+        <div className="space-y-24 md:space-y-36">
           {steps.map((step, index) => (
             <motion.div
               key={step.id}
@@ -63,12 +68,15 @@ const Steps = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5 }}
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center ${
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center ${
                 index % 2 === 0 ? "" : "lg:[&>:first-child]:order-2"
               }`}
             >
-              <div className="card-flat overflow-hidden">
-                <div className="aspect-video bg-zinc-100">
+              <div
+                className="overflow-hidden rounded-2xl"
+                style={{ border: "1px solid var(--border-hairline)" }}
+              >
+                <div className="aspect-video" style={{ backgroundColor: "var(--surface-muted)" }}>
                   <video
                     src={step.videoUrl}
                     autoPlay
@@ -81,13 +89,22 @@ const Steps = () => {
                 </div>
               </div>
               <div>
-                <p className="eyebrow mb-3">
-                  Step {String(step.id).padStart(2, "0")}
-                </p>
-                <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-zinc-900 mb-4 leading-tight">
+                <span
+                  className="text-[40px] leading-none mr-3 align-baseline"
+                  style={{ fontFamily: "var(--font-serif)", color: "var(--text-muted)" }}
+                >
+                  {String(step.id).padStart(2, "0")}
+                </span>
+                <span className="eyebrow">Step</span>
+                <h3
+                  className="mt-5 text-[28px] md:text-[36px] tracking-tight leading-[1.1] text-[color:var(--text-primary)]"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
                   {step.title}
                 </h3>
-                <p className="body-lg">{step.description}</p>
+                <p className="mt-5 text-[16px] leading-relaxed text-[color:var(--text-secondary)]">
+                  {step.description}
+                </p>
               </div>
             </motion.div>
           ))}
