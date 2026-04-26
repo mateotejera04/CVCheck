@@ -13,7 +13,6 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 
-import Steps from "../Components/Home/Steps";
 import TemplateCarousel from "../Components/Home/TemplateCarousel";
 import FAQ from "../Components/Home/FAQ";
 
@@ -213,7 +212,6 @@ const Home = () => {
         </div>
       </section>
 
-      <Steps />
       <TemplateCarousel />
       <FAQ />
 
