@@ -16,7 +16,16 @@ import { IoReorderThreeSharp } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import { CgSpaceBetweenV } from "react-icons/cg";
 import { motion } from "framer-motion";
-import { FaDownload, FaFileAlt, FaPhone, FaEnvelope, FaGlobe } from "react-icons/fa";
+import {
+  FaDownload,
+  FaFileAlt,
+  FaPhone,
+  FaEnvelope,
+  FaGlobe,
+  FaMapMarkerAlt,
+  FaLinkedinIn,
+  FaGithub,
+} from "react-icons/fa";
 import {
   MdFormatAlignLeft,
   MdFormatAlignCenter,
@@ -155,17 +164,30 @@ const ModernTemplate = ({ resume }) => {
   const defaultTextColor = (tag) => {
     switch (tag) {
       case "h1":
-        return "#1e293b"; // dark slate
+        return "#1e3a5f";
       case "h2":
-        return "#334155"; // slightly lighter
+        return "#0f172a";
       case "h3":
-        return "#475569"; // even lighter
+        return "#1f2937";
       case "h4":
-        return "#64748b"; // light slate
+        return "#475569";
       default:
-        return "#000000";
+        return "#0f172a";
     }
   };
+
+  const alignClass = (() => {
+    switch (modernSettings.descriptionAlign) {
+      case "center":
+        return "justify-center";
+      case "right":
+        return "justify-end";
+      case "justify":
+        return "justify-between";
+      default:
+        return "justify-start";
+    }
+  })();
 
   const SortableItem = ({ id }) => {
     const {
@@ -246,14 +268,47 @@ const ModernTemplate = ({ resume }) => {
     resume.contact?.github ||
     resume.projects?.some((proj) => proj.demo || proj.github);
 
+  const accentColor = modernSettings.TextColors?.["h1"] || "#1e3a5f";
+  const inkColor = modernSettings.TextColors?.["h2"] || "#0f172a";
+  const inkSoftColor = modernSettings.TextColors?.["h3"] || "#1f2937";
+  const mutedColor = modernSettings.TextColors?.["h4"] || "#475569";
+  const ruleColor = modernSettings.borderColor || "#1f2937";
+
+  const SectionTitle = ({ children }) => (
+    <h2
+      className="resume-h3 resume-eyebrow w-1/4 pt-1"
+      style={{
+        color: inkColor,
+        fontFamily: "var(--resume-display-modern)",
+        "--resume-h3-user": `${getFontPxValue("12", modernSettings.fontScaleLevel)}px`,
+      }}
+    >
+      {children}
+    </h2>
+  );
+
+  const SectionRow = ({ title, children }) => (
+    <div
+      className="flex gap-6 pt-4 border-t"
+      style={{ borderColor: ruleColor, opacity: 1 }}
+    >
+      <SectionTitle>{title}</SectionTitle>
+      <div className="w-3/4 min-w-0">{children}</div>
+    </div>
+  );
+
   const sectionMap = {
     name: (
-      <div className="flex items-start gap-5 md:gap-7 pb-4">
+      <div className="flex items-start gap-7 pb-5">
         {resume.imgUrl && (
           <img
             src={resume.imgUrl}
             alt={resume.name}
-            className="w-24 h-24 md:w-36 md:h-36 rounded-full object-cover flex-shrink-0"
+            className="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover flex-shrink-0"
+            style={{
+              border: "3px solid #ffffff",
+              boxShadow: "0 0 0 1px rgba(15, 23, 42, 0.08)",
+            }}
             onError={(e) => {
               e.currentTarget.style.display = "none";
             }}
@@ -264,9 +319,11 @@ const ModernTemplate = ({ resume }) => {
             className={`resume-h1 ${getCustomFontClass(
               "text-[48px]",
               modernSettings.fontScaleLevel
-            )} font-light leading-none tracking-tight`}
+            )} leading-[1.05] tracking-[-0.01em]`}
             style={{
-              color: modernSettings.TextColors?.["h1"] || "#1a1a1a",
+              color: accentColor,
+              fontFamily: "var(--resume-display-modern)",
+              fontWeight: 600,
               textAlign: modernSettings.descriptionAlign || "left",
               "--resume-h1-user": `${getFontPxValue(
                 "48",
@@ -278,17 +335,10 @@ const ModernTemplate = ({ resume }) => {
           </h1>
           {resume.headline && (
             <p
-              className={`resume-h3 ${getCustomFontClass(
-                "text-[12px]",
-                modernSettings.fontScaleLevel
-              )} font-bold uppercase tracking-wide mt-3`}
+              className="resume-eyebrow mt-2"
               style={{
-                color: modernSettings.TextColors?.["h2"] || "#1a1a1a",
+                color: inkColor,
                 textAlign: modernSettings.descriptionAlign || "left",
-                "--resume-h3-user": `${getFontPxValue(
-                  "12",
-                  modernSettings.fontScaleLevel
-                )}px`,
               }}
             >
               {resume.headline}
@@ -296,12 +346,12 @@ const ModernTemplate = ({ resume }) => {
           )}
           {resume.description && (
             <div
-              className={`resume-h4 resume-content mt-2 leading-relaxed ${getCustomFontClass(
+              className={`resume-h4 resume-content mt-3 ${getCustomFontClass(
                 "text-[12px]",
                 modernSettings.fontScaleLevel
               )}`}
               style={{
-                color: modernSettings.TextColors?.["h3"] || "#404040",
+                color: inkSoftColor,
                 textAlign: modernSettings.descriptionAlign || "justify",
                 "--resume-h4-user": `${getFontPxValue(
                   "12",
@@ -319,56 +369,53 @@ const ModernTemplate = ({ resume }) => {
 
     details: (
       <div
-        className={`grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 border-t border-b py-3`}
-        style={{
-          borderColor: modernSettings.borderColor || "#1a1a1a",
-          borderTopWidth: modernSettings.borderTopWidth || "1.5px",
-          borderBottomWidth: modernSettings.borderTopWidth || "1.5px",
-        }}
+        className="flex flex-wrap items-center gap-x-6 gap-y-3 py-4 border-t"
+        style={{ borderColor: ruleColor }}
       >
         {[
           resume.contact.phone && {
-            icon: <FaPhone size={10} />,
+            icon: <FaPhone size={9} />,
             value: resume.contact.phone,
             href: `tel:${resume.contact.phone}`,
           },
           resume.contact.email && {
-            icon: <FaEnvelope size={10} />,
+            icon: <FaEnvelope size={9} />,
             value: resume.contact.email,
             href: `mailto:${resume.contact.email}`,
           },
-          resume.contact.linkedin && {
-            icon: <FaGlobe size={10} />,
-            value: resume.contact.linkedin
-              .replace(/^https?:\/\//, "")
-              .replace(/^www\./, ""),
-            href: resume.contact.linkedin,
-          },
-          resume.contact.websiteURL && {
-            icon: <FaGlobe size={10} />,
-            value: resume.contact.websiteURL.replace(/^https?:\/\//, ""),
-            href: resume.contact.websiteURL,
-          },
-          resume.contact.github && {
-            icon: <FaGlobe size={10} />,
-            value: resume.contact.github.replace(/^https?:\/\//, ""),
-            href: resume.contact.github,
-          },
           resume.contact.location && {
-            icon: <FaGlobe size={10} />,
+            icon: <FaMapMarkerAlt size={9} />,
             value: resume.contact.location,
             href: null,
           },
+          resume.contact.websiteURL && {
+            icon: <FaGlobe size={9} />,
+            value: resume.contact.websiteURL.replace(/^https?:\/\//, "").replace(/^www\./, ""),
+            href: resume.contact.websiteURL,
+          },
+          resume.contact.linkedin && {
+            icon: <FaLinkedinIn size={9} />,
+            value: resume.contact.linkedin
+              .replace(/^https?:\/\//, "")
+              .replace(/^www\./, "")
+              .replace(/^linkedin\.com\/in\//, ""),
+            href: resume.contact.linkedin,
+          },
+          resume.contact.github && {
+            icon: <FaGithub size={9} />,
+            value: resume.contact.github
+              .replace(/^https?:\/\//, "")
+              .replace(/^www\./, "")
+              .replace(/^github\.com\//, ""),
+            href: resume.contact.github,
+          },
         ]
           .filter(Boolean)
-          .slice(0, 3)
           .map((item, i) => (
             <div key={i} className="flex items-center gap-2 min-w-0">
               <span
-                className="w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center flex-shrink-0 text-white"
-                style={{
-                  backgroundColor: modernSettings.TextColors?.["h2"] || "#1a1a1a",
-                }}
+                className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-white"
+                style={{ backgroundColor: inkSoftColor }}
               >
                 {item.icon}
               </span>
@@ -378,13 +425,13 @@ const ModernTemplate = ({ resume }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`resume-h4 ${getCustomFontClass(
-                    "text-[12px]",
+                    "text-[11px]",
                     modernSettings.fontScaleLevel
                   )} truncate`}
                   style={{
-                    color: modernSettings.linkColor || "#1a1a1a",
+                    color: modernSettings.linkColor || inkColor,
                     "--resume-h4-user": `${getFontPxValue(
-                      "12",
+                      "11",
                       modernSettings.fontScaleLevel
                     )}px`,
                   }}
@@ -394,13 +441,13 @@ const ModernTemplate = ({ resume }) => {
               ) : (
                 <span
                   className={`resume-h4 ${getCustomFontClass(
-                    "text-[12px]",
+                    "text-[11px]",
                     modernSettings.fontScaleLevel
                   )} truncate`}
                   style={{
-                    color: modernSettings.TextColors?.["h3"] || "#1a1a1a",
+                    color: inkColor,
                     "--resume-h4-user": `${getFontPxValue(
-                      "12",
+                      "11",
                       modernSettings.fontScaleLevel
                     )}px`,
                   }}
@@ -414,39 +461,15 @@ const ModernTemplate = ({ resume }) => {
     ),
 
     description: (
-      <div
-        className={`flex gap-4 border-t border-grgrayay-700 ${
-          modernSettings.sectionPaddingY || "py-4"
-        }`}
-        style={{
-          textAlign: modernSettings.descriptionAlign || "left",
-          borderTopWidth: modernSettings.borderTopWidth || "1px",
-          borderTopStyle: modernSettings.borderStyle || "solid",
-          borderColor: modernSettings.borderColor || "#cbd5e1",
-        }}
-      >
-        <h2
-          className={`w-1/3 resume-h3 ${getCustomFontClass(
-            "text-[14px]",
-            modernSettings.fontScaleLevel
-          )} font-bold tracking-wide text-gray-900`}
-          style={{
-            color: modernSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
-              modernSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          PERSONAL SUMMARY
-        </h2>
+      <SectionRow title="SUMMARY">
         <div
-          className={`w-2/3 resume-h4 resume-content text-gray-700 ${getCustomFontClass(
+          className={`resume-h4 resume-content ${getCustomFontClass(
             "text-[12px]",
             modernSettings.fontScaleLevel
           )}`}
           style={{
-            color: modernSettings.TextColors?.["h3"] || "#475569",
+            color: inkSoftColor,
+            textAlign: modernSettings.descriptionAlign || "justify",
             "--resume-h4-user": `${getFontPxValue(
               "12",
               modernSettings.fontScaleLevel
@@ -456,462 +479,276 @@ const ModernTemplate = ({ resume }) => {
             __html: DOMPurify.sanitize(resume.description),
           }}
         />
-      </div>
+      </SectionRow>
     ),
 
     education: (
-      <div
-        className={`flex gap-4 border-t border-gray-700 ${
-          modernSettings.sectionPaddingY || "py-4"
-        }`}
-        style={{
-          textAlign: modernSettings.descriptionAlign || "left",
-          borderTopWidth: modernSettings.borderTopWidth || "1px",
-          borderTopStyle: modernSettings.borderStyle || "solid",
-          borderColor: modernSettings.borderColor || "#cbd5e1",
-        }}
-      >
-        <h2
-          className={`w-1/3 resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+      <SectionRow title="EDUCATION">
+        <div
+          className={`resume-h4 ${getCustomFontClass(
+            "text-[12px]",
             modernSettings.fontScaleLevel
-          )} font-bold tracking-wide text-gray-900`}
+          )}`}
           style={{
-            color: modernSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
+            "--resume-h4-user": `${getFontPxValue(
+              "12",
               modernSettings.fontScaleLevel
             )}px`,
           }}
         >
-          EDUCATION
-        </h2>
-        <div className="w-2/3">
-          <div
-            style={{
-              color: modernSettings.TextColors?.["h3"] || "#475569",
-              "--resume-h4-user": `${getFontPxValue(
-                "12",
-                modernSettings.fontScaleLevel
-              )}px`,
-            }}
-            className={`flex resume-h4 gap-6 w-full ${getCustomFontClass(
-              "text-[12px]",
-              modernSettings.fontScaleLevel
-            )} ${
-              modernSettings.descriptionAlign === "center"
-                ? "justify-center"
-                : modernSettings.descriptionAlign === "right"
-                ? "justify-end"
-                : modernSettings.descriptionAlign === "justify"
-                ? "justify-between"
-                : "justify-start"
-            }`}
-          >
-            <p className="font-semibold">{resume.education.college}</p>
-            <p className="italic"> {resume.education.location}</p>
-          </div>
-          <div
-            className={`resume-h4 ${getCustomFontClass(
-              "text-[12px]",
-              modernSettings.fontScaleLevel
-            )}`}
-            style={{
-              color: modernSettings.TextColors?.["h3"] || "#475569",
-              "--resume-h4-user": `${getFontPxValue(
-                "12",
-                modernSettings.fontScaleLevel
-              )}px`,
-            }}
-          >
-            <div
-              className={`resume-h4 flex gap-6 w-full ${getCustomFontClass(
-                "text-[12px]",
-                modernSettings.fontScaleLevel
-              )} ${
-                modernSettings.descriptionAlign === "center"
-                  ? "justify-center"
-                  : modernSettings.descriptionAlign === "right"
-                  ? "justify-end"
-                  : modernSettings.descriptionAlign === "justify"
-                  ? "justify-between"
-                  : "justify-start"
-              }`}
-              style={{
-                "--resume-h4-user": `${getFontPxValue(
-                  "12",
-                  modernSettings.fontScaleLevel
-                )}px`,
-              }}
+          <div className="flex justify-between items-baseline gap-4 flex-wrap">
+            <p
+              className="font-semibold uppercase tracking-wide"
+              style={{ color: inkColor }}
             >
-              <p>
-                {resume.education.degree}
-                {resume.education.specialization &&
-                  ` (${resume.education.specialization})`}
-              </p>
-
-              <p className="italic">
-                {" "}
-                {resume.education.startYear} – {resume.education.endYear}
-              </p>
-            </div>
-
-            <p>{resume.education.cgpa} CGPA</p>
+              {resume.education.college}
+            </p>
+            <p
+              className="italic resume-tnum"
+              style={{ color: mutedColor }}
+            >
+              {resume.education.startYear}
+              {resume.education.startYear && resume.education.endYear && " – "}
+              {resume.education.endYear}
+            </p>
           </div>
+          <div
+            className="flex justify-between items-baseline gap-4 flex-wrap mt-0.5"
+            style={{ color: inkSoftColor }}
+          >
+            <p className="italic">
+              {resume.education.degree}
+              {resume.education.specialization &&
+                ` (${resume.education.specialization})`}
+            </p>
+            {resume.education.location && (
+              <p className="italic">{resume.education.location}</p>
+            )}
+          </div>
+          {resume.education.cgpa && (
+            <p className="resume-tnum mt-0.5" style={{ color: mutedColor }}>
+              {resume.education.cgpa} CGPA
+            </p>
+          )}
         </div>
-      </div>
+      </SectionRow>
     ),
 
     skills: (
-      <div
-        className={`flex gap-4 border-t border-gray-700 ${
-          modernSettings.sectionPaddingY || "py-4"
-        }`}
-        style={{
-          textAlign: modernSettings.descriptionAlign || "left",
-          borderTopWidth: modernSettings.borderTopWidth || "1px",
-          borderTopStyle: modernSettings.borderStyle || "solid",
-          borderColor: modernSettings.borderColor || "#cbd5e1",
-        }}
-      >
-        <h2
-          className={`w-1/3 resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+      <SectionRow title="SKILLS">
+        <ul
+          className={`resume-h4 space-y-1 ${getCustomFontClass(
+            "text-[12px]",
             modernSettings.fontScaleLevel
-          )} font-bold tracking-wide text-gray-900`}
+          )}`}
           style={{
-            color: modernSettings.TextColors?.["h3"] || "#334155",
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
+            "--resume-h4-user": `${getFontPxValue(
+              "12",
               modernSettings.fontScaleLevel
             )}px`,
           }}
         >
-          SKILLS
-        </h2>
-        <div className="w-2/3">
           {resume.skills.map((skill, i) => (
-            <div
-              key={i}
-              className={`resume-h4 ${getCustomFontClass(
-                "text-[12px]",
-                modernSettings.fontScaleLevel
-              )}`}
-              style={{
-                "--resume-h4-user": `${getFontPxValue(
-                  "12",
-                  modernSettings.fontScaleLevel
-                )}px`,
-              }}
-            >
+            <li key={i}>
               <span
                 className="font-semibold mr-2"
-                style={{
-                  color: modernSettings.TextColors?.["h3"] || "#475569",
-                }}
+                style={{ color: inkColor }}
               >
                 {skill.domain}:
               </span>
-              <span
-                style={{
-                  color: modernSettings.TextColors?.["h4"] || "#64748b",
-                }}
-              >
+              <span style={{ color: inkSoftColor }}>
                 {skill.languages.join(", ")}
               </span>
-            </div>
+            </li>
           ))}
-        </div>
-      </div>
+        </ul>
+      </SectionRow>
     ),
 
-    projects: (
-      <div
-        className={`flex gap-4 border-t border-gray-700 ${
-          modernSettings.sectionPaddingY || "py-4"
-        }`}
-        style={{
-          textAlign: modernSettings.descriptionAlign || "left",
-          borderTopWidth: modernSettings.borderTopWidth || "1px",
-          borderTopStyle: modernSettings.borderStyle || "solid",
-          borderColor: modernSettings.borderColor || "#cbd5e1",
-        }}
-      >
-        <h2
-          className={`w-1/3 resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+    experience: (
+      <SectionRow title="EXPERIENCE">
+        <ul
+          className={`resume-h4 space-y-3 ${getCustomFontClass(
+            "text-[12px]",
             modernSettings.fontScaleLevel
-          )} font-bold tracking-wide text-gray-900`}
+          )}`}
           style={{
-            color: modernSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
+            "--resume-h4-user": `${getFontPxValue(
+              "12",
               modernSettings.fontScaleLevel
             )}px`,
           }}
         >
-          PROJECTS
-        </h2>
-        <div className="w-2/3 ">
-          {resume.projects.map((proj, i) => (
-            <div key={i} className="mb-2">
+          {resume.experience.map((a, i) => (
+            <li key={i}>
               <div
-                style={{
-                  "--resume-h4-user": `${getFontPxValue(
-                    "12",
-                    modernSettings.fontScaleLevel
-                  )}px`,
-                }}
-                className={`flex resume-h4 gap-2 md:gap-6 w-full ${getCustomFontClass(
-                  "text-[12px]",
-                  modernSettings.fontScaleLevel
-                )} ${
-                  modernSettings.descriptionAlign === "center"
-                    ? "justify-center"
-                    : modernSettings.descriptionAlign === "right"
-                    ? "justify-end"
-                    : modernSettings.descriptionAlign === "justify"
-                    ? "justify-between"
-                    : "justify-start"
-                }`}
+                className="flex justify-between items-baseline gap-4 flex-wrap"
+                style={{ color: inkColor }}
               >
-                <span
-                  className="font-bold"
-                  style={{
-                    color: modernSettings.TextColors?.["h3"] || "#475569",
-                  }}
-                >
-                  {proj.name}
-                </span>
-                <div>
-                  {(proj.demo || proj.github) && (
-                    <span>
-                      (
-                      {proj.demo && (
-                        <a
-                          href={proj.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline "
-                          style={{
-                            color: modernSettings.linkColor || "#2563eb",
-                          }}
-                        >
-                          Live Demo
-                        </a>
-                      )}
-                      {proj.demo && proj.github && (
-                        <span className="mx-1">|</span>
-                      )}
-                      {proj.github && (
-                        <a
-                          href={proj.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline "
-                          style={{
-                            color: modernSettings.linkColor || "#2563eb",
-                          }}
-                        >
-                          GitHub
-                        </a>
-                      )}
-                      )
+                <p className="font-semibold uppercase tracking-wide">
+                  {a.company}
+                  {a.role && (
+                    <span
+                      className="font-normal italic normal-case ml-2"
+                      style={{ color: inkSoftColor, letterSpacing: 0 }}
+                    >
+                      {a.role}
                     </span>
                   )}
-                </div>
+                </p>
+                <p
+                  className="italic resume-tnum"
+                  style={{ color: mutedColor }}
+                >
+                  {a.years}
+                </p>
               </div>
-
-              {/* Description */}
+              {a.technologies && a.technologies.trim() !== "" && (
+                <p className="mt-0.5" style={{ color: mutedColor }}>
+                  <span className="font-bold">
+                    {t("templateControls.technologies")}
+                  </span>{" "}
+                  {a.technologies}
+                </p>
+              )}
               <div
-                className={`resume-content resume-h4  ${getCustomFontClass(
-                  "text-[12px]",
-                  modernSettings.fontScaleLevel
-                )}`}
+                className="resume-content mt-1"
                 style={{
-                  color: modernSettings.TextColors?.["h4"] || "#64748b",
-                  "--resume-h4-user": `${getFontPxValue(
-                    "12",
-                    modernSettings.fontScaleLevel
-                  )}px`,
+                  color: inkSoftColor,
+                  textAlign: modernSettings.descriptionAlign || "left",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(a.description),
+                }}
+              />
+            </li>
+          ))}
+        </ul>
+      </SectionRow>
+    ),
+
+    projects: (
+      <SectionRow title="PROJECTS">
+        <ul
+          className={`resume-h4 space-y-3 ${getCustomFontClass(
+            "text-[12px]",
+            modernSettings.fontScaleLevel
+          )}`}
+          style={{
+            "--resume-h4-user": `${getFontPxValue(
+              "12",
+              modernSettings.fontScaleLevel
+            )}px`,
+          }}
+        >
+          {resume.projects.map((proj, i) => (
+            <li key={i}>
+              <div className="flex justify-between items-baseline gap-4 flex-wrap">
+                <p
+                  className="font-semibold uppercase tracking-wide"
+                  style={{ color: inkColor }}
+                >
+                  {proj.name}
+                </p>
+                {(proj.demo || proj.github) && (
+                  <span
+                    className="italic resume-tnum"
+                    style={{ color: mutedColor }}
+                  >
+                    {proj.demo && (
+                      <a
+                        href={proj.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                        style={{
+                          color: modernSettings.linkColor || accentColor,
+                        }}
+                      >
+                        Live Demo
+                      </a>
+                    )}
+                    {proj.demo && proj.github && (
+                      <span className="mx-1.5">·</span>
+                    )}
+                    {proj.github && (
+                      <a
+                        href={proj.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline"
+                        style={{
+                          color: modernSettings.linkColor || accentColor,
+                        }}
+                      >
+                        GitHub
+                      </a>
+                    )}
+                  </span>
+                )}
+              </div>
+              <div
+                className="resume-content mt-1"
+                style={{
+                  color: inkSoftColor,
+                  textAlign: modernSettings.descriptionAlign || "left",
                 }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(proj.description),
                 }}
               />
-            </div>
+            </li>
           ))}
-        </div>
-      </div>
-    ),
-
-    experience: (
-      <div
-        className={`flex gap-4 border-t border-gray-700 ${
-          modernSettings.sectionPaddingY || "py-4"
-        }`}
-        style={{
-          textAlign: modernSettings.descriptionAlign || "left",
-          borderTopWidth: modernSettings.borderTopWidth || "1px",
-          borderTopStyle: modernSettings.borderStyle || "solid",
-          borderColor: modernSettings.borderColor || "#cbd5e1",
-        }}
-      >
-        <h2
-          className={`w-1/3 resume-h3 ${getCustomFontClass(
-            "text-[14px]",
-            modernSettings.fontScaleLevel
-          )} font-bold tracking-wide text-gray-900`}
-          style={{
-            color: modernSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
-              modernSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          EXPERIENCE
-        </h2>
-        <div className="w-2/3">
-          <ul className="gap-2">
-            {resume.experience.map((a, i) => (
-              <li
-                key={i}
-                className={`md:mb-3 resume-h4  ${getCustomFontClass(
-                  "text-[12px]",
-                  modernSettings.fontScaleLevel
-                )}`}
-                style={{
-                  "--resume-h4-user": `${getFontPxValue(
-                    "12",
-                    modernSettings.fontScaleLevel
-                  )}px`,
-                }}
-              >
-                <div
-                  style={{
-                    color: modernSettings.TextColors?.["h3"] || "#475569",
-                  }}
-                  className={`flex gap-2 md:gap-6 w-full ${
-                    modernSettings.descriptionAlign === "center"
-                      ? "justify-center"
-                      : modernSettings.descriptionAlign === "right"
-                      ? "justify-end"
-                      : modernSettings.descriptionAlign === "justify"
-                      ? "justify-between"
-                      : "justify-start"
-                  }`}
-                >
-                  <span className="font-semibold">
-                    {a.company} - {a.role}
-                  </span>
-                  <span className="italic">{a.years}</span>
-                </div>
-                {a.technologies && a.technologies.trim() !== "" && (
-                  <p
-                    className="md:my-0.5"
-                    style={{
-                      color: modernSettings.TextColors?.["h4"] || "#64748b",
-                    }}
-                  >
-                    <span className="font-bold">{t("templateControls.technologies")}</span>{" "}
-                    {a.technologies}
-                  </p>
-                )}
-
-                <div
-                  className={`resume-content   `}
-                  style={{
-                    color: modernSettings.TextColors?.["h4"] || "#64748b",
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(a.description),
-                  }}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+        </ul>
+      </SectionRow>
     ),
 
     achievements: (
-      <div
-        className={`flex gap-4 border-t border-gray-700 ${
-          modernSettings.sectionPaddingY || "py-4"
-        }`}
-        style={{
-          textAlign: modernSettings.descriptionAlign || "left",
-          borderTopWidth: modernSettings.borderTopWidth || "1px",
-          borderTopStyle: modernSettings.borderStyle || "solid",
-          borderColor: modernSettings.borderColor || "#cbd5e1",
-        }}
-      >
-        <h2
-          className={`w-1/3 resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+      <SectionRow title="ACHIEVEMENTS">
+        <ul
+          className={`resume-h4 space-y-3 ${getCustomFontClass(
+            "text-[12px]",
             modernSettings.fontScaleLevel
-          )} font-bold tracking-wide text-gray-900`}
+          )}`}
           style={{
-            color: modernSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
+            "--resume-h4-user": `${getFontPxValue(
+              "12",
               modernSettings.fontScaleLevel
             )}px`,
           }}
         >
-          ACHIEVEMENTS
-        </h2>
-        <div className="w-2/3">
-          <ul className="gap-2">
-            {resume.achievements.map((a, i) => (
-              <li
-                key={i}
-                className={`resume-h4 ${getCustomFontClass(
-                  "text-[12px]",
-                  modernSettings.fontScaleLevel
-                )}`}
-                style={{
-                  "--resume-h4-user": `${getFontPxValue(
-                    "12",
-                    modernSettings.fontScaleLevel
-                  )}px`,
-                }}
-              >
-                <div
-                  style={{
-                    color: modernSettings.TextColors?.["h3"] || "#475569",
-                  }}
-                  className={`flex gap-6 w-full ${
-                    modernSettings.descriptionAlign === "center"
-                      ? "justify-center"
-                      : modernSettings.descriptionAlign === "right"
-                      ? "justify-end"
-                      : modernSettings.descriptionAlign === "justify"
-                      ? "justify-between"
-                      : "justify-start"
-                  }`}
+          {resume.achievements.map((a, i) => (
+            <li key={i}>
+              <div className="flex justify-between items-baseline gap-4 flex-wrap">
+                <p
+                  className="font-semibold uppercase tracking-wide"
+                  style={{ color: inkColor }}
                 >
-                  <span className="font-semibold">{a.title}</span>
-                  <span className="italic">
+                  {a.title}
+                </p>
+                {(a.month || a.year) && (
+                  <p
+                    className="italic resume-tnum"
+                    style={{ color: mutedColor }}
+                  >
                     {a.month || ""} {a.year || ""}
-                  </span>
-                </div>
-
-                <div
-                  className="resume-content "
-                  style={{
-                    color: modernSettings.TextColors?.["h4"] || "#64748b",
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(a.description),
-                  }}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+                  </p>
+                )}
+              </div>
+              <div
+                className="resume-content mt-1"
+                style={{
+                  color: inkSoftColor,
+                  textAlign: modernSettings.descriptionAlign || "left",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(a.description),
+                }}
+              />
+            </li>
+          ))}
+        </ul>
+      </SectionRow>
     ),
   };
 
@@ -1114,6 +951,13 @@ const ModernTemplate = ({ resume }) => {
 
                 <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
                   {[
+                    "Playfair Display",
+                    "Cormorant Garamond",
+                    "DM Sans",
+                    "Lora",
+                    "Source Sans 3",
+                    "Manrope",
+                    "Bricolage Grotesque",
                     "Inter",
                     "Roboto",
                     "Poppins",
@@ -1123,7 +967,6 @@ const ModernTemplate = ({ resume }) => {
                     "Nunito",
                     "Montserrat",
                     "Work Sans",
-                    "DM Sans",
                     "Ubuntu",
                     "Fira Sans",
                     "Source Sans Pro",
@@ -1732,10 +1575,12 @@ const ModernTemplate = ({ resume }) => {
       <div ref={scaleWrapperRef} className="m-3 mx-2.5 mb-2.5 a4-scale-wrapper">
         <div
           ref={contentRef}
-          className="a4-page print-a4 text-sm leading-relaxed bg-white shadow-xl"
+          className="a4-page print-a4 leading-relaxed bg-white shadow-xl"
           style={{
-            fontFamily: modernSettings.fontFamily || "Lato, sans-serif",
+            fontFamily:
+              modernSettings.fontFamily || "var(--resume-body-modern)",
             backgroundColor: modernSettings.backgroundColor || "#ffffff",
+            color: inkColor,
             flexDirection: "column",
           }}
         >
@@ -1743,7 +1588,8 @@ const ModernTemplate = ({ resume }) => {
           <div
             className={`flex flex-col h-full`}
             style={{
-              padding: modernSettings.padding || "25px",
+              padding: modernSettings.padding || "44px 56px",
+              rowGap: `${modernSettings.sectionGap ?? 18}px`,
               border:
                 modernSettings.borderWidth &&
                 modernSettings.borderWidth !== "0px"
@@ -1757,7 +1603,13 @@ const ModernTemplate = ({ resume }) => {
               modernSettings.sectionOrder.map(
                 (sectionKey) =>
                   modernSettings.visibleSections?.[sectionKey] && (
-                    <div key={sectionKey}>{sectionMap[sectionKey]}</div>
+                    <div
+                      key={sectionKey}
+                      className="break-inside-avoid"
+                      style={{ pageBreakInside: "avoid" }}
+                    >
+                      {sectionMap[sectionKey]}
+                    </div>
                   )
               )}
           </div>

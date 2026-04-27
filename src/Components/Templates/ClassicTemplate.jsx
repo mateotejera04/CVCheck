@@ -151,17 +151,48 @@ const ClassicTemplate = ({ resume }) => {
   const defaultTextColor = (tag) => {
     switch (tag) {
       case "h1":
-        return "#1e293b"; // dark slate
+        return "#0f172a";
       case "h2":
-        return "#334155"; // slightly lighter
+        return "#0f172a";
       case "h3":
-        return "#475569"; // even lighter
+        return "#1f2937";
       case "h4":
-        return "#64748b"; // light slate
+        return "#475569";
       default:
-        return "#000000";
+        return "#0f172a";
     }
   };
+
+  const classicAccent = classicSettings.TextColors?.["h1"] || "#0f172a";
+  const classicInk = classicSettings.TextColors?.["h2"] || "#0f172a";
+  const classicInkSoft = classicSettings.TextColors?.["h3"] || "#1f2937";
+  const classicMuted = classicSettings.TextColors?.["h4"] || "#475569";
+
+  const ClassicSectionTitle = ({ children }) => (
+    <div className="flex items-center gap-3 my-1">
+      <span
+        className="resume-rule"
+        style={{ color: classicMuted, flex: 1 }}
+      />
+      <h2
+        className="resume-h2 resume-eyebrow"
+        style={{
+          color: classicInk,
+          letterSpacing: "0.28em",
+          "--resume-h2-user": `${getFontPxValue(
+            "12",
+            classicSettings.fontScaleLevel
+          )}px`,
+        }}
+      >
+        {children}
+      </h2>
+      <span
+        className="resume-rule"
+        style={{ color: classicMuted, flex: 1 }}
+      />
+    </div>
+  );
 
   const SortableItem = ({ id }) => {
     const {
@@ -248,44 +279,55 @@ const ClassicTemplate = ({ resume }) => {
       <div className="text-center">
         <h1
           className={`resume-h1 ${getCustomFontClass(
-            "text-[36px]",
+            "text-[52px]",
             classicSettings.fontScaleLevel
-          )} font-bold w-full inline-block`}
+          )} w-full inline-block leading-[1.05] tracking-[-0.01em]`}
           style={{
-            color: classicSettings.TextColors?.["h1"] || "black",
+            color: classicAccent,
+            fontFamily: "var(--resume-display-classic)",
+            fontWeight: 500,
             "--resume-h1-user": `${getFontPxValue(
-              "36",
+              "52",
               classicSettings.fontScaleLevel
             )}px`,
           }}
         >
           {resume.name}
         </h1>
+        <div
+          className="flex items-center justify-center gap-3 mt-2"
+          style={{ color: classicMuted }}
+        >
+          <span className="resume-rule" style={{ flex: 1, maxWidth: "120px" }} />
+          <span
+            className="resume-tnum"
+            style={{ fontSize: "14px", lineHeight: 1, opacity: 0.7 }}
+          >
+            ·
+          </span>
+          <span className="resume-rule" style={{ flex: 1, maxWidth: "120px" }} />
+        </div>
       </div>
     ),
 
     details: (
-      <div className="text-center ">
-        {/* Contact Line */}
+      <div className="text-center">
         <p
           className={`resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+            "text-[12px]",
             classicSettings.fontScaleLevel
-          )} `}
+          )} resume-tnum`}
           style={{
+            color: classicInkSoft,
             "--resume-h3-user": `${getFontPxValue(
-              "14",
+              "12",
               classicSettings.fontScaleLevel
             )}px`,
           }}
         >
           {[
             resume.contact.phone && (
-              <span
-                style={{
-                  color: classicSettings.TextColors?.["h3"] || "#475569",
-                }}
-              >
+              <span style={{ color: classicInkSoft }}>
                 {resume.contact.phone}
               </span>
             ),
@@ -294,13 +336,13 @@ const ClassicTemplate = ({ resume }) => {
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: classicSettings.linkColor || "#2563eb" }}
+                style={{ color: classicSettings.linkColor || classicAccent }}
               >
                 {resume.contact.email}
               </a>
             ),
             resume.contact.location && (
-              <span style={{ color: classicSettings.linkColor || "#2563eb" }}>
+              <span style={{ color: classicInkSoft }}>
                 {resume.contact.location}
               </span>
             ),
@@ -309,20 +351,23 @@ const ClassicTemplate = ({ resume }) => {
             .map((item, i, arr) => (
               <span key={i}>
                 {item}
-                {i < arr.length - 1 && " | "}
+                {i < arr.length - 1 && (
+                  <span className="mx-2" style={{ opacity: 0.5 }}>
+                    ·
+                  </span>
+                )}
               </span>
             ))}
         </p>
-        {/* Links */}
         <div
           className={`resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+            "text-[12px]",
             classicSettings.fontScaleLevel
-          )} break-words whitespace-normal flex flex-wrap justify-center gap-x-2 `}
+          )} break-words whitespace-normal flex flex-wrap justify-center items-center gap-x-2 mt-1`}
           style={{
-            color: classicSettings.linkColor || "#2563eb",
+            color: classicSettings.linkColor || classicAccent,
             "--resume-h3-user": `${getFontPxValue(
-              "14",
+              "12",
               classicSettings.fontScaleLevel
             )}px`,
           }}
@@ -332,28 +377,30 @@ const ClassicTemplate = ({ resume }) => {
               href={resume.contact.websiteURL}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline break-all"
+              className="underline underline-offset-2 break-all"
             >
-              {resume.contact.websiteURL}
+              {resume.contact.websiteURL.replace(/^https?:\/\//, "")}
             </a>
           )}
 
-          {resume.contact.websiteURL && resume.contact.linkedin && (
-            <span className="text-gray-700 hidden sm:inline">|</span>
+          {resume.contact.websiteURL && resume.contact.github && (
+            <span style={{ color: classicMuted, opacity: 0.6 }}>·</span>
           )}
           {resume.contact.github && (
             <a
               href={resume.contact.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline break-all"
+              className="underline underline-offset-2 break-all"
             >
-              {resume.contact.github}
+              {resume.contact.github
+                .replace(/^https?:\/\//, "")
+                .replace(/^www\./, "")}
             </a>
           )}
 
           {resume.contact.github && resume.contact.linkedin && (
-            <span className="text-gray-700 hidden sm:inline">|</span>
+            <span style={{ color: classicMuted, opacity: 0.6 }}>·</span>
           )}
 
           {resume.contact.linkedin && (
@@ -361,9 +408,11 @@ const ClassicTemplate = ({ resume }) => {
               href={resume.contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline break-all"
+              className="underline underline-offset-2 break-all"
             >
-              {resume.contact.linkedin}
+              {resume.contact.linkedin
+                .replace(/^https?:\/\//, "")
+                .replace(/^www\./, "")}
             </a>
           )}
         </div>
@@ -371,31 +420,18 @@ const ClassicTemplate = ({ resume }) => {
     ),
 
     description: (
-      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
-            classicSettings.fontScaleLevel
-          )} font-bold `}
-          style={{
-            color: classicSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
-              classicSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          PROFILE
-        </h2>
+      <div style={{ textAlign: classicSettings.descriptionAlign || "justify" }}>
+        <ClassicSectionTitle>PROFILE</ClassicSectionTitle>
         <div
           className={`resume-content resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+            "text-[12.5px]",
             classicSettings.fontScaleLevel
           )}`}
           style={{
-            color: classicSettings.TextColors?.["h3"] || "#475569",
+            color: classicInkSoft,
+            fontFamily: "var(--resume-body-classic)",
             "--resume-h3-user": `${getFontPxValue(
-              "14",
+              "12",
               classicSettings.fontScaleLevel
             )}px`,
           }}
@@ -407,320 +443,224 @@ const ClassicTemplate = ({ resume }) => {
     ),
 
     education: (
-      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
-            classicSettings.fontScaleLevel
-          )} font-bold `}
-          style={{
-            color: classicSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
-              classicSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          EDUCATION
-        </h2>
-        <div
-          style={{
-            color: classicSettings.TextColors?.["h3"] || "#475569",
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
-              classicSettings.fontScaleLevel
-            )}px`,
-          }}
-          className={`flex resume-h3 gap-6 w-full ${getCustomFontClass(
-            "text-[14px]",
-            classicSettings.fontScaleLevel
-          )} ${
-            classicSettings.descriptionAlign === "center"
-              ? "justify-center"
-              : classicSettings.descriptionAlign === "right"
-              ? "justify-end"
-              : classicSettings.descriptionAlign === "justify"
-              ? "justify-between"
-              : "justify-start"
-          }`}
-        >
-          <p className="font-semibold">{resume.education.college}</p>
-          <p className="italic"> {resume.education.location}</p>
-        </div>
+      <div>
+        <ClassicSectionTitle>EDUCATION</ClassicSectionTitle>
         <div
           className={`resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+            "text-[12.5px]",
             classicSettings.fontScaleLevel
           )}`}
           style={{
-            color: classicSettings.TextColors?.["h3"] || "#475569",
+            color: classicInkSoft,
+            fontFamily: "var(--resume-body-classic)",
             "--resume-h3-user": `${getFontPxValue(
-              "14",
+              "12",
               classicSettings.fontScaleLevel
             )}px`,
           }}
         >
-          <div
-            className={`flex resume-h3 gap-6 w-full ${getCustomFontClass(
-              "text-[14px]",
-              classicSettings.fontScaleLevel
-            )} ${
-              classicSettings.descriptionAlign === "center"
-                ? "justify-center"
-                : classicSettings.descriptionAlign === "right"
-                ? "justify-end"
-                : classicSettings.descriptionAlign === "justify"
-                ? "justify-between"
-                : "justify-start"
-            }`}
-            style={{
-              "--resume-h3-user": `${getFontPxValue(
-                "14",
-                classicSettings.fontScaleLevel
-              )}px`,
-            }}
-          >
-            <p>
+          <div className="flex justify-between items-baseline gap-4 flex-wrap">
+            <p className="font-semibold" style={{ color: classicInk }}>
+              {resume.education.college}
+            </p>
+            <p
+              className="italic resume-tnum"
+              style={{ color: classicMuted }}
+            >
+              {resume.education.startYear}
+              {resume.education.startYear && resume.education.endYear && " – "}
+              {resume.education.endYear}
+            </p>
+          </div>
+          <div className="flex justify-between items-baseline gap-4 flex-wrap mt-0.5">
+            <p className="italic">
               {resume.education.degree}
               {resume.education.specialization &&
                 ` (${resume.education.specialization})`}
             </p>
-
-            {resume.education.startYear && resume.education.endYear && (
-              <p className="italic">
-                {" "}
-                {resume.education.startYear} – {resume.education.endYear}
-              </p>
+            {resume.education.location && (
+              <p className="italic">{resume.education.location}</p>
             )}
           </div>
-
-          {resume.education.cgpa && <p>{resume.education.cgpa} CGPA</p>}
+          {resume.education.cgpa && (
+            <p className="resume-tnum mt-0.5" style={{ color: classicMuted }}>
+              {resume.education.cgpa} CGPA
+            </p>
+          )}
         </div>
       </div>
     ),
 
     skills: (
-      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
+      <div>
+        <ClassicSectionTitle>SKILLS</ClassicSectionTitle>
+        <ul
+          className={`resume-h3 space-y-1 ${getCustomFontClass(
+            "text-[12.5px]",
             classicSettings.fontScaleLevel
-          )} font-bold `}
+          )}`}
           style={{
-            color: classicSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
+            fontFamily: "var(--resume-body-classic)",
+            "--resume-h3-user": `${getFontPxValue(
+              "12",
               classicSettings.fontScaleLevel
             )}px`,
           }}
         >
-          SKILLS
-        </h2>
-        {resume.skills.map((skill, i) => (
-          <div
-            key={i}
-            className={`resume-h3 ${getCustomFontClass(
-              "text-[14px]",
-              classicSettings.fontScaleLevel
-            )}`}
-            style={{
-              "--resume-h3-user": `${getFontPxValue(
-                "14",
-                classicSettings.fontScaleLevel
-              )}px`,
-            }}
-          >
-            <span
-              className="font-semibold mr-2"
-              style={{ color: classicSettings.TextColors?.["h3"] || "#475569" }}
-            >
-              {skill.domain}:
-            </span>{" "}
-            <span
-              style={{ color: classicSettings.TextColors?.["h4"] || "#64748b" }}
-            >
-              {skill.languages.join(", ")}
-            </span>
-          </div>
-        ))}
+          {resume.skills.map((skill, i) => (
+            <li key={i}>
+              <span
+                className="font-semibold mr-2"
+                style={{ color: classicInk }}
+              >
+                {skill.domain}:
+              </span>
+              <span style={{ color: classicInkSoft }}>
+                {skill.languages.join(", ")}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     ),
 
     projects: (
-      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
-        <h2
-          className={`resume-h2  ${getCustomFontClass(
-            "text-[16px]",
+      <div>
+        <ClassicSectionTitle>PROJECTS</ClassicSectionTitle>
+        <ul
+          className={`resume-h3 space-y-3 ${getCustomFontClass(
+            "text-[12.5px]",
             classicSettings.fontScaleLevel
-          )} font-bold `}
+          )}`}
           style={{
-            color: classicSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
+            fontFamily: "var(--resume-body-classic)",
+            "--resume-h3-user": `${getFontPxValue(
+              "12",
               classicSettings.fontScaleLevel
             )}px`,
           }}
         >
-          PROJECTS
-        </h2>
-        {resume.projects.map((proj, i) => (
-          <div key={i} className="md:mb-3">
-            <div
-              className={`resume-h3 flex gap-2 md:gap-6 w-full ${getCustomFontClass(
-                "text-[14px]",
-                classicSettings.fontScaleLevel
-              )} ${
-                classicSettings.descriptionAlign === "center"
-                  ? "justify-center"
-                  : classicSettings.descriptionAlign === "right"
-                  ? "justify-end"
-                  : classicSettings.descriptionAlign === "justify"
-                  ? "justify-between"
-                  : "justify-start"
-              }`}
-              style={{
-                "--resume-h3-user": `${getFontPxValue(
-                  "14",
-                  classicSettings.fontScaleLevel
-                )}px`,
-              }}
-            >
-              <span
-                className="font-bold"
-                style={{
-                  color: classicSettings.TextColors?.["h3"] || "#475569",
-                }}
-              >
-                {proj.name}
-              </span>
-              <div>
+          {resume.projects.map((proj, i) => (
+            <li key={i}>
+              <div className="flex justify-between items-baseline gap-4 flex-wrap">
+                <p
+                  className="font-semibold"
+                  style={{
+                    color: classicInk,
+                    fontFamily: "var(--resume-display-classic)",
+                  }}
+                >
+                  {proj.name}
+                </p>
                 {(proj.demo || proj.github) && (
-                  <span>
-                    (
+                  <span
+                    className="italic resume-tnum"
+                    style={{ color: classicMuted }}
+                  >
                     {proj.demo && (
                       <a
                         href={proj.demo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline "
+                        className="underline underline-offset-2"
                         style={{
-                          color: classicSettings.linkColor || "#2563eb",
+                          color: classicSettings.linkColor || classicAccent,
                         }}
                       >
                         Live Demo
                       </a>
                     )}
                     {proj.demo && proj.github && (
-                      <span className="mx-1">|</span>
+                      <span className="mx-1.5">·</span>
                     )}
                     {proj.github && (
                       <a
                         href={proj.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline "
+                        className="underline underline-offset-2"
                         style={{
-                          color: classicSettings.linkColor || "#2563eb",
+                          color: classicSettings.linkColor || classicAccent,
                         }}
                       >
                         GitHub
                       </a>
                     )}
-                    )
                   </span>
                 )}
               </div>
-            </div>
-
-            {/* Description */}
-            <div
-              className={`resume-content resume-h3  ${getCustomFontClass(
-                "text-[14px]",
-                classicSettings.fontScaleLevel
-              )}`}
-              style={{
-                color: classicSettings.TextColors?.["h4"] || "#64748b",
-                "--resume-h3-user": `${getFontPxValue(
-                  "14",
-                  classicSettings.fontScaleLevel
-                )}px`,
-              }}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(proj.description),
-              }}
-            />
-          </div>
-        ))}
+              <div
+                className="resume-content mt-1"
+                style={{
+                  color: classicInkSoft,
+                  textAlign: classicSettings.descriptionAlign || "left",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(proj.description),
+                }}
+              />
+            </li>
+          ))}
+        </ul>
       </div>
     ),
 
     experience: (
-      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
+      <div>
+        <ClassicSectionTitle>EXPERIENCE</ClassicSectionTitle>
+        <ul
+          className={`resume-h3 space-y-3 ${getCustomFontClass(
+            "text-[12.5px]",
             classicSettings.fontScaleLevel
-          )} font-bold text-gray-800`}
+          )}`}
           style={{
-            color: classicSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
+            fontFamily: "var(--resume-body-classic)",
+            "--resume-h3-user": `${getFontPxValue(
+              "12",
               classicSettings.fontScaleLevel
             )}px`,
           }}
         >
-          EXPERIENCE
-        </h2>
-        <ul className="gap-2">
           {resume.experience.map((a, i) => (
-            <li
-              key={i}
-              className={`md:mb-3 resume-h3  ${getCustomFontClass(
-                "text-[14px]",
-                classicSettings.fontScaleLevel
-              )}`}
-              style={{
-                "--resume-h3-user": `${getFontPxValue(
-                  "14",
-                  classicSettings.fontScaleLevel
-                )}px`,
-              }}
-            >
-              <div
-                style={{
-                  color: classicSettings.TextColors?.["h3"] || "#475569",
-                }}
-                className={`flex gap-2 md:gap-6 w-full ${
-                  classicSettings.descriptionAlign === "center"
-                    ? "justify-center"
-                    : classicSettings.descriptionAlign === "right"
-                    ? "justify-end"
-                    : classicSettings.descriptionAlign === "justify"
-                    ? "justify-between"
-                    : "justify-start"
-                }`}
-              >
-                <span className="font-semibold">
-                  {a.company} {a.role && ` - ${a.role}`}
-                </span>
-                <span className="italic">{a.years}</span>
-              </div>
-              {a.technologies && a.technologies.trim() !== "" && (
+            <li key={i}>
+              <div className="flex justify-between items-baseline gap-4 flex-wrap">
                 <p
-                  className="md:my-0.5"
+                  className="font-semibold"
                   style={{
-                    color: classicSettings.TextColors?.["h4"] || "#64748b",
+                    color: classicInk,
+                    fontFamily: "var(--resume-display-classic)",
                   }}
                 >
-                  <span className="font-bold">{t("templateControls.technologies")}</span>{" "}
+                  {a.company}
+                  {a.role && (
+                    <span
+                      className="font-normal italic ml-2"
+                      style={{ color: classicInkSoft }}
+                    >
+                      {a.role}
+                    </span>
+                  )}
+                </p>
+                <p
+                  className="italic resume-tnum"
+                  style={{ color: classicMuted }}
+                >
+                  {a.years}
+                </p>
+              </div>
+              {a.technologies && a.technologies.trim() !== "" && (
+                <p className="mt-0.5" style={{ color: classicMuted }}>
+                  <span className="font-bold">
+                    {t("templateControls.technologies")}
+                  </span>{" "}
                   {a.technologies}
                 </p>
               )}
-
               <div
-                className={`resume-content   `}
+                className="resume-content mt-1"
                 style={{
-                  color: classicSettings.TextColors?.["h4"] || "#64748b",
+                  color: classicInkSoft,
+                  textAlign: classicSettings.descriptionAlign || "left",
                 }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(a.description),
@@ -733,61 +673,42 @@ const ClassicTemplate = ({ resume }) => {
     ),
 
     achievements: (
-      <div style={{ textAlign: classicSettings.descriptionAlign || "left" }}>
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
+      <div>
+        <ClassicSectionTitle>ACHIEVEMENTS</ClassicSectionTitle>
+        <ul
+          className={`resume-h3 resume-bullets space-y-2 ${getCustomFontClass(
+            "text-[12.5px]",
             classicSettings.fontScaleLevel
-          )} font-bold `}
+          )}`}
           style={{
-            color: classicSettings.TextColors?.["h2"] || "#334155",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
+            fontFamily: "var(--resume-body-classic)",
+            color: classicInkSoft,
+            "--resume-h3-user": `${getFontPxValue(
+              "12",
               classicSettings.fontScaleLevel
             )}px`,
           }}
         >
-          ACHIEVEMENTS
-        </h2>
-        <ul className="list-disc pl-1.5 md:pl-5 ">
           {resume.achievements.map((a, i) => (
-            <li
-              key={i}
-              className={`resume-h3 ${getCustomFontClass(
-                "text-[14px]",
-                classicSettings.fontScaleLevel
-              )}`}
-              style={{
-                "--resume-h3-user": `${getFontPxValue(
-                  "14",
-                  classicSettings.fontScaleLevel
-                )}px`,
-              }}
-            >
-              <div
-                style={{
-                  color: classicSettings.TextColors?.["h3"] || "#475569",
-                }}
-                className={`flex gap-6 w-full ${
-                  classicSettings.descriptionAlign === "center"
-                    ? "justify-center"
-                    : classicSettings.descriptionAlign === "right"
-                    ? "justify-end"
-                    : classicSettings.descriptionAlign === "justify"
-                    ? "justify-between"
-                    : "justify-start"
-                }`}
-              >
-                <span className="font-semibold">{a.title}</span>
-                <span className="italic">
-                  {a.month || ""} {a.year || ""}
+            <li key={i}>
+              <div className="flex justify-between items-baseline gap-4 flex-wrap">
+                <span className="font-semibold" style={{ color: classicInk }}>
+                  {a.title}
                 </span>
+                {(a.month || a.year) && (
+                  <span
+                    className="italic resume-tnum"
+                    style={{ color: classicMuted }}
+                  >
+                    {a.month || ""} {a.year || ""}
+                  </span>
+                )}
               </div>
-
               <div
-                className="resume-content "
+                className="resume-content"
                 style={{
-                  color: classicSettings.TextColors?.["h4"] || "#64748b",
+                  color: classicInkSoft,
+                  textAlign: classicSettings.descriptionAlign || "left",
                 }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(a.description),
@@ -995,6 +916,13 @@ const ClassicTemplate = ({ resume }) => {
 
                 <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
                   {[
+                    "Playfair Display",
+                    "Cormorant Garamond",
+                    "DM Sans",
+                    "Lora",
+                    "Source Sans 3",
+                    "Manrope",
+                    "Bricolage Grotesque",
                     "Inter",
                     "Roboto",
                     "Poppins",
@@ -1004,7 +932,6 @@ const ClassicTemplate = ({ resume }) => {
                     "Nunito",
                     "Montserrat",
                     "Work Sans",
-                    "DM Sans",
                     "Ubuntu",
                     "Fira Sans",
                     "Source Sans Pro",
@@ -1667,10 +1594,12 @@ const ClassicTemplate = ({ resume }) => {
       <div ref={scaleWrapperRef} className="m-2.5 mx-2.5 mb-2.5 a4-scale-wrapper">
         <div
           ref={contentRef}
-          className="a4-page print-a4 text-sm leading-relaxed bg-white shadow-xl"
+          className="a4-page print-a4 leading-relaxed bg-white shadow-xl"
           style={{
-            fontFamily: classicSettings.fontFamily || "Inter",
+            fontFamily:
+              classicSettings.fontFamily || "var(--resume-body-classic)",
             backgroundColor: classicSettings.backgroundColor || "#ffffff",
+            color: classicInk,
             flexDirection: "column",
           }}
         >
@@ -1691,9 +1620,8 @@ const ClassicTemplate = ({ resume }) => {
             <div
               className="flex flex-col flex-1  overflow-hidden"
               style={{
-                padding: classicSettings.padding || "0px",
-
-                rowGap: `${classicSettings.sectionGap ?? 16}px`,
+                padding: classicSettings.padding || "48px 56px",
+                rowGap: `${classicSettings.sectionGap ?? 22}px`,
               }}
             >
               {Array.isArray(classicSettings?.sectionOrder) &&

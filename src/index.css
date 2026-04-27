@@ -329,3 +329,94 @@
     font-size: clamp(10px, var(--resume-h4-user, 12px), 25px) !important;
   }
 }
+
+/* ==========================================================================
+   Resume template typography & layout helpers
+   Used by Classic / Standard / Modern / Sidebar templates.
+   Plain CSS so they apply identically in screen preview and print.
+   ========================================================================== */
+:root {
+  --resume-display-classic: "Playfair Display", "Merriweather", ui-serif, Georgia, serif;
+  --resume-body-classic: "Source Sans 3", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --resume-display-standard: "DM Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --resume-body-standard: "DM Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --resume-display-modern: "Playfair Display", "Cormorant Garamond", ui-serif, Georgia, serif;
+  --resume-body-modern: "Lora", "Source Sans 3", ui-serif, Georgia, serif;
+  --resume-display-sidebar: "Bricolage Grotesque", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --resume-body-sidebar: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --resume-hairline: #e5e7eb;
+  --resume-ink: #0f172a;
+  --resume-ink-soft: #1f2937;
+  --resume-ink-muted: #475569;
+  --resume-modern-accent: #1e3a5f;
+}
+
+.resume-tnum {
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.resume-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.resume-hairline {
+  border-color: var(--resume-hairline);
+}
+
+.resume-rule {
+  height: 1px;
+  background-color: currentColor;
+  opacity: 0.18;
+  border: 0;
+  display: block;
+  width: 100%;
+}
+
+.resume-content {
+  line-height: 1.55;
+}
+.resume-content p + p {
+  margin-top: 0.4em;
+}
+.resume-content li + li {
+  margin-top: 0.2em;
+}
+
+/* Refined custom bullet for the editorial templates */
+.resume-bullets {
+  list-style: none;
+  padding-left: 0;
+}
+.resume-bullets > li {
+  position: relative;
+  padding-left: 14px;
+}
+.resume-bullets > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+@media print {
+  .a4-page,
+  .print-a4,
+  .print-a4-sidebar,
+  .resume-content,
+  .resume-eyebrow {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    text-rendering: geometricPrecision;
+  }
+}

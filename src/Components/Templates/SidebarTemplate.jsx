@@ -151,30 +151,92 @@ const SidebarTemplate = ({ resume }) => {
   const defaultTextColor = (tag) => {
     switch (tag) {
       case "h1":
-        return "white";
+        return "#ffffff";
       case "h2":
-        return "#F4F3F3";
+        return "#e2e8f0";
       case "h3":
-        return "#D6D5D5";
+        return "#cbd5e1";
       case "h4":
-        return "text-gray-300";
+        return "#94a3b8";
       default:
-        return "#000000";
+        return "#ffffff";
     }
   };
 
   const defaultMainTextColor = (tag) => {
     switch (tag) {
       case "h1":
-        return "#000000"; // dark slate
+        return "#0f172a";
       case "h2":
-        return "#333333"; // slightly lighter
+        return "#0f172a";
       case "h3":
-        return "#404040"; // even lighter
+        return "#1f2937";
       default:
-        return "#404040";
+        return "#1f2937";
     }
   };
+
+  const sidebarInk = sidebarSettings.textColors?.["h1"] || "#ffffff";
+  const sidebarSoft = sidebarSettings.textColors?.["h2"] || "#e2e8f0";
+  const sidebarBody = sidebarSettings.textColors?.["h3"] || "#cbd5e1";
+  const sidebarMuted = sidebarSettings.textColors?.["h4"] || "#94a3b8";
+
+  const mainInk =
+    sidebarSettings.mainTextColors?.["h1"] || defaultMainTextColor("h1");
+  const mainBody =
+    sidebarSettings.mainTextColors?.["h2"] || defaultMainTextColor("h2");
+  const mainMuted =
+    sidebarSettings.mainTextColors?.["h3"] || defaultMainTextColor("h3");
+
+  const SidebarSubtitle = ({ children }) => (
+    <h3
+      className={`resume-h3 resume-eyebrow mb-2 ${getCustomFontClass(
+        "text-[11px]",
+        sidebarSettings.fontScaleLevel
+      )}`}
+      style={{
+        color: sidebarSoft,
+        opacity: 0.85,
+        "--resume-h3-user": `${getFontPxValue(
+          "11",
+          sidebarSettings.fontScaleLevel
+        )}px`,
+      }}
+    >
+      {children}
+    </h3>
+  );
+
+  const MainSectionTitle = ({ children }) => (
+    <div className="mb-3">
+      <h2
+        className={`resume-h2 ${getCustomFontClass(
+          "text-[18px]",
+          sidebarSettings.fontScaleLevel
+        )} leading-tight tracking-tight`}
+        style={{
+          color: mainInk,
+          fontFamily: "var(--resume-display-sidebar-main, var(--resume-display-modern))",
+          fontWeight: 600,
+          "--resume-h2-user": `${getFontPxValue(
+            "18",
+            sidebarSettings.fontScaleLevel
+          )}px`,
+        }}
+      >
+        {children}
+      </h2>
+      <span
+        className="block mt-1"
+        style={{
+          width: "48px",
+          height: "1px",
+          backgroundColor: mainInk,
+          opacity: 0.35,
+        }}
+      />
+    </div>
+  );
 
   useEffect(() => {
     if (
@@ -264,163 +326,154 @@ const SidebarTemplate = ({ resume }) => {
   const sectionMap = {
     name: (
       <div className="text-center">
+        {resume.imgUrl && (
+          <img
+            src={resume.imgUrl}
+            alt={resume.name}
+            className="w-24 h-24 md:w-28 md:h-28 mx-auto mb-4 rounded-full object-cover"
+            style={{
+              border: "2px solid rgba(255,255,255,0.16)",
+            }}
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        )}
         <h1
           className={`resume-h1 ${getCustomFontClass(
-            "text-[30px]",
+            "text-[28px]",
             sidebarSettings.fontScaleLevel
-          )} font-bold bg-transparent w-full text-center outline-none`}
+          )} bg-transparent w-full text-center outline-none leading-[1.1] tracking-tight`}
           style={{
-            color: sidebarSettings.textColors?.["h1"] || "white",
+            color: sidebarInk,
+            fontFamily: "var(--resume-display-sidebar)",
+            fontWeight: 600,
             "--resume-h1-user": `${getFontPxValue(
-              "36",
+              "28",
               sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
           {resume.name || "Your Name"}
         </h1>
+        {resume.headline && (
+          <p
+            className="resume-eyebrow mt-2"
+            style={{ color: sidebarSoft, opacity: 0.9 }}
+          >
+            {resume.headline}
+          </p>
+        )}
       </div>
     ),
+
     details: (
-      <div className="mb-1 md:mb-2">
-        <h2
-          className={`font-semibold uppercase resume-h2 tracking-wide mb-1  md:mb-2 ${getCustomFontClass(
-            "text-16px]",
+      <div>
+        <SidebarSubtitle>Contact</SidebarSubtitle>
+        <ul
+          className={`resume-h3 space-y-1.5 ${getCustomFontClass(
+            "text-[12px]",
             sidebarSettings.fontScaleLevel
           )}`}
           style={{
-            color: sidebarSettings.textColors?.["h2"] || "#F4F3F3",
-            textAlign: sidebarSettings.descriptionAlign || "left",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
-              sidebarSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          Details
-        </h2>
-        <div
-          className={`flex break-words resume-h3 whitespace-normal flex-col space-y-0.5 md:space-y-2 ${getCustomFontClass(
-            "text-[14px]",
-            sidebarSettings.fontScaleLevel
-          )}`}
-          style={{
-            color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
-            textAlign: sidebarSettings.descriptionAlign || "left",
+            color: sidebarBody,
             "--resume-h3-user": `${getFontPxValue(
-              "14",
+              "12",
               sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
           {resume.contact.location && (
-            <div className="flex items-start  gap-2">
-              <CiLocationOn className="flex-shrink-0  mt-1" />
-              <p className="bg-transparent outline-none w-full break-all">
-                {resume.contact.location}
-              </p>
-            </div>
+            <li className="flex items-start gap-2.5">
+              <CiLocationOn className="flex-shrink-0 mt-0.5 text-[14px]" />
+              <span className="break-all">{resume.contact.location}</span>
+            </li>
           )}
-
           {resume.contact.phone && (
-            <div className="flex items-start  gap-2 ">
-              <CiPhone className="flex-shrink-0  mt-1" />
-              <p className="bg-transparent outline-none w-full break-all">
-                {resume.contact.phone}
-              </p>
-            </div>
+            <li className="flex items-start gap-2.5">
+              <CiPhone className="flex-shrink-0 mt-0.5 text-[14px]" />
+              <span className="break-all">{resume.contact.phone}</span>
+            </li>
           )}
-
-          {resume.contact.websiteURL && (
-            <div className="flex items-start  gap-2">
-              <FaGlobe className="flex-shrink-0  mt-1" />
-              <a
-                href={resume.contact.websiteURL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-transparent outline-none w-full break-all"
-              >
-                {resume.contact.websiteURL}
-              </a>
-            </div>
-          )}
-
           {resume.contact.email && (
-            <div className="flex items-start  gap-2">
-              <MdOutlineMailOutline className="flex-shrink-0 mt-1" />
+            <li className="flex items-start gap-2.5">
+              <MdOutlineMailOutline className="flex-shrink-0 mt-0.5 text-[14px]" />
               <a
                 href={`mailto:${resume.contact.email}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-transparent outline-none w-full break-all"
+                className="break-all"
+                style={{ color: sidebarBody }}
               >
                 {resume.contact.email}
               </a>
-            </div>
+            </li>
           )}
-
+          {resume.contact.websiteURL && (
+            <li className="flex items-start gap-2.5">
+              <FaGlobe className="flex-shrink-0 mt-0.5 text-[12px]" />
+              <a
+                href={resume.contact.websiteURL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all"
+                style={{ color: sidebarBody }}
+              >
+                {resume.contact.websiteURL.replace(/^https?:\/\//, "")}
+              </a>
+            </li>
+          )}
           {resume.contact.linkedin && (
-            <div className="flex items-start gap-2">
-              <FaLinkedinIn className="flex-shrink-0  mt-1" />
+            <li className="flex items-start gap-2.5">
+              <FaLinkedinIn className="flex-shrink-0 mt-0.5 text-[12px]" />
               <a
-                href={`${resume.contact.linkedin}`}
+                href={resume.contact.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-transparent outline-none w-full break-all"
+                className="break-all"
+                style={{ color: sidebarBody }}
               >
-                {resume.contact.linkedin}
+                {resume.contact.linkedin
+                  .replace(/^https?:\/\//, "")
+                  .replace(/^www\./, "")}
               </a>
-            </div>
+            </li>
           )}
-
           {resume.contact.github && (
-            <div className="flex items-start  gap-2">
-              <FaGithub className="flex-shrink-0 mt-1" />
+            <li className="flex items-start gap-2.5">
+              <FaGithub className="flex-shrink-0 mt-0.5 text-[12px]" />
               <a
-                href={`${resume.contact.github}`}
+                href={resume.contact.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-transparent outline-none w-full break-all"
+                className="break-all"
+                style={{ color: sidebarBody }}
               >
-                {resume.contact.github}
+                {resume.contact.github
+                  .replace(/^https?:\/\//, "")
+                  .replace(/^www\./, "")}
               </a>
-            </div>
+            </li>
           )}
-        </div>
+        </ul>
       </div>
     ),
 
     description: (
-      <div className="mb-1 md:mb-2">
+      <div>
         {resume.description && (
-          <div>
-            <h2
-              className={`font-semibold break-all resume-h2 uppercase tracking-wide mb-1 md:mb-2 ${getCustomFontClass(
-                "text-[16px]",
-                sidebarSettings.fontScaleLevel
-              )}`}
-              style={{
-                color: sidebarSettings.textColors?.["h2"] || "text-sky-300",
-                textAlign: sidebarSettings.descriptionAlign || "left",
-                "--resume-h2-user": `${getFontPxValue(
-                  "16",
-                  sidebarSettings.fontScaleLevel
-                )}px`,
-              }}
-            >
-              Description
-            </h2>
-
+          <>
+            <SidebarSubtitle>Profile</SidebarSubtitle>
             <div
-              className={`bg-transparent resume-h3 resume-content ${getCustomFontClass(
-                "text-[14px]",
+              className={`resume-h3 resume-content ${getCustomFontClass(
+                "text-[12px]",
                 sidebarSettings.fontScaleLevel
-              )} outline-none w-full whitespace-pre-line`}
+              )} whitespace-pre-line`}
               style={{
                 textAlign: sidebarSettings.descriptionAlign || "left",
-                color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
+                color: sidebarBody,
                 "--resume-h3-user": `${getFontPxValue(
-                  "14",
+                  "12",
                   sidebarSettings.fontScaleLevel
                 )}px`,
               }}
@@ -428,586 +481,335 @@ const SidebarTemplate = ({ resume }) => {
                 __html: DOMPurify.sanitize(resume.description),
               }}
             />
-          </div>
+          </>
         )}
       </div>
     ),
 
     skills: (
-      <div
-        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
-        className="mb-1 md:mb-2"
-      >
-        <h2
-          className={`font-semibold resume-h2 uppercase tracking-wide md:mb-2 ${getCustomFontClass(
-            "text-[16px]",
+      <div>
+        <SidebarSubtitle>Skills</SidebarSubtitle>
+        <ul
+          className={`resume-h3 space-y-1.5 mb-4 ${getCustomFontClass(
+            "text-[12px]",
             sidebarSettings.fontScaleLevel
           )}`}
           style={{
-            color: sidebarSettings.textColors?.["h2"] || "text-sky-300",
-            textAlign: sidebarSettings.descriptionAlign || "left",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
-              sidebarSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          Skills Overview
-        </h2>
-
-        <div className="">
-          {resume.skills.map((skill, i) => {
-            const totalSkills = resume.skills.reduce(
-              (acc, s) => acc + s.languages.length,
-              0
-            );
-            const domainCount = skill.languages.length;
-            const percentage = Math.round((domainCount / totalSkills) * 100);
-
-            return (
-              <div key={i}>
-                <span
-                  className={`resume-h3 ${getCustomFontClass(
-                    "text-[14px]",
-                    sidebarSettings.fontScaleLevel
-                  )} font-medium`}
-                  style={{
-                    color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
-                    textAlign: sidebarSettings.descriptionAlign || "left",
-                    "--resume-h3-user": `${getFontPxValue(
-                      "14",
-                      sidebarSettings.fontScaleLevel
-                    )}px`,
-                  }}
-                >
-                  {skill.domain}
-                </span>
-
-                <p
-                  className={`resume-h3 ${getCustomFontClass(
-                    "text-[14px]",
-                    sidebarSettings.fontScaleLevel
-                  )}`}
-                  style={{
-                    color: sidebarSettings.textColors?.["h4"] || "#c9c9c9",
-                    "--resume-h3-user": `${getFontPxValue(
-                      "14",
-                      sidebarSettings.fontScaleLevel
-                    )}px`,
-                  }}
-                >
-                  {skill.languages.join(", ")}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-
-        <p
-          className={`font-semibold resume-h2  ${getCustomFontClass(
-            "text-[16px]",
-            sidebarSettings.fontScaleLevel
-          )} uppercase tracking-wide my-3`}
-          style={{
-            color: sidebarSettings.textColors?.["h2"] || "text-sky-300",
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
-              sidebarSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          Skills Distribution
-        </p>
-
-        {/* Segmented Bar */}
-
-        <div className="flex w-full h-1 md:h-2 rounded-4xl overflow-hidden bg-white/10 mb-2">
-          {resume.skills.map((skill, i) => {
-            const totalSkills = resume.skills.reduce(
-              (acc, s) => acc + s.languages.length,
-              0
-            );
-            const width = (skill.languages.length / totalSkills) * 100;
-
-            const color =
-              sidebarSettings.skillColors?.[skill.domain] || "#9c9c9c";
-
-            return (
-              <div
-                key={i}
-                className={`h-full`}
-                style={{ width: `${width}%`, backgroundColor: color }}
-                title={`${skill.domain} (${skill.languages.length} skills)`}
-              ></div>
-            );
-          })}
-        </div>
-
-        {/* Legend */}
-        <div
-          className={`resume-h3 ${getCustomFontClass(
-            "text-[14px]",
-            sidebarSettings.fontScaleLevel
-          )} space-y-1`}
-          style={{
+            color: sidebarBody,
             "--resume-h3-user": `${getFontPxValue(
-              "14",
+              "12",
               sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
-          {resume.skills.map((skill, i) => {
-            const totalSkills = resume.skills.reduce(
-              (acc, s) => acc + s.languages.length,
-              0
-            );
-            const percent = (
-              (skill.languages.length / totalSkills) *
-              100
-            ).toFixed(1);
+          {resume.skills.map((skill, i) => (
+            <li key={i}>
+              <span className="font-semibold mr-1.5" style={{ color: sidebarSoft }}>
+                {skill.domain}:
+              </span>
+              <span style={{ color: sidebarBody }}>
+                {skill.languages.join(", ")}
+              </span>
+            </li>
+          ))}
+        </ul>
 
-            const color =
-              sidebarSettings.skillColors?.[skill.domain] || "#9c9c9c";
+        {resume.skills.length > 0 && (
+          <>
+            <SidebarSubtitle>Distribution</SidebarSubtitle>
+            <div
+              className="flex w-full h-1.5 rounded-full overflow-hidden mb-3"
+              style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+            >
+              {resume.skills.map((skill, i) => {
+                const totalSkills = resume.skills.reduce(
+                  (acc, s) => acc + s.languages.length,
+                  0
+                );
+                const width = (skill.languages.length / totalSkills) * 100;
+                const color =
+                  sidebarSettings.skillColors?.[skill.domain] || "#94a3b8";
 
-            return (
-              <div
-                key={i}
-                className="flex justify-between items-center gap-0.5 md:gap-2"
-              >
-                <span
-                  className="w-2 h-2 shrink-0 md:w-3 md:h-3 rounded-sm"
-                  style={{ backgroundColor: color }}
-                ></span>
-                <span
-                  style={{
-                    color: sidebarSettings.textColors?.["h3"] || "#d9d9d9",
-                  }}
-                  className="break-words"
-                >
-                  {skill.domain}
-                </span>
-                <span
-                  className="ml-auto "
-                  style={{
-                    color: sidebarSettings.textColors?.["h4"] || "#c9c9c9",
-                  }}
-                >
-                  {percent}%
-                </span>
-              </div>
-            );
-          })}
-        </div>
+                return (
+                  <div
+                    key={i}
+                    className="h-full"
+                    style={{ width: `${width}%`, backgroundColor: color }}
+                    title={`${skill.domain} (${skill.languages.length} skills)`}
+                  />
+                );
+              })}
+            </div>
+
+            <ul
+              className={`resume-h3 space-y-1 ${getCustomFontClass(
+                "text-[11px]",
+                sidebarSettings.fontScaleLevel
+              )}`}
+              style={{
+                "--resume-h3-user": `${getFontPxValue(
+                  "11",
+                  sidebarSettings.fontScaleLevel
+                )}px`,
+              }}
+            >
+              {resume.skills.map((skill, i) => {
+                const totalSkills = resume.skills.reduce(
+                  (acc, s) => acc + s.languages.length,
+                  0
+                );
+                const percent = (
+                  (skill.languages.length / totalSkills) *
+                  100
+                ).toFixed(0);
+                const color =
+                  sidebarSettings.skillColors?.[skill.domain] || "#94a3b8";
+
+                return (
+                  <li
+                    key={i}
+                    className="flex items-center gap-2"
+                    style={{ color: sidebarBody }}
+                  >
+                    <span
+                      className="w-1.5 h-1.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: color }}
+                    />
+                    <span className="break-words flex-1">{skill.domain}</span>
+                    <span
+                      className="resume-tnum"
+                      style={{ color: sidebarMuted }}
+                    >
+                      {percent}%
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
       </div>
     ),
 
     experience: (
-      <section
-        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
-      >
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
+      <section style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}>
+        <MainSectionTitle>Experience</MainSectionTitle>
+        <ul
+          className={`resume-h3 space-y-3 ${getCustomFontClass(
+            "text-[12.5px]",
             sidebarSettings.fontScaleLevel
-          )} font-bold mb-1 md:mb-2`}
+          )}`}
           style={{
-            color:
-              sidebarSettings.mainTextColors?.["h1"] ||
-              defaultMainTextColor("h1"),
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
+            "--resume-h3-user": `${getFontPxValue(
+              "12",
               sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
-          EXPERIENCE
-        </h2>
-        {resume.experience.map((exp, i) => (
-          <div
-            key={i}
-            className={`mb-4 resume-h3 ${getCustomFontClass(
-              "text-[14px]",
-              sidebarSettings.fontScaleLevel
-            )}`}
-            style={{
-              "--resume-h3-user": `${getFontPxValue(
-                "14",
-                sidebarSettings.fontScaleLevel
-              )}px`,
-            }}
-          >
-            <div
-              className={`flex gap-6 break-all w-full ${
-                sidebarSettings.descriptionAlign === "center"
-                  ? "justify-center"
-                  : sidebarSettings.descriptionAlign === "right"
-                  ? "justify-end"
-                  : sidebarSettings.descriptionAlign === "justify"
-                  ? "justify-between"
-                  : "justify-start"
-              }`}
-            >
-              <p
-                className="font-semibold"
-                style={{
-                  color:
-                    sidebarSettings.mainTextColors?.["h2"] ||
-                    defaultMainTextColor("h2"),
-                }}
-              >
-                {exp.company}–{exp.role}
-              </p>
-              <p
-                className="italic"
-                style={{
-                  color:
-                    sidebarSettings.mainTextColors?.["h2"] ||
-                    defaultMainTextColor("h2"),
-                }}
-              >
-                {exp.years}
-              </p>
-            </div>
-
-            {exp.technologies && exp.technologies.trim() !== "" && (
-              <p
-                className="my-0.5"
+          {resume.experience.map((exp, i) => (
+            <li key={i}>
+              <div className="flex justify-between items-baseline gap-4 flex-wrap">
+                <p
+                  className="font-semibold"
+                  style={{
+                    color: mainBody,
+                    fontFamily: "var(--resume-display-modern)",
+                  }}
+                >
+                  {exp.company}
+                  {exp.role && (
+                    <span
+                      className="font-normal italic ml-2"
+                      style={{ color: mainMuted }}
+                    >
+                      {exp.role}
+                    </span>
+                  )}
+                </p>
+                <p className="italic resume-tnum" style={{ color: mainMuted }}>
+                  {exp.years}
+                </p>
+              </div>
+              {exp.technologies && exp.technologies.trim() !== "" && (
+                <p className="mt-0.5" style={{ color: mainMuted }}>
+                  <span className="font-bold">
+                    {t("templateControls.technologies")}
+                  </span>{" "}
+                  {exp.technologies}
+                </p>
+              )}
+              <div
+                className="resume-content mt-1"
                 style={{
                   textAlign: sidebarSettings.descriptionAlign || "left",
-                  color:
-                    sidebarSettings.mainTextColors?.["h3"] ||
-                    defaultMainTextColor("h3"),
+                  color: mainMuted,
                 }}
-              >
-                <span className="font-bold">{t("templateControls.technologies")}</span>{" "}
-                {exp.technologies}
-              </p>
-            )}
-
-            <p
-              className="resume-content "
-              style={{
-                textAlign: sidebarSettings.descriptionAlign || "left",
-                color:
-                  sidebarSettings.mainTextColors?.["h3"] ||
-                  defaultMainTextColor("h3"),
-              }}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(exp.description),
-              }}
-            />
-          </div>
-        ))}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(exp.description),
+                }}
+              />
+            </li>
+          ))}
+        </ul>
       </section>
     ),
 
     projects: (
-      <section
-        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
-      >
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
+      <section style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}>
+        <MainSectionTitle>Projects</MainSectionTitle>
+        <ul
+          className={`resume-h3 space-y-3 ${getCustomFontClass(
+            "text-[12.5px]",
             sidebarSettings.fontScaleLevel
-          )} font-bold mb-1 md:mb-2`}
+          )}`}
           style={{
-            color:
-              sidebarSettings.mainTextColors?.["h1"] ||
-              defaultMainTextColor("h1"),
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
+            "--resume-h3-user": `${getFontPxValue(
+              "12",
               sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
-          PROJECTS
-        </h2>
-
-        {resume.projects.map((proj, i) => (
-          <div
-            key={i}
-            className={`mb-4 resume-h3 ${getCustomFontClass(
-              "text-[14px]",
-              sidebarSettings.fontScaleLevel
-            )}`}
-            style={{
-              "--resume-h3-user": `${getFontPxValue(
-                "14",
-                sidebarSettings.fontScaleLevel
-              )}px`,
-            }}
-          >
-            <div
-              className={`flex gap-6 w-full ${
-                sidebarSettings.descriptionAlign === "center"
-                  ? "justify-center"
-                  : sidebarSettings.descriptionAlign === "right"
-                  ? "justify-end"
-                  : sidebarSettings.descriptionAlign === "justify"
-                  ? "justify-between"
-                  : "justify-start"
-              }`}
-            >
-              <p
-                className="font-semibold"
-                style={{
-                  color:
-                    sidebarSettings.mainTextColors?.["h2"] ||
-                    defaultMainTextColor("h2"),
-                }}
-              >
-                {proj.name}
-              </p>
-
-              <div
-                className={`break-all resume-h3 ${getCustomFontClass(
-                  "text-[14px]",
-                  sidebarSettings.fontScaleLevel
-                )}`}
-                style={{
-                  "--resume-h3-user": `${getFontPxValue(
-                    "14",
-                    sidebarSettings.fontScaleLevel
-                  )}px`,
-                }}
-              >
+          {resume.projects.map((proj, i) => (
+            <li key={i}>
+              <div className="flex justify-between items-baseline gap-4 flex-wrap">
+                <p
+                  className="font-semibold"
+                  style={{
+                    color: mainBody,
+                    fontFamily: "var(--resume-display-modern)",
+                  }}
+                >
+                  {proj.name}
+                </p>
                 {(proj.demo || proj.github) && (
-                  <span>
-                    (
+                  <span className="italic resume-tnum" style={{ color: mainMuted }}>
                     {proj.demo && (
                       <a
                         href={proj.demo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline"
+                        className="underline underline-offset-2"
                         style={{
-                          color: sidebarSettings.linkColor || "#2563eb",
+                          color: sidebarSettings.linkColor || mainInk,
                         }}
                       >
                         Live Demo
                       </a>
                     )}
-                    {proj.demo && proj.github && (
-                      <span className="mx-1">|</span>
-                    )}
+                    {proj.demo && proj.github && <span className="mx-1.5">·</span>}
                     {proj.github && (
                       <a
                         href={proj.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="underline"
+                        className="underline underline-offset-2"
                         style={{
-                          color: sidebarSettings.linkColor || "#2563eb",
+                          color: sidebarSettings.linkColor || mainInk,
                         }}
                       >
                         GitHub
                       </a>
                     )}
-                    )
                   </span>
                 )}
               </div>
-            </div>
-
-            <div
-              className={`mt-1 resume-h3 ${getCustomFontClass(
-                "text-[14px]",
-                sidebarSettings.fontScaleLevel
-              )} text-gray-700 whitespace-pre-line`}
-              style={{
-                "--resume-h3-user": `${getFontPxValue(
-                  "14",
-                  sidebarSettings.fontScaleLevel
-                )}px`,
-              }}
-            >
               <div
-                className="mb-1 resume-content"
+                className="resume-content mt-1"
                 style={{
                   textAlign: sidebarSettings.descriptionAlign || "left",
-                  color:
-                    sidebarSettings.mainTextColors?.["h3"] ||
-                    defaultMainTextColor("h3"),
+                  color: mainMuted,
                 }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(proj.description),
                 }}
               />
-            </div>
-          </div>
-        ))}
+            </li>
+          ))}
+        </ul>
       </section>
     ),
 
     education: (
-      <section
-        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
-      >
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
-            sidebarSettings.fontScaleLevel
-          )} font-bold mb-2`}
-          style={{
-            color:
-              sidebarSettings.mainTextColors?.["h1"] ||
-              defaultMainTextColor("h1"),
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
-              sidebarSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          EDUCATION
-        </h2>
-
+      <section style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}>
+        <MainSectionTitle>Education</MainSectionTitle>
         <div
-          className={`flex resume-h3 gap-6 break-all w-full ${
-            sidebarSettings.descriptionAlign === "center"
-              ? "justify-center"
-              : sidebarSettings.descriptionAlign === "right"
-              ? "justify-end"
-              : sidebarSettings.descriptionAlign === "justify"
-              ? "justify-between"
-              : "justify-start"
-          } ${getCustomFontClass(
-            "text-[14px]",
-            sidebarSettings.fontScaleLevel
-          )}`}
-          style={{
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
-              sidebarSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          <p
-            className="font-semibold"
-            style={{
-              color:
-                sidebarSettings.mainTextColors?.["h2"] ||
-                defaultMainTextColor("h2"),
-            }}
-          >
-            {resume.education.college}
-          </p>
-
-          <p
-            className="italic"
-            style={{
-              color:
-                sidebarSettings.mainTextColors?.["h2"] ||
-                defaultMainTextColor("h2"),
-            }}
-          >
-            {resume.education.location}
-          </p>
-        </div>
-
-        <div
-          className={`flex resume-h3 break-all gap-6 w-full ${
-            sidebarSettings.descriptionAlign === "center"
-              ? "justify-center"
-              : sidebarSettings.descriptionAlign === "right"
-              ? "justify-end"
-              : sidebarSettings.descriptionAlign === "justify"
-              ? "justify-between"
-              : "justify-start"
-          } ${getCustomFontClass(
-            "text-[14px]",
-            sidebarSettings.fontScaleLevel
-          )}`}
-          style={{
-            "--resume-h3-user": `${getFontPxValue(
-              "14",
-              sidebarSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          <p>
-            {resume.education.degree}
-            {resume.education.specialization &&
-              ` (${resume.education.specialization})`}
-          </p>
-
-          <p
-            className="italic"
-            style={{
-              color:
-                sidebarSettings.mainTextColors?.["h2"] ||
-                defaultMainTextColor("h2"),
-            }}
-          >
-            {resume.education.startYear} - {resume.education.endYear}
-          </p>
-        </div>
-
-        <p
           className={`resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+            "text-[12.5px]",
             sidebarSettings.fontScaleLevel
           )}`}
           style={{
-            color:
-              sidebarSettings.mainTextColors?.["h3"] ||
-              defaultMainTextColor("h3"),
+            color: mainMuted,
             "--resume-h3-user": `${getFontPxValue(
-              "14",
+              "12",
               sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
-          CGPA: {resume.education.cgpa}
-        </p>
+          <div className="flex justify-between items-baseline gap-4 flex-wrap">
+            <p
+              className="font-semibold"
+              style={{
+                color: mainBody,
+                fontFamily: "var(--resume-display-modern)",
+              }}
+            >
+              {resume.education.college}
+            </p>
+            <p className="italic resume-tnum" style={{ color: mainMuted }}>
+              {resume.education.startYear}
+              {resume.education.startYear && resume.education.endYear && " – "}
+              {resume.education.endYear}
+            </p>
+          </div>
+          <div className="flex justify-between items-baseline gap-4 flex-wrap mt-0.5">
+            <p className="italic">
+              {resume.education.degree}
+              {resume.education.specialization &&
+                ` (${resume.education.specialization})`}
+            </p>
+            {resume.education.location && (
+              <p className="italic">{resume.education.location}</p>
+            )}
+          </div>
+          {resume.education.cgpa && (
+            <p className="resume-tnum mt-0.5">CGPA: {resume.education.cgpa}</p>
+          )}
+        </div>
       </section>
     ),
 
     achievements: (
-      <section
-        style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}
-      >
-        <h2
-          className={`resume-h2 ${getCustomFontClass(
-            "text-[16px]",
-            sidebarSettings.fontScaleLevel
-          )} font-bold mb-1 md:mb-2`}
-          style={{
-            color:
-              sidebarSettings.mainTextColors?.["h1"] ||
-              defaultMainTextColor("h1"),
-            "--resume-h2-user": `${getFontPxValue(
-              "16",
-              sidebarSettings.fontScaleLevel
-            )}px`,
-          }}
-        >
-          ACHIEVEMENTS
-        </h2>
+      <section style={{ textAlign: sidebarSettings.descriptionAlign || "left" }}>
+        <MainSectionTitle>Achievements</MainSectionTitle>
         <ul
-          className={`list-disc resume-h3 ${getCustomFontClass(
-            "text-[14px]",
+          className={`resume-h3 resume-bullets space-y-2 ${getCustomFontClass(
+            "text-[12.5px]",
             sidebarSettings.fontScaleLevel
-          )} pl-5 space-y-2 text-gray-800`}
+          )}`}
           style={{
+            color: mainMuted,
             "--resume-h3-user": `${getFontPxValue(
-              "14",
+              "12",
               sidebarSettings.fontScaleLevel
             )}px`,
           }}
         >
           {resume.achievements.map((ach, i) => (
-            <li
-              key={i}
-              style={{
-                textAlign: sidebarSettings.descriptionAlign || "left",
-                color:
-                  sidebarSettings.mainTextColors?.["h2"] ||
-                  defaultMainTextColor("h2"),
-              }}
-            >
-              <strong>{ach.title}</strong>–
-              <span
-                className="resume-content"
+            <li key={i}>
+              <div className="flex justify-between items-baseline gap-4 flex-wrap">
+                <strong style={{ color: mainBody }}>{ach.title}</strong>
+                {(ach.month || ach.year) && (
+                  <span className="italic resume-tnum" style={{ color: mainMuted }}>
+                    {ach.month || ""} {ach.year || ""}
+                  </span>
+                )}
+              </div>
+              <div
+                className="resume-content mt-0.5"
+                style={{
+                  textAlign: sidebarSettings.descriptionAlign || "left",
+                  color: mainMuted,
+                }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(ach.description),
                 }}
@@ -1309,7 +1111,14 @@ const SidebarTemplate = ({ resume }) => {
 
                 <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
                   {[
+                    "Bricolage Grotesque",
                     "Inter",
+                    "Manrope",
+                    "DM Sans",
+                    "Playfair Display",
+                    "Cormorant Garamond",
+                    "Lora",
+                    "Source Sans 3",
                     "Roboto",
                     "Poppins",
                     "Lato",
@@ -1318,7 +1127,6 @@ const SidebarTemplate = ({ resume }) => {
                     "Nunito",
                     "Montserrat",
                     "Work Sans",
-                    "DM Sans",
                     "Ubuntu",
                     "Fira Sans",
                     "Source Sans Pro",
@@ -1911,17 +1719,18 @@ const SidebarTemplate = ({ resume }) => {
           className="a4-page print-a4-sidebar flex bg-white shadow-xl"
           style={{
             backgroundColor: sidebarSettings.bgColor || "#ffffff",
-            fontFamily: sidebarSettings.fontFamily || "Inter",
+            fontFamily:
+              sidebarSettings.fontFamily || "var(--resume-body-sidebar)",
 
             flexDirection: "row",
           }}
         >
           {/* Sidebar */}
           <aside
-            className=" w-1/3 print:w-[32%] min-h-[1120px] text-white overflow-hidden p-4 py-4 flex flex-col"
+            className=" w-1/3 print:w-[32%] min-h-[1120px] text-white overflow-hidden px-6 py-9 flex flex-col"
             style={{
-              backgroundColor: sidebarSettings.sidebarColor || "#212121",
-              rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
+              backgroundColor: sidebarSettings.sidebarColor || "#0f172a",
+              rowGap: `${sidebarSettings.sectionGap ?? 18}px`,
             }}
           >
             {(sidebarSettings.sectionOrder || [])
@@ -1937,9 +1746,10 @@ const SidebarTemplate = ({ resume }) => {
 
           {/* Mainbar */}
           <main
-            className=" w-2/3 print:w-[68%] min-h-[1120px] p-4 py-5 flex flex-col"
+            className=" w-2/3 print:w-[68%] min-h-[1120px] px-8 py-9 flex flex-col"
             style={{
-              rowGap: `${sidebarSettings.sectionGap ?? 16}px`,
+              rowGap: `${sidebarSettings.sectionGap ?? 18}px`,
+              color: mainBody,
             }}
           >
             {(sidebarSettings.sectionOrder || [])
