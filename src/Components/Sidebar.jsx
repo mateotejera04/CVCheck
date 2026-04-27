@@ -4,6 +4,7 @@ import {
   FaHome,
   FaCogs,
   FaRobot,
+  FaMagic,
 } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
@@ -19,6 +20,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
     { path: "/resume-form", icon: FaFileAlt, label: t("sidebar.editResume") },
     { path: "/resume", icon: FaFileAlt, label: t("sidebar.myResume") },
     { path: "/ats-checker", icon: FaRobot, label: t("sidebar.atsCompatibility") },
+    { path: "/adapt-cv", icon: FaMagic, label: t("sidebar.adaptCV") },
     { path: "/templates", icon: FaCogs, label: t("common.templates") },
     { path: "/profile", icon: FaUser, label: t("common.profile") },
   ];

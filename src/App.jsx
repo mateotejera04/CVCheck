@@ -15,6 +15,7 @@ import ResetPassword from "./Pages/ResetPassword";
 import Templates from "./Pages/Templates";
 import ForgotPassword from "./Pages/ForgetPassword";
 import ATSCompatibilityChecker from "./Pages/ATSCompatibilityChecker";
+import AdaptCV from "./Pages/AdaptCV";
 
 const App = () => {
   return (
@@ -41,6 +42,8 @@ const App = () => {
         <Route path="/resume-form" element={<ResumeForm />} />
         <Route path="/resume" element={<Resume />} />
         <Route path="/ats-checker" element={<ATSCompatibilityChecker />} />
+        <Route path="/adapt-cv" element={<AdaptCV />} />
+        <Route path="/adapt-cv/:id" element={<AdaptCV />} />
 
         <Route path="/templates" element={<Templates />} />
       </Route>

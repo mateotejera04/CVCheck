@@ -642,3 +642,82 @@ IMPORTANT:
     throw new Error(`Failed to analyze ATS compatibility: ${error.message}`);
   }
 }
+
+// Adapt an existing resume to a specific job description.
+// Rewrites headline, description, and the description fields of experience,
+// projects and achievements. Reorders skills.languages by relevance.
+// All other fields are preserved exactly.
+export async function adaptResumeForJob(resume, jobDescription, locale = "en") {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+  const prompt = `
+You are an expert resume editor and ATS optimization specialist. Adapt the candidate's resume to the provided job offer so it emphasizes the most relevant experience for that specific role, while staying truthful and faithful to the original facts.
+
+Job description:
+"""
+${jobDescription}
+"""
+
+Original resume (JSON):
+${JSON.stringify(resume)}
+
+OUTPUT — return a JSON object with EXACTLY the same shape as the input resume. You may modify ONLY these fields:
+- "headline": a concise role headline (max 8 words) aligned with the offer.
+- "description": a professional summary as a single HTML string using only <p> and <strong> tags. Highlight the candidate's strengths most relevant to this offer.
+- For each item in "experience": rewrite the "description" field. If the original used <ul><li>, return <ul><li> with refined bullets; otherwise return <p>...</p>. Emphasize achievements and keywords relevant to the offer. Keep "company", "role", "technologies" and "years" untouched.
+- For each item in "projects": rewrite the "description" field with the same formatting rules. Keep "name", "github" and "demo" untouched.
+- For each item in "achievements": rewrite the "description" field. Keep "title", "year" and "month" untouched.
+- For each item in "skills": REORDER the "languages" array so the most relevant skills for the offer come first. Do NOT add or remove skills. Do NOT modify "domain".
+
+STRICT RULES:
+- DO NOT invent skills, jobs, projects, achievements, dates, companies or numbers that are not present in the original resume.
+- DO NOT remove any items from any array.
+- DO NOT modify "name", "imgUrl", "education" or "contact" — return them exactly as in the input.
+- "education" MUST be a single object (not an array), identical to the input.
+- Use strong action verbs and quantifiable language only when the original already mentions metrics; never fabricate metrics.
+- Keep all proper nouns (companies, schools, project names, URLs, emails) exactly as written.
+- Write all rewritten user-facing text in ${responseLanguage(locale)}.
+- Return ONLY the JSON object — no markdown fences, no explanations.
+`;
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4.1-mini-2025-04-14",
+    temperature: 0.4,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are an expert resume editor and ATS optimization specialist. You produce truthful, ATS-friendly adaptations and never fabricate experience.",
+      },
+      { role: "user", content: prompt },
+    ],
+    max_tokens: 3000,
+  });
+
+  let raw = response.choices[0]?.message?.content?.trim() || "";
+  if (raw.startsWith("```")) {
+    raw = raw.replace(/```json|```/g, "").trim();
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    console.error("❌ Failed to parse adapted resume JSON:\n", raw);
+    throw new Error("Invalid adapted resume JSON from AI");
+  }
+
+  // Defense in depth: enforce immutable fields and education shape regardless of model output.
+  if (Array.isArray(parsed.education)) {
+    parsed.education = parsed.education[0] || resume?.education || {};
+  }
+  if (resume) {
+    if (resume.name !== undefined) parsed.name = resume.name;
+    if (resume.imgUrl !== undefined) parsed.imgUrl = resume.imgUrl;
+    if (resume.contact !== undefined) parsed.contact = resume.contact;
+    if (resume.education !== undefined) parsed.education = resume.education;
+  }
+
+  return parsed;
+}

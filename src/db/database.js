@@ -6,6 +6,12 @@ import {
   serverTimestamp,
   arrayUnion,
   arrayRemove,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  query,
+  orderBy,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
@@ -284,6 +290,57 @@ export const updateUserProfileImage = async (imgUrl) => {
     console.error("Error updating user profile image:", error);
     throw error;
   }
+};
+
+// Adapted resumes: each adaptation tailored to a specific job offer is stored
+// as an independent document under users/{uid}/adaptedResumes. The master
+// resume at users/{uid}/resume/data is never modified by this flow.
+export const saveAdaptedResume = async ({
+  title,
+  jobDescription,
+  resume,
+  templateUsed,
+}) => {
+  const user = auth.currentUser;
+  if (!user) return null;
+
+  const colRef = collection(db, "users", user.uid, "adaptedResumes");
+  const docRef = await addDoc(colRef, {
+    title: title || "",
+    jobDescription: jobDescription || "",
+    resume: resume || {},
+    templateUsed: templateUsed || "modern",
+    createdOn: serverTimestamp(),
+    updatedOn: serverTimestamp(),
+  });
+  return docRef.id;
+};
+
+export const getAdaptedResumes = async () => {
+  const user = auth.currentUser;
+  if (!user) return [];
+
+  const colRef = collection(db, "users", user.uid, "adaptedResumes");
+  const q = query(colRef, orderBy("createdOn", "desc"));
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
+
+export const getAdaptedResume = async (id) => {
+  const user = auth.currentUser;
+  if (!user || !id) return null;
+
+  const ref = doc(db, "users", user.uid, "adaptedResumes", id);
+  const snap = await getDoc(ref);
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+};
+
+export const deleteAdaptedResume = async (id) => {
+  const user = auth.currentUser;
+  if (!user || !id) return;
+
+  const ref = doc(db, "users", user.uid, "adaptedResumes", id);
+  await deleteDoc(ref);
 };
 
 // Get user profile data including image URL

@@ -69,6 +69,33 @@ export async function parseResumeFromUpload(fileUrl, locale = "en") {
   }
 }
 
+// Adapt the user's saved resume to a specific job description.
+// Returns an adapted resume object with the same shape as the input.
+export async function adaptCV({ resume, jobDescription, locale = "en" }) {
+  try {
+    const res = await fetch(`${API_BASE}/adapt-cv`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resume, jobDescription, locale }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || `HTTP ${res.status}: ${res.statusText}`);
+    }
+
+    if (!data.success) {
+      throw new Error(data.error || data.details || "Failed to adapt CV");
+    }
+
+    return data.data;
+  } catch (err) {
+    console.error("CV Adapt Error:", err);
+    throw err;
+  }
+}
+
 // Check ATS compatibility from uploaded file URL
 export async function checkATSFromUpload(fileUrl, locale = "en") {
   try {

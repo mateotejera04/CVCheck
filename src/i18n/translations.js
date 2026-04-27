@@ -52,6 +52,7 @@ export const translations = {
       editResume: "Edit Resume",
       myResume: "My Resume",
       atsCompatibility: "ATS Compatibility",
+      adaptCV: "Adapt CV",
     },
     home: {
       eyebrow: "AI-powered resume builder",
@@ -383,6 +384,47 @@ export const translations = {
       allClear: "All clear",
       allClearDetail: "Your resume looks well-optimized for ATS.",
     },
+    adaptCV: {
+      eyebrow: "Adapt CV",
+      title: "Tailor your resume to",
+      titleEmphasis: "any job offer.",
+      subtitle:
+        "Paste a job description and we'll rewrite your headline, summary and bullets to highlight what matters most for that role. Your master resume stays untouched.",
+      inputTitle: "Job offer",
+      jobTitleLabel: "Role / company",
+      jobTitlePlaceholder: "e.g. Frontend Engineer at Acme",
+      jobDescriptionLabel: "Job description",
+      placeholder:
+        "Paste the full job description here. The more detail, the better the adaptation.",
+      generate: "Generate adaptation",
+      generating: "Adapting your CV...",
+      regenerate: "Regenerate",
+      save: "Save adaptation",
+      savedToast: "Adaptation saved",
+      saveFailed: "Failed to save adaptation. Please try again.",
+      savedTitle: "Saved adaptations",
+      noSaved: "Your saved adaptations will appear here.",
+      delete: "Delete",
+      confirmDelete: "Delete this adaptation? This cannot be undone.",
+      deletedToast: "Adaptation deleted",
+      newAdaptation: "New adaptation",
+      emptyTitle: "Ready when you are.",
+      empty:
+        "Paste a job description on the left and generate an adaptation to see the preview here.",
+      loadingTitle: "Adapting your CV...",
+      loadingIntro:
+        "Rewriting your headline, summary and bullets to match the offer.",
+      error: "Something went wrong while adapting your CV. Please try again.",
+      notFound: "This adaptation could not be found.",
+      descriptionRequired: "Please paste the job description first.",
+      createFirst:
+        "Create or upload your master resume first to start adapting it.",
+      createFirstToast:
+        "Please create your master resume before adapting it.",
+      gatingTitle: "Master resume",
+      gatingTitleEmphasis: "required.",
+      untitled: "Untitled adaptation",
+    },
     profile: {
       eyebrow: "Profile",
       title: "Account",
@@ -708,6 +750,7 @@ export const translations = {
       editResume: "Editar CV",
       myResume: "Mi CV",
       atsCompatibility: "Compatibilidad ATS",
+      adaptCV: "Adaptar CV",
     },
     home: {
       eyebrow: "Creador de CV con IA",
@@ -1038,6 +1081,49 @@ export const translations = {
       generalTips: "Consejos generales",
       allClear: "Todo claro",
       allClearDetail: "Tu CV parece bien optimizado para ATS.",
+    },
+    adaptCV: {
+      eyebrow: "Adaptar CV",
+      title: "Adapta tu CV a",
+      titleEmphasis: "cualquier oferta.",
+      subtitle:
+        "Pega la descripción de la oferta y reescribiremos tu titular, resumen y viñetas para destacar lo más relevante para ese puesto. Tu CV maestro no se modifica.",
+      inputTitle: "Oferta laboral",
+      jobTitleLabel: "Puesto / empresa",
+      jobTitlePlaceholder: "p. ej., Frontend Engineer en Acme",
+      jobDescriptionLabel: "Descripción de la oferta",
+      placeholder:
+        "Pega aquí la descripción completa de la oferta. Cuanto más detalle, mejor la adaptación.",
+      generate: "Generar adaptación",
+      generating: "Adaptando tu CV...",
+      regenerate: "Volver a generar",
+      save: "Guardar adaptación",
+      savedToast: "Adaptación guardada",
+      saveFailed: "No se pudo guardar la adaptación. Inténtalo de nuevo.",
+      savedTitle: "Adaptaciones guardadas",
+      noSaved: "Tus adaptaciones guardadas aparecerán aquí.",
+      delete: "Eliminar",
+      confirmDelete:
+        "¿Eliminar esta adaptación? Esta acción no se puede deshacer.",
+      deletedToast: "Adaptación eliminada",
+      newAdaptation: "Nueva adaptación",
+      emptyTitle: "Listo cuando lo estés.",
+      empty:
+        "Pega la descripción de una oferta a la izquierda y genera una adaptación para ver la vista previa aquí.",
+      loadingTitle: "Adaptando tu CV...",
+      loadingIntro:
+        "Reescribiendo tu titular, resumen y viñetas para que encajen con la oferta.",
+      error:
+        "Algo salió mal al adaptar tu CV. Inténtalo de nuevo.",
+      notFound: "No se pudo encontrar esta adaptación.",
+      descriptionRequired: "Pega primero la descripción de la oferta.",
+      createFirst:
+        "Crea o sube primero tu CV maestro para poder adaptarlo.",
+      createFirstToast:
+        "Crea tu CV maestro antes de adaptarlo.",
+      gatingTitle: "CV maestro",
+      gatingTitleEmphasis: "requerido.",
+      untitled: "Adaptación sin título",
     },
     profile: {
       eyebrow: "Perfil",

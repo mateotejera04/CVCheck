@@ -4,6 +4,7 @@ import { enhanceBullet } from "../config/openai.js";
 import { checkATSCompatibility } from "../config/openai.js";
 import { parseResumeFromFile } from "../config/openai.js";
 import { checkATSFromFile } from "../config/openai.js";
+import { adaptResumeForJob } from "../config/openai.js";
 
 const router = express.Router();
 
@@ -70,6 +71,25 @@ router.post("/ats-check-file", async (req, res) => {
     console.error("ATS File Analysis Error:", err.message);
     return res.status(500).json({
       error: "Failed to analyze ATS compatibility",
+      details: err.message,
+    });
+  }
+});
+
+router.post("/adapt-cv", async (req, res) => {
+  const { resume, jobDescription, locale = "en" } = req.body || {};
+
+  if (!resume || !jobDescription) {
+    return res.status(400).json({ error: "Missing resume or jobDescription" });
+  }
+
+  try {
+    const adapted = await adaptResumeForJob(resume, jobDescription, locale);
+    return res.json({ success: true, data: adapted });
+  } catch (err) {
+    console.error("CV Adapt Error:", err.message);
+    return res.status(500).json({
+      error: "Failed to adapt CV",
       details: err.message,
     });
   }
