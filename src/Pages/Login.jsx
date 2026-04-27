@@ -9,6 +9,17 @@ import { useLocale } from "../Contexts/LocaleContext";
 
 const serif = { fontFamily: "Merriweather, ui-serif, Georgia, serif" };
 
+const AUTH_ERROR_KEYS = {
+  "auth/invalid-credential": "auth.errors.invalidCredential",
+  "auth/invalid-login-credentials": "auth.errors.invalidCredential",
+  "auth/wrong-password": "auth.errors.wrongPassword",
+  "auth/user-not-found": "auth.errors.userNotFound",
+  "auth/invalid-email": "auth.errors.invalidEmail",
+  "auth/user-disabled": "auth.errors.userDisabled",
+  "auth/too-many-requests": "auth.errors.tooManyRequests",
+  "auth/network-request-failed": "auth.errors.networkRequestFailed",
+};
+
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -36,11 +47,13 @@ export default function Login() {
         showSuccessToast(t("auth.loginSuccess"));
         navigate("/dashboard");
       } else {
-        toast.error(result.error || t("auth.loginFailed"));
+        const key = AUTH_ERROR_KEYS[result.code];
+        showErrorToast(key ? t(key) : t("auth.loginFailedLong"));
       }
     } catch (err) {
       toast.dismiss(toastId);
-      showErrorToast(err.message || t("auth.loginFailedLong"));
+      const key = AUTH_ERROR_KEYS[err?.code];
+      showErrorToast(key ? t(key) : t("auth.loginFailedLong"));
     } finally {
       setLoading(false);
     }
